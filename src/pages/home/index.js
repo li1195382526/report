@@ -6,6 +6,7 @@ import Questionaires from '../../components/questionaire'
 import './index.scss';
 import List from '../list';
 import Participate from '../participates'
+//import Template from '../../components/template'
 
 @connect(({ home, common }) => ({
   ...home,
@@ -59,7 +60,7 @@ class Home extends Component {
   }
 
   componentDidShow = () => {
-    this.getData()
+
   }
 
   handleLogout = () => {
@@ -102,10 +103,12 @@ class Home extends Component {
       onChangeStatus: this.handleChangeStatus
     }
     //leftText='+新建问卷'
+    const {currentBar} = this.state
     return (
       <View className='page'>
         {/* 首页跑马灯及创建填报列表 */}
-        <View>
+        {currentBar === 0 && (
+           <View>
           <AtMessage />
            <Swiper
              className='test-h'
@@ -138,6 +141,10 @@ class Home extends Component {
           <AtButton type='primary'>创建填报</AtButton>
         </View>
         </View>
+        )}
+       {/* {currentBar === 1 && (
+         <Template />
+       )} */}
         {/* 列表选择项 */}
         <AtActionSheet isOpened={this.state.isOpened}>
             <AtActionSheetItem onClick={this.toEdit}>
@@ -163,9 +170,9 @@ class Home extends Component {
           <AtTabBar
             fixed
             tabList={[
-              { title: '首页', iconType: 'bullet-list', text: 'new' },
+              { title: '首页', iconType: 'bullet-list' },
               { title: '模板库', iconType: 'camera' },
-              { title: '个人中心', iconType: 'folder', text: '100', max: 99 }
+              { title: '个人中心', iconType: 'folder' }
             ]}
             onClick={this.handleClickBar.bind(this)}
             current={this.state.currentBar}
