@@ -1,0 +1,120 @@
+@import './mixin';
+
+page,
+body {
+  font-size: 32px;
+  background-color: $bg-color-base;
+  color: $color-dark;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+@media screen and (min-width: 500px) {
+  html,
+  body {
+    max-width: 1500px;
+    margin: 0 auto;
+    position: relative;
+  }
+}
+
+view {
+  box-sizing: border-box;
+}
+
+.wordbreak{
+  white-space:normal; 
+  word-break:break-all;
+  overflow:hidden;
+}
+
+.panel {
+  margin: 80px 0 56px;
+
+  &__title {
+    position: relative;
+    margin-bottom: 40px;
+    padding-left: 60px;
+    color: #7F7F7F;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1.5;
+
+     &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: .512rem;
+        width: 2PX;
+        height: 16PX;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
+        background: $color-primary;
+        // box-shadow: 1px 1px 2px 0 rgba($color: $color-primary, $alpha: 0.5);
+        transform: translate3d(0, -50%, 0);
+      }
+  }
+
+  &__content {
+    padding: 0 60px;
+
+    &.no-padding {
+      padding: 0;
+
+      .example-item__desc {
+        padding: 0 60px;
+      }
+    }
+  }
+}
+
+//******常用类******/
+.clearfix:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1;
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.position-center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: auto;
+}

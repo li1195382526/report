@@ -1,0 +1,13 @@
+.view-data{
+    height:197px;
+    width: 100%;
+    background-color: rgba(52, 120, 247, 0.682352941176471);
+    position: relative;
+    .data-step{
+        position:absolute;
+        bottom: 0;
+    }
+}
+.view-text{
+    text-align: center;
+}

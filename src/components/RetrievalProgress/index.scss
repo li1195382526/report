@@ -1,0 +1,30 @@
+@import "taro-ui/dist/style/components/flex.scss";
+
+progress-wrap {
+  width: 100%;
+}
+
+.dataRow{
+  margin: 20px;
+  width: 80%;
+  height: 130PX;
+  border: solid 1px #40b5ff;
+}
+
+.dataItem{
+  font-size: 30PX;
+  height: 80PX;
+  text-align: center;
+  padding-top: 20PX;
+  vertical-align: middle;
+  color: #24aaff;
+
+  .small {
+    font-size: 18PX;
+  }
+}
+
+.infoItem{
+  padding: 20px 0;
+  text-align: center;
+}

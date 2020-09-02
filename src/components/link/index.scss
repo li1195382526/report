@@ -1,0 +1,28 @@
+@import "taro-ui/dist/style/components/flex.scss";
+@import "../../styles/base.scss";
+
+.link-wrap {
+  width: 100%;
+}
+
+.linkInfoRow{
+  padding: 20PX 5PX;
+}
+
+.linkText{
+  border: solid 1px #d6d6d6;
+  padding: 5PX;
+  width: 100%;
+  overflow: auto;
+  color: #888888;
+  border-radius: 5px;
+}
+
+.copyRow{
+  margin: 10PX;
+  padding-right: 10PX;
+}
+
+.copyrightInfo {
+  padding: 10PX 2PX;
+}

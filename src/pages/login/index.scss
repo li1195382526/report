@@ -1,0 +1,29 @@
+@import "../../styles/mixin";
+
+.index-page {
+  width: 100%;
+  min-height: 100vh;
+  text-align: center;
+  margin: 0 auto;
+}
+.login{
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+}
+.copyright-info {
+  text-align: center;
+  padding-bottom: 50Px;
+}
+.siteurl {
+  padding-top: 10Px;
+  font-weight: bold;
+  font-size: large;
+  text-align: center;
+}
+.loginbutton{
+  padding: 5Px 0;
+}
+button {margin: 10px;}
