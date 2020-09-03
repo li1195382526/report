@@ -6,7 +6,8 @@ import Questionaires from '../../components/questionaire'
 import './index.scss';
 import List from '../list';
 import Participate from '../participates'
-//import Template from '../../components/template'
+import TemplateText from '../../components/templateText'
+import  PersonalCenter from  "../../components/personalCenter";
 
 @connect(({ home, common }) => ({
   ...home,
@@ -93,6 +94,12 @@ class Home extends Component {
     })
   }
 
+  submit = () =>{
+    Taro.navigateTo({
+      url: '/pages/answer/index'
+     })
+  }
+
   render() {
     const { qtnList, qtnTypes, projectExist } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
@@ -142,15 +149,18 @@ class Home extends Component {
         </View>
         </View>
         )}
-       {/* {currentBar === 1 && (
-         <Template />
-       )} */}
+       {currentBar === 1 && (
+         <TemplateText />
+       )}
+       {currentBar === 2 && (
+         <PersonalCenter />
+       )}
         {/* 列表选择项 */}
         <AtActionSheet isOpened={this.state.isOpened}>
             <AtActionSheetItem onClick={this.toEdit}>
                 编辑填报
             </AtActionSheetItem>
-            <AtActionSheetItem>
+            <AtActionSheetItem onClick={this.submit}>
                 分享到微信群
             </AtActionSheetItem>
             <AtActionSheetItem onClick={this.handleData}>
