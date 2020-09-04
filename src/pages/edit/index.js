@@ -1,11 +1,12 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text,Picker } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { AtList,AtListItem,AtInput,AtTextarea } from 'taro-ui'
 import { BeginToCollect } from '../../components/beginToCollect'
 import { Link } from '../../components/link'
 import './index.scss';
 import {Question} from '../../components/Question'
+import { QtSet } from '../../components/QtSet'
 
 @connect(({ Edit, home, common }) => ({
   ...Edit,
@@ -21,8 +22,7 @@ class Edit extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        timeSel: '12:01',
-        dateSel: '2018-04-22'
+        
     }
   }
 
@@ -120,49 +120,7 @@ onTimeChange = e => {
        </View>
         <View>
           <View className='edit-title'>填报设置</View>
-          <View>
-          <View>
-            <Picker mode='date' onChange={this.onDateChange}>
-                <AtList>
-                  <AtListItem title='请选择日期' extraText={this.state.dateSel} />
-                </AtList>
-              </Picker>
-              <Picker mode='time' onChange={this.onTimeChange}>
-                <AtList>
-                  <AtListItem title='请选择时间' extraText={this.state.timeSel} />
-                </AtList>
-              </Picker>
-            </View>
-            <AtList>
-                <AtListItem title='标题文字' onClick={this.handleClick}>
-                </AtListItem>
-                <AtListItem
-                  title='填报名单'
-                  isSwitch
-                  onSwitchChange={this.handleChange}
-                />
-                  <AtListItem
-                    title='填写周期'
-                    isSwitch
-                    onSwitchChange={this.handleChange}
-                  />
-                  <AtListItem
-                    title='允许填报人修改'
-                    isSwitch
-                    onSwitchChange={this.handleChange}
-                  />
-                  <AtListItem
-                    title='严格填报'
-                    isSwitch
-                    onSwitchChange={this.handleChange}
-                  />
-                  <AtListItem
-                    title='填报密码'
-                    isSwitch
-                    onSwitchChange={this.handleChange}
-                  />
-            </AtList>
-          </View>
+          <QtSet />
         </View>
       <View className='edit-footer'>
         <View className='edit-save'>

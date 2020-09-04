@@ -8,12 +8,14 @@ class Question extends Component {
   constructor(props) {
       super(props)
       this.state = {
-          vaule:1
+          vaule:''
       }
   }
 
-  handleChange(){
-
+  handleChange (value) {
+    this.setState({
+      value
+    })
   }
   
   render() {

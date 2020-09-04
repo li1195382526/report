@@ -75,7 +75,8 @@ class App extends Component {
       'pages/viewData/index',
       'pages/edit/index',
       'pages/answer/index',
-      'pages/release/index'
+      'pages/release/index',
+      'pages/nameList/index',
     ],
     window: {
       backgroundTextStyle: 'light',
