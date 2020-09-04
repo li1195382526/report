@@ -74,11 +74,12 @@ class App extends Component {
       'pages/project/manage',
       'pages/viewData/index',
       'pages/edit/index',
-      'pages/answer/index'
+      'pages/answer/index',
+      'pages/release/index'
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
+      navigationBarBackgroundColor: '#71a0f7',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black',
     },

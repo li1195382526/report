@@ -1,0 +1,21 @@
+.release{
+    text-align: center;
+    .release-check{
+        margin-top:100px;
+    }
+    .release-mes{
+        color:#ccc;
+        line-height:80px;
+    }
+    .release-text{
+       line-height:50px;
+    }
+    .release-btn{
+        margin-top:50px;
+        width: 90%;
+        margin: auto;
+        View{
+            margin-bottom: 20px;
+        }
+    }
+}

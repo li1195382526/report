@@ -72,7 +72,8 @@ class Home extends Component {
 
   handleClick (value) {
     this.setState({
-      current: value
+      current: value,
+      isOpened:false
     })
   }
 
@@ -90,7 +91,8 @@ class Home extends Component {
 
   handleClickBar(value){
     this.setState({
-      currentBar: value
+      currentBar: value,
+      isOpened:false
     })
   }
 
@@ -99,6 +101,57 @@ class Home extends Component {
       url: '/pages/answer/index'
      })
   }
+
+  // handledingyue = () => {
+  //   const _this = this
+  //   wx.requestSubscribeMessage({
+  //     tmplIds: ['I-we9Wszvb7IAn-6IR3GqYbdUBxp3nUqrLLhCwKwOm0'], // 此处可填写多个模板 ID，但低版本微信不兼容只能授权一个
+  //     success (res) {
+  //       console.log('已授权接收订阅消息')
+  //       _this.sendMessage()
+  //     }
+  //   })
+  // }
+
+  // sendMessage =() => {
+  //     var self = this;
+  //     console.log(this)
+  //     var _access_token = this.props.token
+  //     var opeid = this.props.openid
+  //     let url = 'https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=' + _access_token
+     
+  //     let jsonData = {
+  //       access_token: _access_token,
+  //       touser: opeid,
+  //       template_id: 'I-we9Wszvb7IAn-6IR3GqYbdUBxp3nUqrLLhCwKwOm0',
+  //       page: "pages/home/index",
+  //       data: {
+  //         "thing7": { "value": "互联网大会科学技术", "color": "#173177" },
+  //         "thing4": { "value": "双人海鲜自助餐", "color": "#173177" },
+  //         "thing3": { "value": "2019年11月1日", "color": "#173177" },
+  //         "thing2": { "value": "全场通用", "color": "#173177" },
+  //         "thing8": { "value": "请在有效期内使用", "color": "#173177" },
+  //       },
+  //       miniprogram_state: 'developer',
+  //     }
+  //     wx.request({
+  //       url: url,
+  //       data:jsonData,
+  //       method: 'POST',
+  //       success (res) {
+  //         console.log("***" + JSON.stringify(res))
+  //         if (res.data.errcode === 0) {
+  //           wx.showToast({
+  //             title: '通知成功',
+  //           })
+  //         }
+  //       },
+  //       fail (err) {
+  //         console.log('request fail ', err);
+  //       },
+  //     })
+    
+  // }
 
   render() {
     const { qtnList, qtnTypes, projectExist } = this.props
@@ -144,19 +197,11 @@ class Home extends Component {
             <Participate />
           </AtTabsPane>
         </AtTabs>
-        <View className='create-fill'>
+        <View className='create-fill' onClick={this.toEdit}>
           <AtButton type='primary'>创建填报</AtButton>
         </View>
-        </View>
-        )}
-       {currentBar === 1 && (
-         <TemplateText />
-       )}
-       {currentBar === 2 && (
-         <PersonalCenter />
-       )}
-        {/* 列表选择项 */}
-        <AtActionSheet isOpened={this.state.isOpened}>
+         {/* 列表选择项 */}
+         <AtActionSheet isOpened={this.state.isOpened}>
             <AtActionSheetItem onClick={this.toEdit}>
                 编辑填报
             </AtActionSheetItem>
@@ -176,6 +221,14 @@ class Home extends Component {
                 取消
             </AtActionSheetItem>
           </AtActionSheet> 
+        </View>
+        )}
+       {currentBar === 1 && (
+         <TemplateText />
+       )}
+       {currentBar === 2 && (
+         <PersonalCenter />
+       )}
           {/* 底部bar */}
           <AtTabBar
             fixed
@@ -187,6 +240,9 @@ class Home extends Component {
             onClick={this.handleClickBar.bind(this)}
             current={this.state.currentBar}
           />
+        {/* <View onClick={this.handledingyue} style={{marginBottom:'100px'}}>
+          订阅
+        </View> */}
       </View>
     )
   }

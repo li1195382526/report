@@ -14,6 +14,9 @@ class PersonalCenter extends Component {
   static defaultProps = {
   };
 
+  handelListDataBase(){
+      
+  }
   render() {
 
     return (
@@ -27,7 +30,7 @@ class PersonalCenter extends Component {
             </View>
         </View>
         <View>
-        <AtListItem title='标题文字' arrow='right' />
+        <AtListItem title='发布名单库' arrow='right' onClick={this.handelListDataBase.bind(this)} />
         <AtListItem title='标题文字' arrow='right' />
         <AtListItem title='标题文字' arrow='right' />
         <AtListItem title='标题文字' arrow='right' />

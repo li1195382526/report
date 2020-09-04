@@ -52,6 +52,12 @@ onTimeChange = e => {
 
   }
 
+  handleRelease = () =>{
+    Taro.navigateTo({
+      url: '/pages/release/index'
+     })
+  }
+
   render() {
       const qtn = [
         {
@@ -91,7 +97,7 @@ onTimeChange = e => {
     return (
       <View className='edit'>
           <View>
-             <View>填报主题</View> 
+             <View className='edit-title'>填报主题</View> 
              <View>
              <AtInput
                name='value' 
@@ -109,12 +115,13 @@ onTimeChange = e => {
               />
           </View>
        <View>
-           <View>填报题目</View>
+           <View className='edit-title'>填报题目</View>
            <Question />
        </View>
         <View>
-        <View>填报设置</View>
-        <View>
+          <View className='edit-title'>填报设置</View>
+          <View>
+          <View>
             <Picker mode='date' onChange={this.onDateChange}>
                 <AtList>
                   <AtListItem title='请选择日期' extraText={this.state.dateSel} />
@@ -126,36 +133,45 @@ onTimeChange = e => {
                 </AtList>
               </Picker>
             </View>
-        <AtList>
-            <AtListItem title='标题文字' onClick={this.handleClick}>
-            </AtListItem>
-             <AtListItem
-               title='填报名单'
-               isSwitch
-               onSwitchChange={this.handleChange}
-             />
-              <AtListItem
-                title='填写周期'
-                isSwitch
-                onSwitchChange={this.handleChange}
-              />
-              <AtListItem
-                title='允许填报人修改'
-                isSwitch
-                onSwitchChange={this.handleChange}
-              />
-              <AtListItem
-                title='严格填报'
-                isSwitch
-                onSwitchChange={this.handleChange}
-              />
-              <AtListItem
-                title='填报密码'
-                isSwitch
-                onSwitchChange={this.handleChange}
-              />
-        </AtList>
+            <AtList>
+                <AtListItem title='标题文字' onClick={this.handleClick}>
+                </AtListItem>
+                <AtListItem
+                  title='填报名单'
+                  isSwitch
+                  onSwitchChange={this.handleChange}
+                />
+                  <AtListItem
+                    title='填写周期'
+                    isSwitch
+                    onSwitchChange={this.handleChange}
+                  />
+                  <AtListItem
+                    title='允许填报人修改'
+                    isSwitch
+                    onSwitchChange={this.handleChange}
+                  />
+                  <AtListItem
+                    title='严格填报'
+                    isSwitch
+                    onSwitchChange={this.handleChange}
+                  />
+                  <AtListItem
+                    title='填报密码'
+                    isSwitch
+                    onSwitchChange={this.handleChange}
+                  />
+            </AtList>
+          </View>
         </View>
+      <View className='edit-footer'>
+        <View className='edit-save'>
+          保存
+        </View>
+        <View className='edit-send' onClick={this.handleRelease}>
+          发布填报
+        </View>
+      </View>
       </View>
     )
   }

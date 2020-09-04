@@ -1,5 +1,32 @@
 .edit{
-    background-color: rgb(228, 228, 228);
+    background-color: rgba(244, 244, 244, 1);
+    .edit-title{
+        height:80px;
+        margin-left:10px;
+        line-height: 80px;
+    }
+    .edit-footer{
+        display: flex;
+        position:fixed;
+        bottom: 16px;   
+        height:100px;
+        width:90%;
+        left:5%;
+        border:1px solid #71a0f7;
+        .edit-save{
+            width:50%;
+            background-color: #fff;
+            line-height: 100px;
+            text-align: center;
+            color: #71a0f7;
+        }
+        .edit-send{
+            width:50%;
+            background-color: #71a0f7;
+            line-height: 100px;
+            text-align: center;
+        }
+    }
 }
 .at-input{
     margin-left:0;
