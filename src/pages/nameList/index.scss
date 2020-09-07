@@ -1,5 +1,41 @@
 .namelist{
+    //background-color: rgb(228, 228, 228);
     .list-import{
-        height:100px;
+        margin:20px auto;
+        width:85%;
+        height:160px;
+        display:flex;
+        line-height: 160px;
+        justify-content:space-around;
+        border:1px solid #ccc;
     }
+    .header{
+        display: flex;
+        height:80px;
+        line-height: 80px;
+        justify-content:space-around;
+        width: 80%;
+        margin: auto;
+    }
+    .table{
+        height: 100px;
+        line-height: 100px;
+        display: flex;
+        justify-content:space-around;
+        .name-text{
+            input{
+                margin-top: 28px;
+                border: 1px solid #ccc;
+            }
+        }
+    }
+}
+.model-input{
+    width:100%;
+    width: 99%;
+    border: 1px solid #ccc;
+}
+.model-text{
+    width:80%;
+    text-align: center;
 }

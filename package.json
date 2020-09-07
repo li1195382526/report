@@ -54,6 +54,7 @@
 		"nerv-devtools": "^1.5.6",
 		"nervjs": "^1.5.6",
 		"redux": "^4.0.5",
+		"mp-colorui":"^0.6.13",
 		"redux-logger": "^3.0.6",
 		"redux-thunk": "^2.3.0",
 		"taro-code": "^2.1.0",

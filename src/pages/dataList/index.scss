@@ -1,0 +1,30 @@
+.checkobox-data{
+    position: absolute;
+    z-index: 100;
+}
+.Atlist-text{
+    padding-left: 60px;
+}
+.edit-footer{
+    display: flex;
+    position:fixed;
+    bottom: 16px;   
+    height:100px;
+    width:90%;
+    left:5%;
+    .edit-save{
+        width:50%;
+        background-color: #fff;
+        line-height: 100px;
+        text-align: center;
+        color: #71a0f7;
+        border:1px solid #71a0f7;
+        margin-right:20px;
+    }
+    .edit-send{
+        width:50%;
+        background-color: #71a0f7;
+        line-height: 100px;
+        text-align: center;
+    }
+}

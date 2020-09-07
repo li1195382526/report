@@ -77,6 +77,7 @@ class App extends Component {
       'pages/answer/index',
       'pages/release/index',
       'pages/nameList/index',
+      'pages/dataList/index',
     ],
     window: {
       backgroundTextStyle: 'light',
