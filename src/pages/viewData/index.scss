@@ -1,17 +1,20 @@
 .view{
     background-color: rgba(244, 244, 244, 1);
         .view-data{
-        height:197px;
+        height:230px;
         width: 100%;
         background-color: rgba(52, 120, 247, 0.682352941176471);
         position: relative;
         .data-step{
             position:absolute;
-            bottom: 0;
+            bottom: 120px;
         }
     }
     .view-text{
         text-align: center;
+        padding-top:90px;
+        color:#fff;
+        font-size: 30px;
     }
     .view-statistics{
         height:170px;
@@ -23,7 +26,7 @@
         justify-content: space-around;
         color:#ccc;
         z-index: 100;
-        top: 100px;
+        top: 140px;
         border-radius: 10px;
         left: 10%;
         .view-num{
@@ -36,7 +39,7 @@
         }
     }
     .view-atlist{
-        margin-top:75px;
+        margin-top:90px;
     }
     .view-radius{
         position: absolute;

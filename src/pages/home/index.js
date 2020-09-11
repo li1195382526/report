@@ -27,6 +27,7 @@ class Home extends Component {
       current: 0,
       isOpened:false
     }
+    this.handleWxLogin = this.handleWxLogin.bind(this)
   }
 
   componentWillMount() {
@@ -101,6 +102,38 @@ class Home extends Component {
       url: '/pages/answer/index'
      })
   }
+
+  handleWxLogin(){
+    let encryptedData = ''
+    let iv = ''
+    Taro.login()
+      .then(r => {
+        console.log(r.code)
+        var code = r.code // 登录凭证
+        if (code) {
+          // 调用获取用户信息接口
+          Taro.getUserInfo({
+            success: function (res) {
+              encryptedData = res.encryptedData
+              iv = res.iv    
+            }
+          }).then(()=>{
+            let params = { encryptedData: encryptedData, iv: iv, code: code }
+            if (!!encryptedData && !!iv) {
+              this.props.dispatch({
+                type: 'login/wxLogin',
+                payload: params
+              })
+            } else {
+              this.errorMessage('微信获取用户信息失败')
+            }
+          }) 
+        } else {
+          this.errorMessage('微信授权登录失败')
+        }
+      })
+  }
+
 
   // handledingyue = () => {
   //   const _this = this
@@ -194,7 +227,7 @@ class Home extends Component {
             <List handleOpen={this.handleOpen.bind(this)} />
           </AtTabsPane>
           <AtTabsPane current={this.state.current} index={1}>
-            <Participate />
+            <Participate handleWxLogin={this.handleWxLogin}/>
           </AtTabsPane>
         </AtTabs>
         <View className='create-fill' onClick={this.toEdit}>
