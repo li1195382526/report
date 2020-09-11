@@ -1,3 +1,35 @@
 .tempalate-box{
-
+    .list{
+        height:200px;
+        border-bottom: 1px solid #ccc;
+        display: flex;
+        .list-img{
+            width:30%;
+            height:80%;
+            text-align: center;
+        }
+        .list-data{
+            width:70%;
+            height:80%;
+            .list-title{
+                line-height: 60px;
+            }
+            .list-description{
+                font-size: 28px;
+                line-height: 46px;
+                color:#ccc;
+            }
+            .list-num{
+                display: flex;
+                justify-content:space-between;
+                .list-clock{
+                    width:68px;
+                    height:45px;
+                    border:1px solid #71a0f7;
+                    color:#71a0f7;
+                    
+                }
+            }
+        }
+    }
 }

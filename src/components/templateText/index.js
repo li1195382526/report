@@ -4,7 +4,7 @@ import { ChartText } from '../ChartText'
 import { ChartSubTable } from '../ChartSubTable'
 import { ChartOptTable } from '../ChartOptTable'
 import PropTypes from 'prop-types';
-import { AtGrid } from "taro-ui"
+import { AtGrid,AtIcon } from "taro-ui"
 import './index.scss'
 
 class TemplateText extends Component {
@@ -19,25 +19,140 @@ class TemplateText extends Component {
     return (
       <View className='tempalate-box'>
         <View className='list'>
-          暑假打卡情况
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            </View>
+          </View>
         </View>
         <View className='list'>
-          每日健康打卡
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            </View>
+          </View>
         </View>
         <View className='list'>
-          暑假开学记录
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            </View>
+          </View>
         </View>
         <View className='list'>
-          秋游地点投票
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            </View>
+          </View>
         </View>
         <View className='list'>
-          孩子身高统计
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            </View>
+          </View>
         </View>
         <View className='list'>
-         暑假开学记录
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            </View>
+          </View>
         </View>
         <View className='list'>
-         每日健康打卡
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            </View>
+          </View>
+        </View>
+        <View className='list'>
+          <View className='list-img'>
+            <img src="" alt=""/>
+          </View>
+          <View className='list-data'>
+            <View className='list-title'>
+            暑假学生作业完成情况
+            </View>
+            <View className='list-description'>
+            为了更好的收集各学科作业，请各位家长配合填写记录单
+            </View>
+            <View className="list-num">
+              <View className='list-clock'>打卡</View>
+              <View><AtIcon value='eye' size='30' color='#F00'></AtIcon>275</View>
+            </View>
+          </View>
         </View>
       </View>
     )

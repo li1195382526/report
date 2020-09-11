@@ -55,7 +55,7 @@ class Participates extends Component {
             这也是内容区 可以随意定义功能
             </AtCard> 
           </View> 
-          <View className='create-qt'>
+          <View className='participate-list'>
              <AtCard
                note='小Tips'
                extra='额外信息'
@@ -66,7 +66,7 @@ class Participates extends Component {
             这也是内容区 可以随意定义功能
             </AtCard> 
           </View> 
-          <View className='create-qt'>
+          <View className='participate-list'>
              <AtCard
                note='小Tips'
                extra='额外信息'
