@@ -67,12 +67,14 @@ class App extends Component {
       'pages/release/index',
       'pages/nameList/index',
       'pages/dataList/index',
+      'pages/personalCenter/index',
+      'pages/templateText/index'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#71a0f7',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black',
+      navigationBarTextStyle: 'white',
     },
   }
 

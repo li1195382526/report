@@ -4,16 +4,33 @@ import { ChartText } from '../ChartText'
 import { ChartSubTable } from '../ChartSubTable'
 import { ChartOptTable } from '../ChartOptTable'
 import PropTypes from 'prop-types';
-import { AtGrid,AtIcon } from "taro-ui"
+import { AtGrid,AtIcon,AtTabBar } from "taro-ui"
 import './index.scss'
 
 class TemplateText extends Component {
-  static propTypes = {
+  config = {
+    navigationBarTitleText: '模板库',
   };
 
-  static defaultProps = {
-  };
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentBar:1
+    }
+  }
 
+  handleClickBar(value){
+    if(value === 0){
+      Taro.navigateTo({
+        url: '/pages/home/index'
+       })
+    }
+    if(value === 2){
+      Taro.navigateTo({
+        url: '/pages/personalCenter/index'
+       })
+    }
+  }
   render() {
 
     return (
@@ -154,6 +171,16 @@ class TemplateText extends Component {
             </View>
           </View>
         </View>
+        <AtTabBar
+            fixed
+            tabList={[
+              { title: '首页', iconType: 'bullet-list' },
+              { title: '模板库', iconType: 'camera' },
+              { title: '个人中心', iconType: 'folder' }
+            ]}
+            onClick={this.handleClickBar.bind(this)}
+            current={this.state.currentBar}
+          />
       </View>
     )
   }

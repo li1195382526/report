@@ -12,6 +12,13 @@ export default {
   },
 
   effects: {
+    * wxLogin({ payload: values }, { call, put }) {
+      const { data } = yield call(homeApi.wxLogin, values);
+      yield put({
+        type: 'commonLogin',
+        payload: data
+      })
+    },
     * getQuestionnaireName({ payload: values, token }, { call, put }) {
       const { data } = yield call(homeApi.getQuestionnaireName, values, token);
 

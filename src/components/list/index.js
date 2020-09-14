@@ -1,17 +1,10 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
-import { connect } from '@tarojs/redux';
 import { AtActionSheet, AtActionSheetItem, AtNavBar,AtCard } from 'taro-ui'
 import { BeginToCollect } from '../../components/beginToCollect'
 import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
 import './index.scss';
-
-@connect(({ List, home, common }) => ({
-  ...List,
-  ...home,
-  ...common
-}))
 
 class List extends Component {
   config = {

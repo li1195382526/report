@@ -4,10 +4,9 @@ import { connect } from '@tarojs/redux';
 import { AtActionSheet, AtMessage, AtButton,AtTabs, AtTabsPane,AtActionSheetItem,AtTabBar } from 'taro-ui'
 import Questionaires from '../../components/questionaire'
 import './index.scss';
-import List from '../list';
+import List from '../../components/list';
 import Participate from '../participates'
-import TemplateText from '../../components/templateText'
-import  PersonalCenter from  "../../components/personalCenter";
+import image from '../../assets/images/u128.png'
 
 @connect(({ home, common }) => ({
   ...home,
@@ -17,7 +16,7 @@ import  PersonalCenter from  "../../components/personalCenter";
 
 class Home extends Component {
   config = {
-    navigationBarTitleText: '问卷列表',
+    navigationBarTitleText: '准报',
   };
 
   constructor(props) {
@@ -25,17 +24,27 @@ class Home extends Component {
     this.state = {
       currentBar:0,
       current: 0,
-      isOpened:false
+      isOpened:false,
+      data:[],
+      isLogin:false 
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
+    this.handleClickBar = this.handleClickBar.bind(this)
+    this.handleOpen = this.handleOpen.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+    this.handleData = this.handleData.bind(this)
+    this.toEdit = this.toEdit.bind(this)
   }
 
   componentWillMount() {
     const token = this.props.token || Taro.getStorageSync('token');
-
     if (!token) {
       Taro.redirectTo({
         url: '../login/index'
+      })
+    }else{
+      this.setState({
+        isLogin:true
       })
     }
   };
@@ -45,7 +54,6 @@ class Home extends Component {
   }
 
   handleOpen (){
-    console.log("----")
       this.setState({
         isOpened:true
       })
@@ -78,21 +86,30 @@ class Home extends Component {
     })
   }
 
-  handleData = () => {
+  handleData () {
        Taro.navigateTo({
        url: '/pages/viewData/index'
       })
   }
 
-  toEdit = () => {
+  toEdit () {
     Taro.navigateTo({
       url: '/pages/edit/index'
      })
   }
 
   handleClickBar(value){
+    if(value === 1){
+      Taro.navigateTo({
+        url: '/pages/templateText/index'
+       })
+    }
+    if(value === 2){
+      Taro.navigateTo({
+        url: '/pages/personalCenter/index'
+       })
+    }
     this.setState({
-      currentBar: value,
       isOpened:false
     })
   }
@@ -108,7 +125,6 @@ class Home extends Component {
     let iv = ''
     Taro.login()
       .then(r => {
-        console.log(r.code)
         var code = r.code // 登录凭证
         if (code) {
           // 调用获取用户信息接口
@@ -120,8 +136,9 @@ class Home extends Component {
           }).then(()=>{
             let params = { encryptedData: encryptedData, iv: iv, code: code }
             if (!!encryptedData && !!iv) {
+              console.log(this.props)
               this.props.dispatch({
-                type: 'login/wxLogin',
+                type: 'home/wxLogin',
                 payload: params
               })
             } else {
@@ -196,11 +213,10 @@ class Home extends Component {
       onChangeStatus: this.handleChangeStatus
     }
     //leftText='+新建问卷'
-    const {currentBar} = this.state
+    const {currentBar, isLogin, data} = this.state
     return (
       <View className='page'>
         {/* 首页跑马灯及创建填报列表 */}
-        {currentBar === 0 && (
            <View>
           <AtMessage />
            <Swiper
@@ -222,16 +238,17 @@ class Home extends Component {
               <View className='demo-text-3'>3</View>
             </SwiperItem>
         </Swiper>
-        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
+        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick}>
           <AtTabsPane current={this.state.current} index={0} >
-            <List handleOpen={this.handleOpen.bind(this)} />
+            <Image src={image} className='list-img' />
+            <List handleOpen={this.handleOpen} />
           </AtTabsPane>
           <AtTabsPane current={this.state.current} index={1}>
             <Participate handleWxLogin={this.handleWxLogin}/>
           </AtTabsPane>
         </AtTabs>
         <View className='create-fill' onClick={this.toEdit}>
-          <AtButton type='primary'>创建填报</AtButton>
+        <AtButton type='primary'>{isLogin ? "创建填报" :"立即登录"}</AtButton>
         </View>
          {/* 列表选择项 */}
          <AtActionSheet isOpened={this.state.isOpened}>
@@ -250,18 +267,12 @@ class Home extends Component {
             <AtActionSheetItem>
                 删除填报
             </AtActionSheetItem>
-            <AtActionSheetItem>
+            <AtActionSheetItem onClick={this.handleWxLogin}>
                 取消
             </AtActionSheetItem>
           </AtActionSheet> 
         </View>
-        )}
-       {currentBar === 1 && (
-         <TemplateText />
-       )}
-       {currentBar === 2 && (
-         <PersonalCenter />
-       )}
+        
           {/* 底部bar */}
           <AtTabBar
             fixed
@@ -270,7 +281,7 @@ class Home extends Component {
               { title: '模板库', iconType: 'camera' },
               { title: '个人中心', iconType: 'folder' }
             ]}
-            onClick={this.handleClickBar.bind(this)}
+            onClick={this.handleClickBar}
             current={this.state.currentBar}
           />
         {/* <View onClick={this.handledingyue} style={{marginBottom:'100px'}}>

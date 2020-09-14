@@ -43,3 +43,10 @@ export const verifyUserExistProjects = (data, token) => syncAction({
   data,
   token
 });
+
+export const wxLogin = (data) => syncAction({
+  url: '/thirdLogin/user/wxLogin',
+  method: 'user.wxLogin',
+  type: 'user',
+  data
+});
