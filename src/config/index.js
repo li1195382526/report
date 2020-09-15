@@ -71,3 +71,83 @@ export const statusOpts = [
   { value: 2, label: '回收中' },
   { value: 5, label: '已结束' }
 ]
+
+export const questionnaire = {
+  "id": "1",
+  "name": "填报1",
+  "title": "填报1",
+  "status": 0 ,
+  "pageList": [{
+    "qtList": [{
+      "type": 1,
+      "selectType": 1,
+      "disSeq": "Q1",
+      "fixSeq": "Q1",
+      "mySeq": "Q1",
+      "cols": 1,
+      "img": "",
+      "smax": 4,
+      "smin": 1,
+      "optList": [{
+        "fixSeq":"A1",
+        "position":0,
+        "val":1,
+        "mySeq":"A1",
+        "input":false,
+        "fmt":"text",
+        "seq":1,
+        "img":"",
+        "label":"选项1",
+        "conf":{},
+        "required":false,
+        "optQuote":false
+      },
+      {
+        "fixSeq":"A1",
+        "position":0,
+        "val":1,
+        "mySeq":"A1",
+        "input":false,
+        "fmt":"text",
+        "seq":1,
+        "img":"",
+        "label":"选项2",
+        "conf":{},
+        "required":false,
+        "optQuote":false
+      }
+    ],
+      "seq": "1",
+      "text": "选择题",
+  },
+  {
+    "type": 2,
+    "selectType": 1,
+    "disSeq": "Q1",
+    "fixSeq": "Q1",
+    "mySeq": "Q1",
+    "cols": 1,
+    "img": "",
+    "smax": 4,
+    "smin": 1,
+    "optList": [{
+      "fixSeq":"A1",
+      "position":0,
+      "val":1,
+      "mySeq":"A1",
+      "input":false,
+      "fmt":"text",
+      "seq":1,
+      "img":"",
+      "label":"题目标题",
+      "conf":{},
+      "required":false,
+      "optQuote":false
+    }
+  ],
+    "seq": "1",
+    "text": "填空",
+}
+],
+  }],
+}

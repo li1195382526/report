@@ -23,7 +23,6 @@ class List extends Component {
   };
 
   handleClick(value) {
-    console.log(value)
     this.props.handleOpen(true)
     this.setState({
         current: value,

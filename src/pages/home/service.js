@@ -4,44 +4,17 @@ const QUESTIONNAIRE = 'questionnaire'
 const INVITION = 'invition'
 const PROJECT = 'project'
 
-//查询问卷列表
-export const getQuestionaires = (data, token) => syncAction({
-  method: 'QuestionnaireCreater.queryQuestionnaire',
-  type: QUESTIONNAIRE,
+//获取创建填报的列表
+export const getOwnerlist = (data,token,url) => syncAction({
   data,
+  method: "POST",
   token
 });
 
-//查询问卷类型
-export const getQuestionaireType = (data, token) => syncAction({
-  method: 'QuestionnaireService.queryQuestionnaireType',
-  type: QUESTIONNAIRE,
-  data,
-  token
-});
-
-//更新问卷状态
-export const updateQtnStatus = (data, token) => syncAction({
-  method: 'InvitationManager.updateQtnStatus',
-  type: INVITION,
-  data,
-  token
-});
-
-//获取问卷名称
-export const getQuestionnaireName = (data, token) => syncAction({
-  method: 'QuestionnaireService.getQuestionnaireName',
-  type: QUESTIONNAIRE,
-  data,
-  token
-});
-
-//验证用户是否有项目权限
-export const verifyUserExistProjects = (data, token) => syncAction({
-  method: 'ProjectManager.verifyUserExistProjects',
-  type: PROJECT,
-  data,
-  token
+export const getCycle = ( token,url) => syncAction({
+  method: "GET",
+  token,
+  url,
 });
 
 export const wxLogin = (data) => syncAction({

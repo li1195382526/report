@@ -3,6 +3,15 @@ import { View } from '@tarojs/components'
 import PropTypes from 'prop-types';
 import { AtRadio }  from 'taro-ui'
 import './index.scss'
+import Questionnaire from './Questionnaire'
+import { connect } from '@tarojs/redux';
+
+
+@connect(({ question,home, common }) => ({
+  ...question,
+  ...home,
+  ...common
+}))
 
 class Question extends Component {
   constructor(props) {
@@ -12,6 +21,10 @@ class Question extends Component {
       }
   }
 
+  componentDidMount(){
+    console.log(this.props)
+  }
+
   handleChange (value) {
     this.setState({
       value
@@ -19,18 +32,14 @@ class Question extends Component {
   }
   
   render() {
-
+    const {questionnaire} = this.props
+    console.log(questionnaire)
     return (
       <View className=''>
-          <AtRadio
-            options={[
-              { label: '单选项一', value: 'option1' },
-              { label: '单选项二', value: 'option2' },
-              { label: '单选项三', value: 'option3' }
-            ]}
-            value={this.state.value}
-            onClick={this.handleChange.bind(this)}
-          />
+        {!!questionnaire.pageList ? questionnaire.pageList.map((item, key) => (
+            !!questionnaire ? <Questionnaire  data={item} index={key} />: null
+        )
+        ):''}
       </View>
     )
   }

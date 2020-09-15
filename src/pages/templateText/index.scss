@@ -5,8 +5,14 @@
         display: flex;
         .list-img{
             width:30%;
+            margin-top:20px;
             height:80%;
             text-align: center;
+            //background: url(../../assets/images/u3232.png) center center / cover;
+            .data-img{
+                width:100%;
+                height:100%;
+            }
         }
         .list-data{
             width:70%;
@@ -27,7 +33,8 @@
                     height:45px;
                     border:1px solid #71a0f7;
                     color:#71a0f7;
-                    
+                    font-size: 28px;
+                    text-align: center;
                 }
             }
         }

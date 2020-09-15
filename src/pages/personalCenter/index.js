@@ -13,7 +13,9 @@ import './index.scss'
 }))
 
 class PersonalCenter extends Component {
-
+  config = {
+    navigationBarTitleText: '个人中心',
+  };
   constructor(props) {
     super(props)
     this.state = {
@@ -43,7 +45,6 @@ class PersonalCenter extends Component {
           }).then(()=>{
             let params = { encryptedData: encryptedData, iv: iv, code: code }
             if (!!encryptedData && !!iv) {
-              console.log(this.props)
               this.props.dispatch({
                 type: 'personal/wxLogin',
                 payload: params

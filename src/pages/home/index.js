@@ -26,7 +26,9 @@ class Home extends Component {
       current: 0,
       isOpened:false,
       data:[],
-      isLogin:false 
+      isLogin:false,
+      pageSize:10,
+      reportId:'1234256' 
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -34,6 +36,8 @@ class Home extends Component {
     this.handleClick = this.handleClick.bind(this)
     this.handleData = this.handleData.bind(this)
     this.toEdit = this.toEdit.bind(this)
+    this.getOwnerlist = this.getOwnerlist.bind(this)
+    this.getCycle = this.getCycle.bind(this)
   }
 
   componentWillMount() {
@@ -49,14 +53,49 @@ class Home extends Component {
     }
   };
 
-  componentWillUnmount() {
-
+  componentDidMount(){
+    this.getOwnerlist()
+    this.getCycle()
   }
 
   handleOpen (){
       this.setState({
         isOpened:true
       })
+  }
+
+  //获取周期
+  getCycle(){
+    const {reportId} = this.state
+    this.props.dispatch({
+      type: 'home/getCycle',
+      token: this.props.token,
+      url:`/v3/report/${reportId}/periods`
+    })
+  }
+
+  getOwnerlist(){
+    const {current, pageSize} = this.state
+    const params = {
+      current,
+      pageSize
+    }
+    this.props.dispatch({
+      type: 'home/getOwnerlist',
+      payload: params,
+      token: this.props.token,
+    })
+  }
+
+   // 小程序上拉加载
+   onReachBottom() {
+    this.props.dispatch({
+      type: 'home/save',
+      payload: {
+        page: this.props.page + 1,
+      },
+    });
+    this.getOwnerlist()
   }
   
   componentWillUnmount = ()=>{
@@ -136,7 +175,6 @@ class Home extends Component {
           }).then(()=>{
             let params = { encryptedData: encryptedData, iv: iv, code: code }
             if (!!encryptedData && !!iv) {
-              console.log(this.props)
               this.props.dispatch({
                 type: 'home/wxLogin',
                 payload: params

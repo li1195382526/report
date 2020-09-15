@@ -13,40 +13,18 @@ let token = Taro.getStorageSync('token')
 export function syncAction(options) {
   token = options.token || token
   let currentUrl = options.url ? options.url : defaultUrl
-
-  if (!noConsole) {
-    console.log(`${new Date().toLocaleString()} token=${JSON.stringify(
-      token
-    )}`)
-    console.log(
-      `${new Date().toLocaleString()}【 url=${currentUrl} 】【 type=${options.type} 】【 method=${options.method} 】data=${JSON.stringify(
-        options.data
-      )}`
-    );
-  }
   return Taro.request({
     url: MAINHOST + currentUrl,
-    data: {
-      "method": options.method,
-      "params": options.data,
-      "type": options.type,
-      ...commonParame
-    },
+    data:  options.data,
     header: {
       'Content-Type': 'application/json',
       'Authorization': 'ePanel ' + token
     },
-    method: 'POST',
+    method: options.method,
     success: function (res) {
       const { data } = res;
 
       if (data.status == HTTP_STATUS.SUCCESS) {
-        if (!noConsole) {
-          console.log(
-            `${new Date().toLocaleString()}【 type=${options.type} 】【 method=${options.method} 【接口响应：】`,
-            data
-          );
-        }
 
         if (data.token) {
           Taro.setStorage({

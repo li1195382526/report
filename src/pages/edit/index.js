@@ -8,10 +8,11 @@ import './index.scss';
 import {Question} from '../../components/Question'
 import { QtSet } from '../../components/QtSet'
 
-@connect(({ Edit, home, common }) => ({
-  ...Edit,
+@connect(({ edit, home, common,question }) => ({
+  ...edit,
   ...home,
-  ...common
+  ...common,
+  ...question
 }))
 
 class Edit extends Component {
@@ -22,13 +23,42 @@ class Edit extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        
+      title:'',
+      memo:'',
+      beginTime:'',
+      endTime:'',
+      id: "1",
+      useCount: "0",
+      pnlCount: "0",
+      useNamelist: "1",
+      namelist: [{
+          "num": 1,
+          "name":"张三",
+          "status":1,
+          "limit":["13901234567"]
+        }],
+      usePeriod: "1",
+      periodType: "1",
+      periodSize: "4",
+      isStrict: "0",
+      isUserLimit: "0",
+      canEdit: "0",
+      needPwd: "0",
+      pwd: "",
+      creatorName: "",
     }
+    this.handleSave = this.handleSave.bind(this)
   }
 
   componentWillMount() {
    
   };
+
+  componentDidMount(){
+    this.setState({
+      
+    })
+  }
 
   onChange = e => {
     this.setState({
@@ -58,42 +88,11 @@ onTimeChange = e => {
      })
   }
 
+  handleSave(){
+    console.log(this.props)
+  }
+
   render() {
-      const qtn = [
-        {
-            "pageName":"第1页",
-            "qtList":[
-                {
-                    "conf":{
-
-                    },
-                    "fixSeq":"Q1", 
-                    "mySeq":"D1",
-                    "opts":[
-
-                    ],
-                    "text":"为了给您提供更好的服务，希望您能抽出几分钟时间，将您的感受和建议告诉我们，我们非常重视每位用户的宝贵意见，期待您的参与，现在我们就马上开始吧！",
-                    "type":6
-                }
-            ],
-            "qtList":[
-                {
-                    "conf":{
-
-                    },
-                    "fixSeq":"Q2", 
-                    "mySeq":"Q1",
-                    "opts":[
-
-                    ],
-                    "text":"为了给您提供更好的服务，希望您能抽出几分钟时间，将您的感受和建议告诉我们，我们非常重视每位用户的宝贵意见，期待您的参与，现在我们就马上开始吧！",
-                    "type":1
-                }
-            ],
-            "qtnId":90242,
-            "title":"第1页"
-        }
-    ]
     return (
       <View className='edit'>
           <View>
@@ -116,14 +115,14 @@ onTimeChange = e => {
           </View>
        <View>
            <View className='edit-title'>填报题目</View>
-           <Question />
+           <Question/>
        </View>
         <View>
           <View className='edit-title'>填报设置</View>
           <QtSet />
         </View>
       <View className='edit-footer'>
-        <View className='edit-save'>
+        <View className='edit-save' onClick={this.handleSave}>
           保存
         </View>
         <View className='edit-send' onClick={this.handleRelease}>

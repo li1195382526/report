@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 
 import "./config/taroConfig"
 
-import Login from './pages/login';
+import PersonalCenter from './pages/personalCenter';
 import dva from './utils/dva';
 import models from './models';
 import { Provider } from '@tarojs/redux';
@@ -83,7 +83,7 @@ class App extends Component {
   render () {
     return (
       <Provider store={store}>
-        <Login />
+        <PersonalCenter />
       </Provider>
     )
   }

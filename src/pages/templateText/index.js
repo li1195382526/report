@@ -6,6 +6,7 @@ import { ChartOptTable } from '../ChartOptTable'
 import PropTypes from 'prop-types';
 import { AtGrid,AtIcon,AtTabBar } from "taro-ui"
 import './index.scss'
+import image from '../../assets/images/u3232.png'
 
 class TemplateText extends Component {
   config = {
@@ -37,7 +38,7 @@ class TemplateText extends Component {
       <View className='tempalate-box'>
         <View className='list'>
           <View className='list-img'>
-            <img src="" alt=""/>
+          <Image src={image} className='data-img'/>
           </View>
           <View className='list-data'>
             <View className='list-title'>
@@ -54,7 +55,7 @@ class TemplateText extends Component {
         </View>
         <View className='list'>
           <View className='list-img'>
-            <img src="" alt=""/>
+            <Image src={image} className='data-img'/>
           </View>
           <View className='list-data'>
             <View className='list-title'>
@@ -71,7 +72,7 @@ class TemplateText extends Component {
         </View>
         <View className='list'>
           <View className='list-img'>
-            <img src="" alt=""/>
+            <Image src={image} className='data-img'/>
           </View>
           <View className='list-data'>
             <View className='list-title'>
@@ -88,7 +89,7 @@ class TemplateText extends Component {
         </View>
         <View className='list'>
           <View className='list-img'>
-            <img src="" alt=""/>
+            <Image src={image} className='data-img'/>
           </View>
           <View className='list-data'>
             <View className='list-title'>
