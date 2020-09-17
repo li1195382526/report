@@ -6,8 +6,8 @@ import { AtGrid,AtListItem,AtAvatar,AtTabBar } from "taro-ui"
 import './index.scss'
 
 
-@connect(({ PersonalCenter, home, common }) => ({
-  ...PersonalCenter,
+@connect(({ edit, home, common }) => ({
+  ...edit,
   ...home,
   ...common
 }))
@@ -22,12 +22,35 @@ class PersonalCenter extends Component {
       currentBar:2
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
+    this.handelListDataBase = this.handelListDataBase.bind(this)
+    this.login = this.login.bind(this)
   }
 
   handelListDataBase(){
-      
+    if(!!this.props.token){
+      Taro.navigateTo({
+            url: '/pages/dataList/index'
+          })
+    }else{
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          isPersonal:2
+        }
+      })
+      this.handleWxLogin()
+    } 
   }
 
+  login(){
+    this.props.dispatch({
+      type: 'home/save',
+      payload: {
+        isPersonal:1
+      }
+    })
+    this.handleWxLogin()
+  }
 
   handleWxLogin(){
     let encryptedData = ''
@@ -43,10 +66,10 @@ class PersonalCenter extends Component {
               iv = res.iv    
             }
           }).then(()=>{
-            let params = { encryptedData: encryptedData, iv: iv, code: code }
+            let params = { encryptedData: encryptedData, iv: iv, code: code,oid:'gh_13a2c24667b4' }
             if (!!encryptedData && !!iv) {
               this.props.dispatch({
-                type: 'personal/wxLogin',
+                type: 'home/wxLogin',
                 payload: params
               })
             } else {
@@ -84,14 +107,14 @@ class PersonalCenter extends Component {
             <View>
                 微信昵称
             </View>
-            <View onClick={this.handleWxLogin}>
+            <View onClick={this.login}>
                 立即登录
             </View>
         </View>
             
         </View>
         <View>
-        <AtListItem title='发布名单库' arrow='right' note='名单库用于发布填报时直接引用名单中人员' onClick={this.handelListDataBase.bind(this)} />
+        <AtListItem title='发布名单库' arrow='right' note='名单库用于发布填报时直接引用名单中人员' onClick={this.handelListDataBase} />
         <AtListItem title='推荐小程序' arrow='right' />
         <AtListItem title='添加小程序' arrow='right' />
         <AtListItem title='更新说明' arrow='right' />

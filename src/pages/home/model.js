@@ -10,20 +10,20 @@ export default {
     qtnTypes: '',
     qtnName: '',
     projectExist: false,
-    userId:0
+    userId:0,
+    isPersonal:0,//0首页登录，1，个人中心等，2，获取名单库登录
   },
 
   effects: {
     * wxLogin({ payload: values }, { call, put }) {
       const { data } = yield call(homeApi.wxLogin, values);
-      console.log(data)
       yield put({
         type: 'wechatLogin',
         payload: data
       })
     },
-    * wechatLogin({ payload: data }, { put }) {
-      console.log(data)
+    * wechatLogin({ payload: data }, { put,select }) {
+      const { isPersonal } = yield select(state => state.home);
       if (data.status == HTTP_STATUS.SUCCESS && data.data.token) {
         let token = data.data.token
         let user = data.data.user
@@ -62,12 +62,26 @@ export default {
             logintime: now
           }
         });
-
-        setTimeout(() => {
-          Taro.redirectTo({
-            url: '../home/index'
-          })
-        }, 100);
+        if(isPersonal === 0){
+          setTimeout(() => {
+            Taro.redirectTo({
+              url: '../home/index'
+            })
+          }, 100);
+        }else if(isPersonal === 2){
+          setTimeout(() => {
+            Taro.redirectTo({
+              url: '../dataList/index'
+            })
+          }, 100);
+        }else{
+          setTimeout(() => {
+            Taro.redirectTo({
+              url: '../personalCenter/index'
+            })
+          }, 100);
+        }
+        
       } else if(data.status == HTTP_STATUS.SUCCESS && !data.data.token) {
         Taro.navigateTo({
           url: '/pages/home/wxlogin?userId=' + data.data.userId
@@ -108,7 +122,6 @@ export default {
 
     * bindPhone({ payload: values }, { call, put }) {
       const { data } = yield call(homeApi.bindPhoneNum, values);
-      console.log(data)
       yield put({
         type: 'wechatLogin',
         payload: data

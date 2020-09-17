@@ -34,27 +34,27 @@ class DataList extends Component {
 
 
   render() {
-      const checkboxGroup = ["1"]
+   //className='checkobox-data'
     return (
      <View>
          <View>
-            <ClCheckbox type="normal" checkboxGroup={checkboxGroup} className='checkobox-data'/>
+            <Checkbox value='选中' checked>选中</Checkbox>
             <AtListItem title='育才（2）班' note='共5人' arrow='right' extraText='管理' className='Atlist-text'/>
          </View>
          <View>
-            <ClCheckbox type="normal" checkboxGroup={checkboxGroup} className='checkobox-data'/>
+            <Checkbox value='选中' checked>选中</Checkbox>
             <AtListItem title='育才（2）班' note='共5人' arrow='right' extraText='管理' className='Atlist-text'/>
          </View>
          <View>
-            <ClCheckbox type="normal" checkboxGroup={checkboxGroup} className='checkobox-data'/>
+            <Checkbox value='选中' checked>选中</Checkbox>
             <AtListItem title='育才（2）班' note='共5人' arrow='right' extraText='管理' className='Atlist-text'/>
          </View>
          <View>
-            <ClCheckbox type="normal" checkboxGroup={checkboxGroup} className='checkobox-data'/>
+            <Checkbox value='选中' checked>选中</Checkbox>
             <AtListItem title='育才（2）班' note='共5人' arrow='right' extraText='管理' className='Atlist-text'/>
          </View>
          <View>
-            <ClCheckbox type="normal" checkboxGroup={checkboxGroup} className='checkobox-data'/>
+            <Checkbox value='选中' checked>选中</Checkbox>
             <AtListItem title='育才（2）班' note='共5人' arrow='right' extraText='管理' className='Atlist-text'/>
          </View>
          <View className='edit-footer'>
