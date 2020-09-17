@@ -1,8 +1,8 @@
 {
   "miniprogramRoot": "./dist",
-  "projectname": "云调查",
-  "description": "云调查小程序",
-  "appid": "wx7c2fb36925f527c0",
+  "projectname": "准报",
+  "description": "准报小程序",
+  "appid": "wxc860d9612140ebd3",
   "setting": {
     "urlCheck": true,
     "es6": false,

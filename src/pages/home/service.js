@@ -5,10 +5,11 @@ const INVITION = 'invition'
 const PROJECT = 'project'
 
 //获取创建填报的列表
-export const getOwnerlist = (data,token,url) => syncAction({
+export const getOwnerlist = (data,token) => syncAction({
   data,
   method: "POST",
-  token
+  token,
+  url:'/v3/report/ownerlist'
 });
 
 export const getCycle = ( token,url) => syncAction({
@@ -18,8 +19,16 @@ export const getCycle = ( token,url) => syncAction({
 });
 
 export const wxLogin = (data) => syncAction({
-  url: '/thirdLogin/user/wxLogin',
-  method: 'user.wxLogin',
+  url: '/v3/login/wxLogin',
+  method: 'POST',
   type: 'user',
   data
 });
+
+export const bindPhoneNum = (data) => syncAction({
+  url: '/v3/login/wxBind',
+  method: 'POST',
+  type: 'user',
+  data,
+  formatData: true
+})

@@ -13,6 +13,8 @@ let token = Taro.getStorageSync('token')
 export function syncAction(options) {
   token = options.token || token
   let currentUrl = options.url ? options.url : defaultUrl
+  console.log(currentUrl)
+  console.log(options)
   return Taro.request({
     url: MAINHOST + currentUrl,
     data:  options.data,

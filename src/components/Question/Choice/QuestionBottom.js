@@ -1,12 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import PropTypes from 'prop-types';
-import { AtRadio,AtInput, AtForm  }  from 'taro-ui'
+import { AtIcon }  from 'taro-ui'
 import './style/question.scss'
 import { connect } from '@tarojs/redux';
 
-@connect(({ question,edit,home, common }) => ({
-  ...question,
+@connect(({ edit,home, common }) => ({
   ...edit,
   ...home,
   ...common
@@ -22,8 +21,8 @@ class QuestionBottom extends Component {
   }
 
   handleChange () {
-    const {opts} = this.props
-    const index = opts.optList.length
+    const {opts,isChange} = this.props
+    const index = opts.optlist.length
     //Object.assign(newObj,user,page)
     const opt = [{
       "fixSeq":`A${index+1 }`,
@@ -39,29 +38,29 @@ class QuestionBottom extends Component {
       "required":false,
       "optQuote":false
     }]
-    const newOptList = opts.optList.concat(opt)
+    const newOptList = opts.optlist.concat(opt)
     let questionnaire = this.props.questionnaire
     questionnaire.pageList[0].qtList.map((item,key)=>{
       if(item.disSeq === opts.disSeq){
-         item.optList = newOptList
+         item.optlist = newOptList
       } 
     })
     
     this.props.dispatch({
-        type: 'question/save',
+        type: 'edit/save',
         payload: {
           questionnaire,
-          id:index+1
+          isChange:!isChange
         }
       })
   }
   
   render() {
     const {opts} = this.props
-    console.log(this.props)
     return (
       <View className='opt-add' onClick={this.handleChange}>
-         添加选项
+         <AtIcon value='add-circle' size='30' color='#71a0f7'></AtIcon>
+         <View className='add'>添加选项</View>
       </View>
     )
   }

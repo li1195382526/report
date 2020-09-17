@@ -1,8 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import PropTypes from 'prop-types';
-import { AtRadio }  from 'taro-ui'
+import { AtRadio,AtInput }  from 'taro-ui'
 import './Open/open.scss'
+import QtnSet from './Choice/QtnSet'
+import './Choice/style/open.scss'
 
 class QuestionOpen extends Component {
   constructor(props) {
@@ -20,11 +22,18 @@ class QuestionOpen extends Component {
   
   render() {
     const {opts} = this.props
-    console.log(opts)
     return (
       <View className='open'>
-        填空
-         
+        <View className='open-text'>{opts.text}</View>
+        <AtInput
+            name='value'
+            title={opts.text}
+            type='text'
+            placeholder='填空题'
+            value={this.state.value}
+            onChange={this.handleText}
+          />
+        <QtnSet opts={opts}/>
       </View>
     )
   }

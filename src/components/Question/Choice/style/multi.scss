@@ -1,0 +1,12 @@
+.multi-choice{
+    .multi-opt{
+        display: flex;
+        background-color: #ffffff;
+        .multi-input{
+            width:90%;
+        }
+        .multi-icon{
+            margin-top:10px;
+        }
+    }
+}

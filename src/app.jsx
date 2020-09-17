@@ -61,6 +61,7 @@ class App extends Component {
   config = {
     pages: [
       'pages/home/index',
+      'pages/home/wxlogin',
       'pages/viewData/index',
       'pages/edit/index',
       'pages/answer/index',

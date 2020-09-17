@@ -31,8 +31,8 @@ export const MAINHOST = QAHOST
  * wx 根据 code 获取session地址
  */
 export const WXGETSESSION = 'https://api.weixin.qq.com/sns/jscode2session'
-export const APPID = 'wx7c2fb36925f527c0'
-export const SECRET = '0218f83ffe2a60bbd3b4788eba1beab9'
+export const APPID = 'wxc860d9612140ebd3'
+export const SECRET = '3c0dc295779e688da881665f93239923'
 
 // 输出日志信息
 export const noConsole = false;
@@ -88,7 +88,7 @@ export const questionnaire = {
       "img": "",
       "smax": 4,
       "smin": 1,
-      "optList": [{
+      "optlist": [{
         "fixSeq":"A1",
         "position":0,
         "val":1,
@@ -130,7 +130,7 @@ export const questionnaire = {
     "img": "",
     "smax": 4,
     "smin": 1,
-    "optList": [{
+    "optlist": [{
       "fixSeq":"A1",
       "position":0,
       "val":1,

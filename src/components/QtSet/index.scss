@@ -1,0 +1,30 @@
+.qtn-setting{
+    margin-bottom: 120px;
+    .set-publisher{
+        height: 100px;
+        background-color: #fff;
+        margin-top:20px;
+        border:1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+        line-height: 100px;
+        input{
+            width: 200px;
+            height:100px;
+        }
+    }
+    .set-cycle{
+        height: 100px;
+        background-color: #fff;
+        display: flex;
+        justify-content: space-between;
+        line-height: 100px;
+        margin-left: 20px;
+        input{
+            width: 215px;
+            height:100px;
+            text-align: right;
+            padding-right: 46px;
+        }
+    }
+}

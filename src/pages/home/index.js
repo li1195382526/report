@@ -54,8 +54,18 @@ class Home extends Component {
   };
 
   componentDidMount(){
-    this.getOwnerlist()
-    this.getCycle()
+    const token = this.props.token || Taro.getStorageSync('token');
+    if (!token) {
+      this.setState({
+        isLogin:false
+      })
+    }else{
+      this.getOwnerlist()
+      this.getCycle()
+      this.setState({
+        isLogin:true
+      })
+    }
   }
 
   handleOpen (){
@@ -74,6 +84,7 @@ class Home extends Component {
     })
   }
 
+  //获取创建填报的列表
   getOwnerlist(){
     const {current, pageSize} = this.state
     const params = {
@@ -108,16 +119,6 @@ class Home extends Component {
     });
   }
 
-  componentDidShow = () => {
-
-  }
-
-  handleLogout = () => {
-    this.props.dispatch({
-      type: 'home/logout',
-    })
-  }
-
   handleClick (value) {
     this.setState({
       current: value,
@@ -132,10 +133,48 @@ class Home extends Component {
   }
 
   toEdit () {
-    Taro.navigateTo({
+    const {isLogin} = this.state
+    if(!!isLogin){
+      Taro.navigateTo({
       url: '/pages/edit/index'
      })
+    }else{
+      this.handleWxLogin()
+    }
+    
   }
+
+  //微信登录
+  handleWxLogin() {
+    let encryptedData = ''
+    let iv = ''
+    Taro.login()
+      .then(r => {
+        var code = r.code // 登录凭证
+        if (code) {
+          // 调用获取用户信息接口
+          Taro.getUserInfo({
+            success: function (res) {
+              encryptedData = res.encryptedData
+              iv = res.iv    
+            }
+          }).then(()=>{
+            let params = { encryptedData: encryptedData, iv: iv, code: code, userId: '0',oid:'gh_13a2c24667b4' }
+            if (!!encryptedData && !!iv) {
+              this.props.dispatch({
+                type: 'home/wxLogin',
+                payload: params
+              })
+            } else {
+              this.errorMessage('微信获取用户信息失败')
+            }
+          }) 
+        } else {
+          this.errorMessage('微信授权登录失败')
+        }
+      })
+  }
+
 
   handleClickBar(value){
     if(value === 1){
@@ -158,88 +197,6 @@ class Home extends Component {
       url: '/pages/answer/index'
      })
   }
-
-  handleWxLogin(){
-    let encryptedData = ''
-    let iv = ''
-    Taro.login()
-      .then(r => {
-        var code = r.code // 登录凭证
-        if (code) {
-          // 调用获取用户信息接口
-          Taro.getUserInfo({
-            success: function (res) {
-              encryptedData = res.encryptedData
-              iv = res.iv    
-            }
-          }).then(()=>{
-            let params = { encryptedData: encryptedData, iv: iv, code: code }
-            if (!!encryptedData && !!iv) {
-              this.props.dispatch({
-                type: 'home/wxLogin',
-                payload: params
-              })
-            } else {
-              this.errorMessage('微信获取用户信息失败')
-            }
-          }) 
-        } else {
-          this.errorMessage('微信授权登录失败')
-        }
-      })
-  }
-
-
-  // handledingyue = () => {
-  //   const _this = this
-  //   wx.requestSubscribeMessage({
-  //     tmplIds: ['I-we9Wszvb7IAn-6IR3GqYbdUBxp3nUqrLLhCwKwOm0'], // 此处可填写多个模板 ID，但低版本微信不兼容只能授权一个
-  //     success (res) {
-  //       console.log('已授权接收订阅消息')
-  //       _this.sendMessage()
-  //     }
-  //   })
-  // }
-
-  // sendMessage =() => {
-  //     var self = this;
-  //     console.log(this)
-  //     var _access_token = this.props.token
-  //     var opeid = this.props.openid
-  //     let url = 'https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=' + _access_token
-     
-  //     let jsonData = {
-  //       access_token: _access_token,
-  //       touser: opeid,
-  //       template_id: 'I-we9Wszvb7IAn-6IR3GqYbdUBxp3nUqrLLhCwKwOm0',
-  //       page: "pages/home/index",
-  //       data: {
-  //         "thing7": { "value": "互联网大会科学技术", "color": "#173177" },
-  //         "thing4": { "value": "双人海鲜自助餐", "color": "#173177" },
-  //         "thing3": { "value": "2019年11月1日", "color": "#173177" },
-  //         "thing2": { "value": "全场通用", "color": "#173177" },
-  //         "thing8": { "value": "请在有效期内使用", "color": "#173177" },
-  //       },
-  //       miniprogram_state: 'developer',
-  //     }
-  //     wx.request({
-  //       url: url,
-  //       data:jsonData,
-  //       method: 'POST',
-  //       success (res) {
-  //         console.log("***" + JSON.stringify(res))
-  //         if (res.data.errcode === 0) {
-  //           wx.showToast({
-  //             title: '通知成功',
-  //           })
-  //         }
-  //       },
-  //       fail (err) {
-  //         console.log('request fail ', err);
-  //       },
-  //     })
-    
-  // }
 
   render() {
     const { qtnList, qtnTypes, projectExist } = this.props
@@ -278,16 +235,18 @@ class Home extends Component {
         </Swiper>
         <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick}>
           <AtTabsPane current={this.state.current} index={0} >
-            <Image src={image} className='list-img' />
-            <List handleOpen={this.handleOpen} />
+            {!!isLogin ? <List handleOpen={this.handleOpen} /> : 
+            <Image src={image} className='list-img' />}
           </AtTabsPane>
           <AtTabsPane current={this.state.current} index={1}>
-            <Participate handleWxLogin={this.handleWxLogin}/>
+            <Participate />
           </AtTabsPane>
         </AtTabs>
+        
         <View className='create-fill' onClick={this.toEdit}>
-        <AtButton type='primary'>{isLogin ? "创建填报" :"立即登录"}</AtButton>
+          <AtButton type='primary' circle openType='getUserInfo'>{isLogin?"创建填报":"立即登录"}</AtButton>
         </View>
+        
          {/* 列表选择项 */}
          <AtActionSheet isOpened={this.state.isOpened}>
             <AtActionSheetItem onClick={this.toEdit}>
@@ -305,7 +264,7 @@ class Home extends Component {
             <AtActionSheetItem>
                 删除填报
             </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.handleWxLogin}>
+            <AtActionSheetItem>
                 取消
             </AtActionSheetItem>
           </AtActionSheet> 
@@ -322,9 +281,6 @@ class Home extends Component {
             onClick={this.handleClickBar}
             current={this.state.currentBar}
           />
-        {/* <View onClick={this.handledingyue} style={{marginBottom:'100px'}}>
-          订阅
-        </View> */}
       </View>
     )
   }

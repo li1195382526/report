@@ -8,11 +8,10 @@ import './index.scss';
 import {Question} from '../../components/Question'
 import { QtSet } from '../../components/QtSet'
 
-@connect(({ edit, home, common,question }) => ({
+@connect(({ edit, home, common }) => ({
   ...edit,
   ...home,
-  ...common,
-  ...question
+  ...common
 }))
 
 class Edit extends Component {
@@ -48,13 +47,26 @@ class Edit extends Component {
       creatorName: "",
     }
     this.handleSave = this.handleSave.bind(this)
+    this.getQuestionner = this.getQuestionner.bind(this)
+    this.handleTitle = this.handleTitle.bind(this)
   }
 
   componentWillMount() {
    
   };
 
+  //获取周期
+  getQuestionner(){
+    const {reportId} = this.state
+    this.props.dispatch({
+      type: 'edit/getQuestionner',
+      token: this.props.token,
+      url:`/v3/report/${3}`
+    })
+  }
+
   componentDidMount(){
+    //this.getQuestionner()
     this.setState({
       
     })
@@ -89,10 +101,42 @@ onTimeChange = e => {
   }
 
   handleSave(){
-    console.log(this.props)
+    const {info,questionnaire} = this.props
+    const params = {
+      info,
+      questionnaire
+    }
+    this.props.dispatch({
+      type: 'edit/save',
+      token: this.props.token,
+      payload: params,
+    })
+  }
+
+  handleTitle(value){
+    let {info} = this.props
+    info.title = value
+    this.props.dispatch({
+      type: 'edit/save',
+      payload: {
+        info
+      }
+    })
+  }
+
+  handleMemo(value){
+    let {info} = this.props
+    info.memo = value
+    this.props.dispatch({
+      type: 'edit/save',
+      payload: {
+        info
+      }
+    })
   }
 
   render() {
+    const {questionnaire,info} = this.props
     return (
       <View className='edit'>
           <View>
@@ -102,20 +146,21 @@ onTimeChange = e => {
                name='value' 
                type='text'
                placeholder='请输入填报主题名称'
-               value={this.state.value}
-               onChange={this.handleChange.bind(this)}
+               value={info.title}
+               onChange={this.handleTitle}
              />
              </View>
              <AtTextarea
-                value={this.state.value}
-                onChange={this.handleChange.bind(this)}
+                style={{borderTop:'none'}}
+                value={info.memo}
+                onChange={this.handleMemo.bind(this)}
                 maxLength={200}
                 placeholder='请输入填报说明描述'
               />
           </View>
        <View>
            <View className='edit-title'>填报题目</View>
-           <Question/>
+           <Question questionnaire={questionnaire}/>
        </View>
         <View>
           <View className='edit-title'>填报设置</View>

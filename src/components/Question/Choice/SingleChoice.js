@@ -1,35 +1,91 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import PropTypes from 'prop-types';
-import { AtRadio }  from 'taro-ui'
+import { AtRadio,AtInput, AtIcon  }  from 'taro-ui'
+import './style/multi.scss'
+import { connect } from '@tarojs/redux';
 
+@connect(({ edit,home, common }) => ({
+  ...edit,
+  ...home,
+  ...common
+}))
 class SingleChoice extends Component {
   constructor(props) {
       super(props)
       this.state = {
           vaule:''
       }
+      this.handleText = this.handleText.bind(this)
+      this.handleChange = this.handleChange.bind(this)
+      this.handleDeleteOpt = this.handleDeleteOpt.bind(this)
   }
 
   handleChange (value) {
-    this.setState({
-      value
+   
+  }
+
+  handleText(value){
+    // this.setState({
+    //   value
+    // })
+  }
+
+  //删除选项
+  handleDeleteOpt(item,key){
+    console.log(key)
+    const {opts,isChange} = this.props
+    let newOptList = opts.optlist.filter((val)=> val.mySeq !== item.mySeq)
+    let questionnaire = this.props.questionnaire
+    console.log(questionnaire)
+    questionnaire.pageList[0].qtList.map((item,key)=>{
+      if(item.disSeq === opts.disSeq){
+         item.optlist = newOptList
+      } 
     })
+    
+    this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          questionnaire,
+          isChange:!isChange
+        }
+      })
   }
   
   render() {
+    const {opts} = this.props
     return (
-      <View className=''>
-         
-           <AtRadio
-                options={[
-                { label: '单选项一', value: 'option1' },
-                { label: '单选项二', value: 'option2' },
-                { label: '单选项三', value: 'option3' }
-                ]}
-                value={this.state.value}
-                onClick={this.handleChange.bind(this)}
+      <View className='.multi-choice'>
+          <AtInput
+            name='value'
+            title={opts.text}
+            type='text'
+            placeholder='单选题'
+            value={this.state.value}
+            onChange={this.handleText}
+          />
+          
+          {opts.optlist.map((item,key)=>(
+            <View className='multi-opt'>
+              <View className='multi-input'>
+                <AtInput
+                  style={{width:'90%'}}
+                  subtract
+                  name='value'
+                  title='选项'
+                  type='text'
+                  placeholder='选项'
+                  value={item.label}
+                  onChange={this.handleChange}
                 />
+              </View>
+                <View className='multi-icon' onClick={(val)=>this.handleDeleteOpt(item,key)}>
+                  <AtIcon value='subtract' size='15' color='red'></AtIcon>
+                </View> 
+            </View>
+          
+          ))}
       </View>
     )
   }
