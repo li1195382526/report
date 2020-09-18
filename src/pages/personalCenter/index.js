@@ -52,6 +52,13 @@ class PersonalCenter extends Component {
     this.handleWxLogin()
   }
 
+  errorMessage = (msg) => {
+    Taro.atMessage({
+      'message': msg,
+      'type': 'error'
+    })
+  }
+
   handleWxLogin(){
     let encryptedData = ''
     let iv = ''
@@ -62,6 +69,10 @@ class PersonalCenter extends Component {
           // 调用获取用户信息接口
           Taro.getUserInfo({
             success: function (res) {
+              Taro.setStorage({
+                key: "wxInfo",
+                data: res.userInfo
+              })
               encryptedData = res.encryptedData
               iv = res.iv    
             }
@@ -96,20 +107,23 @@ class PersonalCenter extends Component {
   }
 
   render() {
-
+    const {token,wxInfo} = this.props
     return (
       <View className='personal'>
         <View className='personal-login'>
           <View className='head-img'>
-            <AtAvatar image='https://jdc.jd.com/img/200' circle={true} size='300' ></AtAvatar>
+            <AtAvatar image={!!token ?wxInfo.avatarUrl :'https://jdc.jd.com/img/200'} circle={true} size='300' ></AtAvatar>
           </View>
         <View className='wechat-name'>
             <View>
-                微信昵称
+              {!!token ? wxInfo.nickName :'暂无'}
             </View>
-            <View onClick={this.login}>
-                立即登录
-            </View>
+            {!token && (
+              <View onClick={this.login}>
+                  立即登录
+              </View>
+            )}
+            
         </View>
             
         </View>

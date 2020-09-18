@@ -55,7 +55,7 @@ class Edit extends Component {
    
   };
 
-  //获取周期
+  //获取问卷
   getQuestionner(){
     const {reportId} = this.state
     this.props.dispatch({

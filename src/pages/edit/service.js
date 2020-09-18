@@ -14,6 +14,7 @@ export const getQuestionner = ( token,url) => syncAction({
 export const save = (data,token) => syncAction({
   url: '/v3/report/save',
   method: 'POST',
+  token,
   type: 'user',
   data
 });

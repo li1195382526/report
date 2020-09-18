@@ -155,6 +155,10 @@ class Home extends Component {
           // 调用获取用户信息接口
           Taro.getUserInfo({
             success: function (res) {
+              Taro.setStorage({
+                key: "wxInfo",
+                data: res.userInfo
+              })
               encryptedData = res.encryptedData
               iv = res.iv    
             }

@@ -69,7 +69,8 @@ class App extends Component {
       'pages/nameList/index',
       'pages/dataList/index',
       'pages/personalCenter/index',
-      'pages/templateText/index'
+      'pages/templateText/index',
+      'pages/manage/index'
     ],
     window: {
       backgroundTextStyle: 'light',

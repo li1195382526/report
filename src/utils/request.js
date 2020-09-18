@@ -10,11 +10,13 @@ let token = Taro.getStorageSync('token')
  * 内部调用用
  * @param {*} options 
  */
+// eslint-disable-next-line import/prefer-default-export
 export function syncAction(options) {
+  console.log('======')
   token = options.token || token
   let currentUrl = options.url ? options.url : defaultUrl
-  console.log(currentUrl)
-  console.log(options)
+  console.log(token)
+  console.log(MAINHOST + currentUrl)
   return Taro.request({
     url: MAINHOST + currentUrl,
     data:  options.data,
@@ -37,7 +39,7 @@ export function syncAction(options) {
       } else if (data.status == HTTP_STATUS.AUTHENTICATE) {
         Taro.removeStorageSync('token')
         Taro.redirectTo({
-          url: '/pages/login/index',
+          url: '/pages/home/index',
         })
       }
     },
