@@ -133,6 +133,11 @@ class NameList extends Component {
            <View><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
        </View>   
        ))}
+       <View className='namelist-add'>
+           <View>批量添加</View>
+           <View>单个添加</View>
+       </View>
+       <View>保存名单</View>
        <AtModal isOpened={isOpen}>
             <AtModalHeader>导入填写名单</AtModalHeader>
             <AtModalContent>
