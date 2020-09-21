@@ -3,10 +3,10 @@ import { View, Picker } from '@tarojs/components'
 import PropTypes from 'prop-types';
 import { AtIcon,AtList,AtListItem }  from 'taro-ui'
 import './index.scss'
+// eslint-disable-next-line import/first
 import { connect } from '@tarojs/redux';
 
-@connect(({ question,edit,home, common }) => ({
-    ...question,
+@connect(({edit,home, common }) => ({
     ...edit,
     ...home,
     ...common
@@ -15,7 +15,7 @@ class NewQuestion extends Component {
   constructor(props) {
       super(props)
       this.state = {
-        selector: ['单选', '多选', '填空'],
+        selector: ['单选', '多选', '填空文本'],
         selectorChecked: '单选',
       }
       this.onChange = this.onChange.bind(this)
@@ -45,9 +45,9 @@ class NewQuestion extends Component {
           "fmt":"text",
           "seq":1,
           "img":"",
-          "label":"选项1",
+          "label":"",
           "conf":{},
-          "required":false,
+          "required":true,
           "optQuote":false
         }
       ],

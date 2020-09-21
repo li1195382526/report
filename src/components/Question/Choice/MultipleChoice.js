@@ -21,19 +21,45 @@ class MultipleChoice extends Component {
       this.handleDeleteOpt = this.handleDeleteOpt.bind(this)
   }
 
-  handleChange (value) {
-   
+  handleChange (value,item) {
+    const {opts,isChange} = this.props
+    let newOptList = opts.optlist.filter((val)=> val.mySeq === item.mySeq ? val.label = value :val)
+    console.log(newOptList)
+    let questionnaire = this.props.questionnaire
+    questionnaire.pageList[0].qtList.map((item,key)=>{
+      if(item.disSeq === opts.disSeq){
+         item.optlist = newOptList
+      } 
+    })
+    this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          questionnaire,
+          isChange:!isChange
+        }
+      })
   }
 
   handleText(value){
-    // this.setState({
-    //   value
-    // })
+    const {opts,isChange} = this.props
+    let questionnaire = this.props.questionnaire
+    questionnaire.pageList[0].qtList.map((item,key)=>{
+      if(item.disSeq === opts.disSeq){
+         item.text = value
+      } 
+    })
+    this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          questionnaire,
+          isChange:!isChange
+        }
+      })
   }
+  
 
   //删除选项
   handleDeleteOpt(item,key){
-    console.log(key)
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq !== item.mySeq)
     let questionnaire = this.props.questionnaire
@@ -55,16 +81,15 @@ class MultipleChoice extends Component {
   render() {
     const {opts} = this.props
     return (
-      <View className='.multi-choice'>
-          <AtInput
-            name='value'
-            title={opts.text}
-            type='text'
-            placeholder='多选题'
-            value={this.state.value}
-            onChange={this.handleText}
-          />
-          
+      <View className='multi-choice'>
+         <AtInput
+           name='value'
+           title='题目标题'
+           type='text'
+           placeholder={opts.text}
+           value={opts.text}
+           onChange={this.handleText}
+         />
           {opts.optlist.map((item,key)=>(
             <View className='multi-opt'>
               <View className='multi-input'>
@@ -76,14 +101,13 @@ class MultipleChoice extends Component {
                   type='text'
                   placeholder='选项'
                   value={item.label}
-                  onChange={this.handleChange}
+                  onChange={(val)=>this.handleChange(val,item)}
                 />
               </View>
                 <View className='multi-icon' onClick={(val)=>this.handleDeleteOpt(item,key)}>
                   <AtIcon value='subtract' size='15' color='red'></AtIcon>
                 </View> 
             </View>
-          
           ))}
       </View>
     )

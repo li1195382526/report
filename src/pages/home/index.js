@@ -24,11 +24,10 @@ class Home extends Component {
     this.state = {
       currentBar:0,
       current: 0,
+      currentPage:1,
       isOpened:false,
-      data:[],
       isLogin:false,
       pageSize:10,
-      reportId:'1234256' 
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -38,6 +37,8 @@ class Home extends Component {
     this.toEdit = this.toEdit.bind(this)
     this.getOwnerlist = this.getOwnerlist.bind(this)
     this.getCycle = this.getCycle.bind(this)
+    this.handleCopy = this.handleCopy.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentWillMount() {
@@ -68,9 +69,10 @@ class Home extends Component {
     }
   }
 
-  handleOpen (){
+  handleOpen (value,reportId){
       this.setState({
-        isOpened:true
+        isOpened:true,
+        reportId
       })
   }
 
@@ -86,9 +88,9 @@ class Home extends Component {
 
   //获取创建填报的列表
   getOwnerlist(){
-    const {current, pageSize} = this.state
+    const {currentPage, pageSize} = this.state
     const params = {
-      current,
+      current:currentPage,
       pageSize
     }
     this.props.dispatch({
@@ -132,11 +134,11 @@ class Home extends Component {
       })
   }
 
-  toEdit () {
-    const {isLogin} = this.state
+  toEdit (value) {
+    const {isLogin,reportId} = this.state
     if(!!isLogin){
       Taro.navigateTo({
-      url: '/pages/edit/index'
+      url: `/pages/edit/index?isInit=${value}&reportId=${reportId}`
      })
     }else{
       this.handleWxLogin()
@@ -202,17 +204,54 @@ class Home extends Component {
      })
   }
 
-  render() {
-    const { qtnList, qtnTypes, projectExist } = this.props
-    const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
-
-    const qtProps = {
-      qtnTypes,
-      view: false,
-      onChangeStatus: this.handleChangeStatus
+  //复制填报
+  handleCopy(){
+    const {reportId} = this.state
+    const params = {
+      reportId
     }
-    //leftText='+新建问卷'
-    const {currentBar, isLogin, data} = this.state
+    this.setState({
+      isOpened:false
+    })
+    this.props.dispatch({
+      type: 'home/copyReport',
+      payload: params,
+      token: this.props.token,
+      url:`/v3/report/${reportId}/copy`
+    }).then(
+      ()=>{
+        this.getOwnerlist()
+      }
+    )
+
+  }
+
+  //删除填报
+  handleDelete(){
+    const {reportId} = this.state
+    console.log(reportId)
+    const params = {
+      reportId
+    }
+    this.setState({
+      isOpened:false
+    })
+    this.props.dispatch({
+      type: 'home/deleteReport',
+      payload: params,
+      token: this.props.token,
+      url:`/v3/report/${reportId}`
+    }).then(
+      ()=>{
+        this.getOwnerlist()
+      }
+    )
+  }
+
+  render() {
+    const {createList } = this.props
+    const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
+    const {isLogin} = this.state
     return (
       <View className='page'>
         {/* 首页跑马灯及创建填报列表 */}
@@ -239,7 +278,8 @@ class Home extends Component {
         </Swiper>
         <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick}>
           <AtTabsPane current={this.state.current} index={0} >
-            {!!isLogin ? <List handleOpen={this.handleOpen} /> : 
+            {!!isLogin ? <List handleOpen={this.handleOpen} createList={createList}/> : 
+            // eslint-disable-next-line react/jsx-no-undef
             <Image src={image} className='list-img' />}
           </AtTabsPane>
           <AtTabsPane current={this.state.current} index={1}>
@@ -247,13 +287,13 @@ class Home extends Component {
           </AtTabsPane>
         </AtTabs>
         
-        <View className='create-fill' onClick={this.toEdit}>
+        <View className='create-fill' onClick={()=>this.toEdit(0)}>
           <AtButton type='primary' circle openType='getUserInfo'>{isLogin?"创建填报":"立即登录"}</AtButton>
         </View>
         
          {/* 列表选择项 */}
          <AtActionSheet isOpened={this.state.isOpened}>
-            <AtActionSheetItem onClick={this.toEdit}>
+            <AtActionSheetItem onClick={()=>this.toEdit(1)}>
                 编辑填报
             </AtActionSheetItem>
             <AtActionSheetItem onClick={this.submit}>
@@ -262,10 +302,10 @@ class Home extends Component {
             <AtActionSheetItem onClick={this.handleData}>
                 查看结果
             </AtActionSheetItem>
-            <AtActionSheetItem>
+            <AtActionSheetItem onClick={this.handleCopy}>
                 复制填报
             </AtActionSheetItem>
-            <AtActionSheetItem>
+            <AtActionSheetItem onClick={this.handleDelete}>
                 删除填报
             </AtActionSheetItem>
             <AtActionSheetItem>

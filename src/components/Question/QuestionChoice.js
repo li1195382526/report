@@ -29,8 +29,8 @@ class QuestionChoice extends Component {
           {/* 单选0 多选2 */}
             {opts.selectType === 0 &&  <SingleChoice opts={opts}/>}
             {opts.selectType === 1 &&  <MultipleChoice opts={opts}/>}
-            <QuestionBottom opts={opts}/>
-            <QtnSet opts={opts}/>
+            <QuestionBottom opts={opts} />
+            <QtnSet opts={opts} />
       </View>
     )
   }

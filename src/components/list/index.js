@@ -7,15 +7,12 @@ import { Link } from '../../components/link'
 import './index.scss';
 
 class List extends Component {
-  config = {
-    navigationBarTitleText: '收集数据',
-  };
-
   constructor(props) {
     super(props)
     this.state = {
         
     }
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentWillMount() {
@@ -23,84 +20,29 @@ class List extends Component {
   };
 
   handleClick(value) {
-    this.props.handleOpen(true)
-    this.setState({
-        current: value,
-    })
-//   Taro.navigateTo({
-//       url: '/pages/viewData/index'
-//     })
+    // eslint-disable-next-line taro/this-props-function
+    this.props.handleOpen(true,value)
 }
 
   render() {
+    const {createList} = this.props
     return (
       <View className='page'>
+        {createList && createList.map((item,key)=>(
           <View className='create-qt'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick.bind(this)}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
+          <AtCard
+            note={`${item.creatorName} | ${item.updateTime || item.createTime} | 参与${item.pnlCount}/${item.totalCount}`}
+            extra={item.status == 0 ? '编辑中':''}
+            title={item.title}
+            thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
+            onClick={()=>this.handleClick(item.id)}
+          >
+          {item.memo}
+          </AtCard> 
           </View> 
-          <View className='create-qt'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick.bind(this)}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View> 
-          <View className='create-qt'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick.bind(this)}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View> 
-          <View className='create-qt'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick.bind(this)}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View> 
-          <View className='create-qt'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick.bind(this)}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View> 
-          <View className='create-qt'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick.bind(this)}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View>
+        ))}
+         
+        
       </View>
     )
   }

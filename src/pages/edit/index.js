@@ -1,12 +1,14 @@
+/* eslint-disable react/no-unused-state */
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtList,AtListItem,AtInput,AtTextarea } from 'taro-ui'
+import { AtList,AtListItem,AtInput,AtTextarea,AtMessage } from 'taro-ui'
 import { BeginToCollect } from '../../components/beginToCollect'
 import { Link } from '../../components/link'
 import './index.scss';
 import {Question} from '../../components/Question'
 import { QtSet } from '../../components/QtSet'
+import {info,questionnaire} from '../../config'
 
 @connect(({ edit, home, common }) => ({
   ...edit,
@@ -22,33 +24,12 @@ class Edit extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      title:'',
-      memo:'',
-      beginTime:'',
-      endTime:'',
-      id: "1",
-      useCount: "0",
-      pnlCount: "0",
-      useNamelist: "1",
-      namelist: [{
-          "num": 1,
-          "name":"张三",
-          "status":1,
-          "limit":["13901234567"]
-        }],
-      usePeriod: "1",
-      periodType: "1",
-      periodSize: "4",
-      isStrict: "0",
-      isUserLimit: "0",
-      canEdit: "0",
-      needPwd: "0",
-      pwd: "",
-      creatorName: "",
+      
     }
     this.handleSave = this.handleSave.bind(this)
     this.getQuestionner = this.getQuestionner.bind(this)
     this.handleTitle = this.handleTitle.bind(this)
+    this.handleTips = this.handleTips.bind(this)
   }
 
   componentWillMount() {
@@ -57,19 +38,31 @@ class Edit extends Component {
 
   //获取问卷
   getQuestionner(){
-    const {reportId} = this.state
+    const {reportId} = this.$router.params
+    console.log(reportId)
     this.props.dispatch({
       type: 'edit/getQuestionner',
       token: this.props.token,
-      url:`/v3/report/${3}`
+      url:`/v3/report/${reportId}`
     })
   }
 
   componentDidMount(){
-    //this.getQuestionner()
-    this.setState({
-      
-    })
+    const init = this.$router.params.isInit
+    console.log(this.$router.params.isInit)
+
+    //第一次编辑填报前端数据，编辑中问卷获取问卷信息
+    if(init == 1){
+      this.getQuestionner()
+    }else{
+      this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          info,
+          questionnaire
+        }
+      })
+    }
   }
 
   onChange = e => {
@@ -100,14 +93,40 @@ onTimeChange = e => {
      })
   }
 
+  handleTips (type,message) {
+    Taro.atMessage({
+      'message': message,
+      'type': type,
+    })
+  }
+
   handleSave(){
+    // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
+    if(info.title.length === 0){
+        this.handleTips('error','填报主题不能为空')
+        return
+    }
+    if(info.title.length >= 20){
+      this.handleTips('error','填报主题不能超过20个字符')
+      return
+  }
+  if(info.memo.length === 0){
+    this.handleTips('error','填报说明不能为空')
+    return
+  }
+
+  if(info.memo.length >= 200){
+    this.handleTips('error','填报说明不能超过200个字符')
+    return
+  }
+    
     const params = {
       info,
       questionnaire
     }
     this.props.dispatch({
-      type: 'edit/save',
+      type: 'edit/saveQtn',
       token: this.props.token,
       payload: params,
     })
@@ -125,8 +144,9 @@ onTimeChange = e => {
   }
 
   handleMemo(value){
+    // eslint-disable-next-line no-shadow
     let {info} = this.props
-    info.memo = value
+    info.memo = value.target.value
     this.props.dispatch({
       type: 'edit/save',
       payload: {
@@ -136,12 +156,14 @@ onTimeChange = e => {
   }
 
   render() {
+    // eslint-disable-next-line no-shadow
     const {questionnaire,info} = this.props
     return (
       <View className='edit'>
+        <AtMessage />
           <View>
              <View className='edit-title'>填报主题</View> 
-             <View>
+             <View className='edit-titleText'>
              <AtInput
                name='value' 
                type='text'
@@ -151,16 +173,16 @@ onTimeChange = e => {
              />
              </View>
              <AtTextarea
-                style={{borderTop:'none'}}
-                value={info.memo}
-                onChange={this.handleMemo.bind(this)}
-                maxLength={200}
-                placeholder='请输入填报说明描述'
-              />
+               style={{borderTop:'none'}}
+               value={info.memo}
+               onChange={this.handleMemo.bind(this)}
+               maxLength={200}
+               placeholder='请输入填报说明描述'
+             />
           </View>
        <View>
            <View className='edit-title'>填报题目</View>
-           <Question questionnaire={questionnaire}/>
+           <Question questionnaire={questionnaire} />
        </View>
         <View>
           <View className='edit-title'>填报设置</View>

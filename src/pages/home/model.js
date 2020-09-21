@@ -5,12 +5,8 @@ import { noConsole, HTTP_STATUS } from '../../config';
 export default {
   namespace: 'home',
   state: {
-    qtnList: [],
+    createList:[],
     page: 1,
-    qtnTypes: '',
-    qtnName: '',
-    projectExist: false,
-    userId:0,
     isPersonal:0,//0首页登录，1，个人中心等，2，获取名单库登录
   },
 
@@ -95,15 +91,25 @@ export default {
       }
     },
     * getCycle({ payload: token,url }, { call, put, select }) {
-      const { page, createList } = yield select(state => state.home);
       const { data } = yield call(homeApi.getCycle, token, url);
+      yield put({
+        type: 'save'
+      });
+    },
+    * copyReport({ payload: values, token,url }, { call, put, select }) {
+      const { page, createList } = yield select(state => state.home);
+      const { data } = yield call(homeApi.copyReport, values, token, url);
 
       yield put({
         type: 'save',
-        payload: {
-          createList:
-            page > 1 ? [...createList, ...data.data] : data.data,
-        }
+      });
+    },
+    * deleteReport({ payload: values, token,url }, { call, put, select }) {
+      const { page, createList } = yield select(state => state.home);
+      const { data } = yield call(homeApi.deleteReport, values, token, url);
+
+      yield put({
+        type: 'save',
       });
     },
     * getOwnerlist({ payload: values, token }, { call, put, select }) {

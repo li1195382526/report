@@ -32,3 +32,19 @@ export const bindPhoneNum = (data) => syncAction({
   data,
   formatData: true
 })
+
+//复制填报
+export const copyReport = (data,token,url) => syncAction({
+  data,
+  method: "POST",
+  token,
+  url
+});
+
+//删除填报deleteReport
+export const deleteReport = (data,token,url) => syncAction({
+  data,
+  method: "DELETE",
+  token,
+  url
+});

@@ -33,9 +33,9 @@ class QuestionBottom extends Component {
       "fmt":"text",
       "seq":1,
       "img":"",
-      "label":`选项${index+1}`,
+      "label":'',
       "conf":{},
-      "required":false,
+      "required":true,
       "optQuote":false
     }]
     const newOptList = opts.optlist.concat(opt)
