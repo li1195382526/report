@@ -26,7 +26,7 @@ export default {
     },
     * getName({ payload: value,token,url }, { call, put }) {
       const { data } = yield call(dataListApi.getName, token, url);
-      console.log(data)
+      // console.log(data)
       yield put({
         type: 'save',
         payload: {
@@ -35,6 +35,21 @@ export default {
         }
       });
     },
+    * delList({ payload: value,token,url }, { call, put }) {
+      const { data } = yield call(dataListApi.delList, value, token, url);
+      yield put({
+        type: 'save',
+      });
+    },
+    * uploadList({ payload: value }, { select, put }) {
+      yield put({
+        type: 'save',
+        payload: {
+          nameData: value
+        }
+      });
+    },
+
   },
 
   reducers: {
