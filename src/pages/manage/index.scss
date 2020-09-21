@@ -44,9 +44,19 @@
         }
     }
     .namelist-add{
-        height:200px;
+        height:80px;
         background-color: #fff;
-        
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 5%;
+        .edit-add{
+            width:40%;
+            background-color: #fff;
+            line-height: 80px;
+            text-align: center;
+            color: #666;
+            border:1px solid #666;
+        }
     }
 }
 .model-input{
@@ -57,4 +67,16 @@
 .model-text{
     width:80%;
     text-align: center;
+}
+.save-change {
+    display: border-box;
+    position: fixed;
+    bottom: 16px;   
+    height: 80px;
+    width: 90%;
+    left: 5%;
+    background: #0079fe;
+    color: #fff;
+    text-align: center;
+    line-height: 80px;
 }

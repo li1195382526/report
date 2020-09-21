@@ -19,3 +19,10 @@ export const getNamelist = ( data,token,url) => Request.syncAction({
     method: 'GET',
     token,
   });
+
+  export const delList = ( data,token,url ) => Request.syncAction({
+    url,
+    method: 'DELETE',
+    token,
+    data
+  });
