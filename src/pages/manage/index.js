@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtIcon, AtTextarea, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
+import { AtIcon, AtTextarea, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtMessage } from 'taro-ui'
 import { BeginToCollect } from '../../components/beginToCollect'
 import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
@@ -24,7 +24,10 @@ class NameList extends Component {
       value: '',
       isOpen: false,
       multipleInfo: '',
-      multipleList: this.props.nameData
+      multipleList: this.props.nameData,
+      isBindNum: false,
+      bindKey: 0,
+      newtitle: ''
     }
     this.titleChange = this.titleChange.bind(this)
     this.handleSubUsername = this.handleSubUsername.bind(this)
@@ -33,6 +36,11 @@ class NameList extends Component {
     this.onClose = this.onClose.bind(this)
     this.getName = this.getName.bind(this)
     this.bindNum = this.bindNum.bind(this)
+    this.onConfirmBind = this.onConfirmBind.bind(this)
+    this.handleBind = this.handleBind.bind(this)
+    this.save = this.save.bind(this)
+    this.delItem = this.delItem.bind(this)
+    this.handleAddSingle = this.handleAddSingle.bind(this)
   }
 
   componentWillMount() {
@@ -40,14 +48,15 @@ class NameList extends Component {
   };
 
   // 库名称change
-  titleChange () {
-
+  titleChange (event) {
+    this.setState({newtitle: event.target.value})
   }
   componentDidMount() {
+
   }
 
   getName() {
-    const listId = this.$router.params.id
+    const listId = this.$router.params.listId
     const { userinfo } = this.props
     this.props.dispatch({
       type: 'dataList/getName',
@@ -69,28 +78,26 @@ class NameList extends Component {
       isOpen: true
     })
   }
-  // 弹框确定
+  // 批量弹框确定
   onConfirm() {
     const { multipleInfo } = this.state
     const { nameData } = this.props
-    let list = multipleInfo.split(/\s/) // 回车符
+    let list = multipleInfo.split(/\s/g) // 回车符
     list = [...new Set(list)]
-    let data = []
     list.forEach((item, index) => {
       if(item) {
         let obj = {
-          id: '',
-          num: '',
+          listIndex: nameData[nameData.length - 1].listIndex + 1,
           name: item.split(/[,，]/g)[0],
           limit: item.split(/[,，]/g).slice(1),
           status: 1
         }
-        data.push(obj)
+        nameData.push(obj)
       }
     })
     this.props.dispatch({
-      type: 'dataList/uploadList',
-      payload: nameData.concat(data),
+      type: 'dataList/uploadData',
+      payload: nameData,
     })
     this.onClose()
   }
@@ -99,29 +106,106 @@ class NameList extends Component {
     this.setState({
       isOpen: false,
       value: '',
-      multipleInfo: ''
+      multipleInfo: '',
+      isBindNum: false,
     })
   }
-  // 关联按钮
-  bindNum(item) {
-
-  }
   // 删除单条人员
-  delItem() {
-
+  delItem(key) {
+    const { nameData } = this.props
+    nameData.splice(key, 1)
+    setTimeout(() => {
+      this.props.dispatch({
+        type: 'dataList/uploadData',
+        payload: [...nameData],
+      })
+    }, 0);
   }
-  render() {
-    const { isOpen } = this.state
+  // 关联按钮
+  bindNum(key) {
+    this.setState({isBindNum: true, bindKey: key})
+  }
+  // 关联确定按钮
+  onConfirmBind() {
+    const { multipleInfo, bindKey } = this.state
+    const { nameData } = this.props
+    let list = multipleInfo.split(/,/g) // 回车符
+    list = [...new Set(nameData[bindKey].limit.concat(list))]
+    nameData[bindKey].limit = list
+    this.props.dispatch({
+      type: 'dataList/uploadData',
+      payload: nameData,
+    })
+    this.onClose()
+  }
+  // 关联change
+  handleBind(event) {
+    const username = event.target.value.replace(/\s/g, ',')
+    this.setState({
+      multipleInfo: username
+    })
+  }
+  // 保存
+  save() {
+    let { newtitle } = this.state
     const { nameData, title } = this.props
-    console.log('render---------')
-    console.log(nameData)
+    newtitle = newtitle ? newtitle.replace(/(^\s*)|(\s*$)/g, "") : title
+    if(!newtitle) { // 标题非空
+      Taro.atMessage({
+        'message': '标签名称为必填项，请检查您的输入',
+        'type': 'warning',
+        'duration': 2500
+      })
+      return
+    }
+    for (let item of nameData) { // 名字和电话非空
+      if(!item.name || !item.limit) {
+        Taro.atMessage({
+          'message': '详细人员列表的名字和联系方式为必填项，请检查您的输入',
+          'type': 'warning',
+          'duration': 2500
+        })
+        return
+      }
+    }
+    let params = {
+      title: newtitle,
+      data: nameData
+    }
+    this.props.dispatch({
+      type: 'dataList/saveList',
+      payload: params,
+      url: `/v3/reportuser/${this.$router.params.userId}/namelist/${this.$router.params.listId}`
+    })
+  }
+  // 单个添加
+  handleAddSingle() {
+    const { nameData } = this.props
+    nameData.push({
+      listIndex: nameData[nameData.length - 1].listIndex + 1,
+      name: '',
+      limit: '',
+      status: 1
+    })
+    this.props.dispatch({
+      type: 'dataList/uploadData',
+      payload: [...nameData],
+    })
+  }
+
+  render() {
+    const { isOpen, isBindNum, bindKey } = this.state
+    const { nameData, title } = this.props
+    const devalue = nameData[bindKey] && nameData[bindKey].limit ? nameData[bindKey].limit.join(',') : ''
     return (
       <View className='namelist'>
+        <AtMessage />
         <View>
           <View className='title'>标签名称</View>
           <View className='title-name'>
             <View >
               <AtTextarea
+                showConfirmBar={true}
                 className='title-input'
                 count={false}
                 value={title}
@@ -147,47 +231,63 @@ class NameList extends Component {
             </View>
           </View>
         </View>
-
         {nameData.map((item, key) => (
-          item.status == 1 && <View className='table'>
+          <View className='table'>
             <View style={{ marginLeft: '30px' }}>{`${key + 1}.`}</View>
             <View className='name-text'>
               <input type="text" placeholder='名字' value={item.name} />
             </View>
-            <View onClick={this.bindNum(item)}>关联</View>
-            <View onClick={this.delItem(key)}><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
+            <View onClick={()=>this.bindNum(key)}>关联</View>
+            <View onClick={()=>this.delItem(key)}><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
           </View>
         ))}
         <View className='namelist-add'>
           <View className='edit-add' onClick={this.handleAddMultiple}>批量添加</View>
-          <View className='edit-add' >单个添加</View>
+          <View className='edit-add' onClick={this.handleAddSingle} >单个添加</View>
         </View>
-        <View className="save-change">保存名单</View>
+        <View className="save-change" onClick={this.save}>保存名单</View>
+
         {/* 批量添加弹框 */}
-        <AtModal isOpened={isOpen}>
+        <AtModal isOpened={isOpen} closeOnClickOverlay={false}>
           <AtModalHeader>导入填报名单</AtModalHeader>
           <AtModalContent>
-            {/* <AtTextarea
-              className="model-input"
-              value=''
-              onChange={this.handleSubUsername}
-              placeholder='请输入/粘贴微信绑定的手机号'
-            /> */}
             <AtTextarea
+              showConfirmBar={true}
               count={false}
               value={this.state.value}
               onChange={this.handleSubUsername}
               height={200}
               maxLength={200}
               placeholder='请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：
-              小明，13545678921,15637493638
-              小芳，15893839373,18737393738'
+              小明，13555555555,15666666666
+              小芳，15888888888,18777777777'
             />
             <View className='model-text'>可将名单信息粘贴后导入</View>
           </AtModalContent>
           <AtModalAction>
             <Button onClick={this.onClose}>取消</Button>
             <Button onClick={this.onConfirm}>确定</Button>
+          </AtModalAction>
+        </AtModal>
+        {/* 关联弹框 */}
+        <AtModal isOpened={isBindNum} closeOnClickOverlay={false}>
+          <AtModalHeader>关联填报账号</AtModalHeader>
+          <AtModalContent>
+            <AtTextarea
+              showConfirmBar={true}
+              count={false}
+              value={devalue}
+              onChange={this.handleBind}
+              height={200}
+              maxLength={200}
+              placeholder='请输入/粘贴微信绑定的手机号，示例：
+              15666666666,18777777777'
+            />
+            <View className='model-text'>仅允许关联的账号填报</View>
+          </AtModalContent>
+          <AtModalAction>
+            <Button onClick={this.onClose}>取消</Button>
+            <Button onClick={this.onConfirmBind}>确定</Button>
           </AtModalAction>
         </AtModal>
       </View>

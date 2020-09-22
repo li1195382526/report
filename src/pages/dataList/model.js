@@ -1,4 +1,5 @@
 import * as dataListApi from './service';
+import Taro from '@tarojs/taro';
 
 export default {
   namespace: 'dataList',
@@ -26,7 +27,6 @@ export default {
     },
     * getName({ payload: value,token,url }, { call, put }) {
       const { data } = yield call(dataListApi.getName, token, url);
-      // console.log(data)
       yield put({
         type: 'save',
         payload: {
@@ -40,8 +40,22 @@ export default {
       yield put({
         type: 'save',
       });
+      Taro.hideLoading()
+      if(data.status == 200) {
+        Taro.atMessage({
+          'message': '删除成功',
+          'type': 'success',
+          'duration': 1500
+        })
+      } else {
+        Taro.atMessage({
+          'message': '删除失败',
+          'type': 'error',
+          'duration': 1500
+        })
+      }
     },
-    * uploadList({ payload: value }, { select, put }) {
+    * uploadData({ payload: value }, { put }) {
       yield put({
         type: 'save',
         payload: {
@@ -49,7 +63,30 @@ export default {
         }
       });
     },
-
+    * saveList({ payload: value, url }, { put, call }) {
+      const { data } = yield call(dataListApi.saveList, value, url);
+      yield put({
+        type: 'save'
+      });
+      if(data.status == 200) {
+        Taro.atMessage({
+          'message': '保存成功',
+          'type': 'success',
+          'duration': 1500
+        })
+        setTimeout(() => {
+          Taro.redirectTo({
+            url: '../dataList/index'
+          })
+        }, 500);
+      } else {
+        Taro.atMessage({
+          'message': '保存失败',
+          'type': 'error',
+          'duration': 1500
+        })
+      }
+    },
   },
 
   reducers: {

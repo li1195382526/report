@@ -26,3 +26,9 @@ export const getNamelist = ( data,token,url) => Request.syncAction({
     token,
     data
   });
+
+  export const saveList = ( data,url ) => Request.syncAction({
+    url,
+    method: 'PUT',
+    data
+  });
