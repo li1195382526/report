@@ -143,7 +143,9 @@ class Home extends Component {
     }else{
       this.handleWxLogin()
     }
-    
+    this.setState({
+      isOpened:false
+    })
   }
 
   //微信登录
@@ -229,7 +231,6 @@ class Home extends Component {
   //删除填报
   handleDelete(){
     const {reportId} = this.state
-    console.log(reportId)
     const params = {
       reportId
     }

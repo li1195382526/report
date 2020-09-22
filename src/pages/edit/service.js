@@ -14,3 +14,11 @@ export const saveQtn = (data,token) => syncAction({
   type: 'user',
   data
 });
+
+//发布填报publish
+export const publish = ( data,token,url) => syncAction({
+  data,
+  method: "POST",
+  token,
+  url,
+});

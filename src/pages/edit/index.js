@@ -30,6 +30,7 @@ class Edit extends Component {
     this.getQuestionner = this.getQuestionner.bind(this)
     this.handleTitle = this.handleTitle.bind(this)
     this.handleTips = this.handleTips.bind(this)
+    this.handleRelease = this.handleRelease.bind(this)
   }
 
   componentWillMount() {
@@ -39,7 +40,6 @@ class Edit extends Component {
   //获取问卷
   getQuestionner(){
     const {reportId} = this.$router.params
-    console.log(reportId)
     this.props.dispatch({
       type: 'edit/getQuestionner',
       token: this.props.token,
@@ -49,7 +49,6 @@ class Edit extends Component {
 
   componentDidMount(){
     const init = this.$router.params.isInit
-    console.log(this.$router.params.isInit)
 
     //第一次编辑填报前端数据，编辑中问卷获取问卷信息
     if(init == 1){
@@ -87,10 +86,56 @@ onTimeChange = e => {
 
   }
 
-  handleRelease = () =>{
-    Taro.navigateTo({
-      url: '/pages/release/index'
-     })
+  //发布填报
+  handleRelease(){
+
+    // eslint-disable-next-line no-shadow
+    const {info,questionnaire} = this.props
+    const {reportId} = this.$router.params
+    if(info.title.length === 0){
+        this.handleTips('error','填报主题不能为空')
+        return
+    }
+    if(info.title.length >= 20){
+      this.handleTips('error','填报主题不能超过20个字符')
+      return
+    }
+    if(info.memo.length === 0){
+    this.handleTips('error','填报说明不能为空')
+    return
+    }
+
+    if(info.memo.length >= 200){
+    this.handleTips('error','填报说明不能超过200个字符')
+    return
+    }
+
+    const params = {
+      info,
+      questionnaire
+    }
+    this.props.dispatch({
+      type: 'edit/saveQtn',
+      token: this.props.token,
+      payload: params,
+    }).then(()=>{
+      this.props.dispatch({
+        type: 'edit/publish',
+        token: this.props.token,
+        payload: {reportId},
+        url:`/v3/report/${reportId}/publish`
+      }).then(()=>{
+        const {qtnStatus,message} = this.props
+        if(qtnStatus === 200){
+          Taro.navigateTo({
+          url: '/pages/release/index'
+         })
+        }else{
+          this.handleTips('error',message)
+        }
+        
+      })
+    })  
   }
 
   handleTips (type,message) {
@@ -100,27 +145,10 @@ onTimeChange = e => {
     })
   }
 
+  //保存
   handleSave(){
     // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
-    if(info.title.length === 0){
-        this.handleTips('error','填报主题不能为空')
-        return
-    }
-    if(info.title.length >= 20){
-      this.handleTips('error','填报主题不能超过20个字符')
-      return
-  }
-  if(info.memo.length === 0){
-    this.handleTips('error','填报说明不能为空')
-    return
-  }
-
-  if(info.memo.length >= 200){
-    this.handleTips('error','填报说明不能超过200个字符')
-    return
-  }
-    
     const params = {
       info,
       questionnaire

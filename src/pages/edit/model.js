@@ -4,7 +4,10 @@ export default {
   namespace: 'edit',
   state: {
     "info": {},
-    "questionnaire":{}
+    "questionnaire":{},
+    isChange:'',
+    qtnStatus:'',
+    message:''
   },
 
   effects: {
@@ -27,6 +30,17 @@ export default {
         payload: {
           //questionnaire:data.questionnaire,
           //info:data.info
+        }
+      });
+    },
+    * publish({ payload: values,token,url }, { call, put, select }) {
+      const { page, createList } = yield select(state => state.home);
+      const { data } = yield call(editApi.publish,values, token, url);
+      yield put({
+        type: 'save',
+        payload:{
+          qtnStatus:data.status,
+          message:data.message
         }
       });
     }, 
