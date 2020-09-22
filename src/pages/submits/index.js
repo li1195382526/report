@@ -13,9 +13,9 @@ import './index.scss';
   ...common
 }))
 
-class Release extends Component {
+class Submits extends Component {
   config = {
-    navigationBarTitleText: '发布填报',
+    navigationBarTitleText: '提交填报',
   };
 
   constructor(props) {
@@ -50,20 +50,20 @@ class Release extends Component {
           <AtIcon value='check-circle' size='100' color='#71a0f7'></AtIcon>
         </View>
         <View className='release-text'>
-          发布成功
+          填报成功
         </View>
         <View className='release-mes'>
-          填报已发布成功，您可将填报分享到微信群内
+          填报提交成功，感谢您对速报的支持
         </View>
         <View className='release-btn'>
           <View>
-            <AtButton type='primary' className='btn' openType='share'>分享微信群</AtButton>
+            <AtButton type='primary' className='btn' openType='share'>我要创建</AtButton>
           </View>
           <View>
-            <AtButton type='secondary'>生成二维码</AtButton>
+            <AtButton type='secondary'>修改填报</AtButton>
           </View>
           <View>
-            <AtButton loading type='primary'>修改填报内容</AtButton> 
+            <AtButton type='primary'>查看结果</AtButton> 
           </View>
         </View>
         
@@ -72,4 +72,4 @@ class Release extends Component {
   }
 }
 
-export default Release;
+export default Submits;

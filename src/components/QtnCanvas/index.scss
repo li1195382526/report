@@ -1,0 +1,30 @@
+.open{
+    background-color: #fff;
+    .open-text{
+        height: 100px;
+        .open-input{
+        width: 90%;
+        margin: auto;
+        border: 1rpx solid rgba(238, 238, 238, 1);
+        height: 80rpx;
+    } 
+    }
+    
+}
+.question{
+    .question-qt{
+        margin-bottom: 20px;
+    }
+    .all-title{
+        background-color: #fff;
+        .open-title{
+            width: 90%;
+            display: flex;
+            margin: auto;
+            justify-content: space-between;
+            height: 80rpx;
+            line-height: 80rpx;
+            }
+    }
+    
+}

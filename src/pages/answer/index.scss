@@ -1,0 +1,41 @@
+.answer{
+    background-color: rgba(245, 245, 245, 1);
+    
+    .change-name{
+        display: flex;
+        justify-content: space-between;
+        height:100px;
+        line-height: 100px;
+        background-color: #fff;
+        border-top:1px solid rgba(238, 238, 238, 1);
+        padding:0 10px 10px 10px;
+    }
+    .answer-list{
+        margin:20px 0 100px 0;
+    }
+    .answer-title{
+        height: 200px;
+        background-color: #fff;
+        margin-top: 20px;
+        .title{
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            border-bottom:1px solid rgba(238, 238, 238, 1);
+        }
+        .memo{
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            color: #ccc;
+        }
+    }
+    .answer-footer{
+        position: fixed;
+        bottom: 0;
+        height: 100px;
+        width:90%;
+        margin:auto;
+        left: 5%;
+    }
+}

@@ -66,11 +66,13 @@ class App extends Component {
       'pages/edit/index',
       'pages/answer/index',
       'pages/release/index',
+      'pages/submits/index',
       'pages/nameList/index',
       'pages/dataList/index',
       'pages/personalCenter/index',
       'pages/templateText/index',
-      'pages/manage/index'
+      'pages/manage/index',
+      'pages/share/index'
     ],
     window: {
       backgroundTextStyle: 'light',

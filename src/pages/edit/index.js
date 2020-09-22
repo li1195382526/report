@@ -128,8 +128,8 @@ onTimeChange = e => {
         const {qtnStatus,message} = this.props
         if(qtnStatus === 200){
           Taro.navigateTo({
-          url: '/pages/release/index'
-         })
+            url: '/pages/release/index'
+           })
         }else{
           this.handleTips('error',message)
         }
