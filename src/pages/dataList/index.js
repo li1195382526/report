@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem } from 'taro-ui'
+import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem, AtMessage } from 'taro-ui'
 import './index.scss';
 
 @connect(({ dataList, home, common }) => ({
@@ -63,7 +63,7 @@ class DataList extends Component {
 	//添加名单库
 	handleAddNameList() {
 		this.setState({
-			isOpen: true
+			isOpen: true,
 		})
 	}
 
@@ -77,7 +77,8 @@ class DataList extends Component {
 	handleChangeName(value) {
 		this.setState({
 			// eslint-disable-next-line react/no-unused-state
-			name: value.target.value
+			name: value.target.value,
+			value: value.target.value
 		})
 	}
 
@@ -111,9 +112,10 @@ class DataList extends Component {
 
 	// 修改名单库
 	handleModify() {
-		const { listId } = this.state
+		const { listId, userId } = this.state
+		this.cancel()
 		Taro.navigateTo({
-			url: `/pages/manage/index?id=${listId}`
+			url: `/pages/manage/index?listId=${listId}&userId=${userId}`
 		})
 	}
 	// 删除名单库
@@ -122,7 +124,10 @@ class DataList extends Component {
 			userId: this.state.userId,
 			listId: this.state.listId,
 		}
-		console.log(this.props)
+		this.cancel()
+		Taro.showLoading({
+			title: '正在删除...',
+		})
 		this.props.dispatch({
 			type: 'dataList/delList',
 			payload: params,
@@ -132,20 +137,23 @@ class DataList extends Component {
 	}
 	// 取消
 	cancel() {
-		this.setState({ isMenge: false })
+		// Taro.createSelectorQuery().select('#add').fields(rec => {
+		// 	console.log(rec)
+		// }).exec()
+		this.setState({ isMenge: false, isOpen: false, value: '' })
 	}
 
 	render() {
 		const { isOpen, isMenge } = this.state
+		console.log(this.state.value)
 		const { dataList } = this.props
-		console.log(dataList)
 		return (
 			<View>
+				<AtMessage />
 				{dataList.map((item, key) => (
 					<View>
 						{/* <Checkbox value='选中' checked className='checkobox-data'></Checkbox> */}
-						<AtListItem title={item.tilte} note={item.totalCount} arrow='right' extraText='管理'
-							onClick={() => this.handleManage(item)} />
+						<AtListItem title={item.tilte} note={item.totalCount} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} />
 					</View>
 				))}
 				<View className='edit-footer'>
@@ -157,11 +165,12 @@ class DataList extends Component {
 					</View>
 				</View>
 
-				<AtModal isOpened={isOpen}>
-					<AtModalHeader>标题</AtModalHeader>
+				<AtModal isOpened={isOpen} closeOnClickOverlay={false}>
+					<AtModalHeader>添加填报名单</AtModalHeader>
 					<AtModalContent>
 						<View className="daa-data">
 							<AtTextarea
+								showConfirmBar={true}
 								count={false}
 								value={this.state.value}
 								onChange={this.handleChangeName}
@@ -172,6 +181,8 @@ class DataList extends Component {
 						</View>
 						<View className='daa-data'>
 							<AtTextarea
+								id='add'
+								showConfirmBar={true}
 								count={false}
 								value={this.state.value}
 								onChange={this.handleChange}
@@ -182,12 +193,12 @@ class DataList extends Component {
                小芳，15893839373,18737393738'
 							/>
 						</View>
-						<View>可将名单信息快捷粘贴至文本框</View>
+						<View style={{textAlign:'center'}}>可将名单信息快捷粘贴至文本框</View>
 					</AtModalContent>
-					<AtModalAction> <Button>取消</Button> <Button onClick={this.handleConfirm}>确定</Button> </AtModalAction>
+					<AtModalAction> <Button onClick={this.cancel}>取消</Button> <Button onClick={this.handleConfirm}>确定</Button> </AtModalAction>
 				</AtModal>
 
-				<AtActionSheet isOpened={isMenge}>
+				<AtActionSheet isOpened={isMenge} onClose={this.cancel}>
 					<AtActionSheetItem onClick={this.handleModify}>
 						修改名单组
             		</AtActionSheetItem>
