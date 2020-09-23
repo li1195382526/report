@@ -32,10 +32,10 @@ class List extends Component {
           <View className='create-qt'>
           <AtCard
             note={`${item.creatorName} | ${item.updateTime || item.createTime} | 参与${item.pnlCount}/${item.totalCount}`}
-            extra={item.status == 0 ? '编辑中':''}
+            extra={item.status == 0 ? '编辑中':item.status == 2 ? '收集中' :'已结束'}
             title={item.title}
             thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-            onClick={()=>this.handleClick(item.id)}
+            onClick={()=>this.handleClick(item)}
           >
           {item.memo}
           </AtCard> 

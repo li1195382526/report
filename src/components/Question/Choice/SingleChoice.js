@@ -85,7 +85,8 @@ class SingleChoice extends Component {
     const {opts} = this.props
     return (
       <View className='multi-choice'>
-          <AtInput
+        <View className='multi-width'>
+        <AtInput
             name='value'
             title='题目标题'
             type='text'
@@ -113,6 +114,7 @@ class SingleChoice extends Component {
             </View>
           
           ))}
+        </View> 
       </View>
     )
   }

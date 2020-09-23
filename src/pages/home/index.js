@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View,Swiper,SwiperItem  } from '@tarojs/components';
+import { View,Swiper,SwiperItem } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { AtActionSheet, AtMessage, AtButton,AtTabs, AtTabsPane,AtActionSheetItem,AtTabBar } from 'taro-ui'
 import Questionaires from '../../components/questionaire'
@@ -28,6 +28,7 @@ class Home extends Component {
       isOpened:false,
       isLogin:false,
       pageSize:10,
+      status:null
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -69,10 +70,11 @@ class Home extends Component {
     }
   }
 
-  handleOpen (value,reportId){
+  handleOpen (value,item){
       this.setState({
         isOpened:true,
-        reportId
+        reportId:item.id,
+        status:item.status
       })
   }
 
@@ -249,10 +251,28 @@ class Home extends Component {
     )
   }
 
+  //小程序分享
+  onShareAppMessage(res) {
+    console.log(res)
+    if (res.from === 'button' || res.target.id == 1) {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title:  '云调查',
+      path: '/pages/answer/index?',
+      imageUrl: 'https://www.epanel.cn/images/answer.jpg'
+    }
+  }
+
+  handleShare(){
+    //this.onShareAppMessage()
+  }
+
   render() {
     const {createList } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
-    const {isLogin} = this.state
+    const {isLogin,status} = this.state
     return (
       <View className='page'>
         {/* 首页跑马灯及创建填报列表 */}
@@ -289,27 +309,40 @@ class Home extends Component {
         </AtTabs>
         
         <View className='create-fill' onClick={()=>this.toEdit(0)}>
-          <AtButton type='primary' circle openType='getUserInfo'>{isLogin?"创建填报":"立即登录"}</AtButton>
+          <AtButton type='primary' openType='getUserInfo'>{isLogin?"创建填报":"立即登录"}</AtButton>
         </View>
         
          {/* 列表选择项 */}
          <AtActionSheet isOpened={this.state.isOpened}>
-            <AtActionSheetItem onClick={()=>this.toEdit(1)}>
+           {status === 0 && (
+             <AtActionSheetItem onClick={()=>this.toEdit(1)}>
                 编辑填报
             </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.submit}>
-                分享到微信群
+           )}
+           {(status === 5 || status === 2) && (
+             
+             <AtActionSheetItem>
+               <AtButton type='primary'  plain='true' openType='share' className='share-btn'>分享到微信群</AtButton>
             </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.handleData}>
-                查看结果
+           ) }
+            {(status === 2 || status === 5) && (
+              <AtActionSheetItem onClick={this.handleData}>
+             查看结果
             </AtActionSheetItem>
+            )}
+            
+            {status === 2 && (
+             <AtActionSheetItem onClick={()=>this.toEdit(1)}>
+                修改填报
+            </AtActionSheetItem>
+           )}
             <AtActionSheetItem onClick={this.handleCopy}>
                 复制填报
             </AtActionSheetItem>
             <AtActionSheetItem onClick={this.handleDelete}>
                 删除填报
             </AtActionSheetItem>
-            <AtActionSheetItem>
+            <AtActionSheetItem onClick={this.submit}>
                 取消
             </AtActionSheetItem>
           </AtActionSheet> 

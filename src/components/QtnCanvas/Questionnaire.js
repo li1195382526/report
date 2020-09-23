@@ -26,7 +26,7 @@ class Questionnaire extends Component {
                   <View>
                     {qt.disSeq+'.'+qt.text}
                   </View>
-                  <View>必填</View>
+                  <View>（必填）</View>
                 </View>
               </View>
                 {qt.type === 1 && <QuestionChoice  opts={qt}/>}

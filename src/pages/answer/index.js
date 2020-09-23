@@ -79,8 +79,10 @@ class Answer extends Component {
           <QtnCanvas questionnaire={questionnaire} />
         </View>
         <View className='answer-footer'>
-        <AtButton circle type='primary' onClick={this.submit}>提交填报</AtButton> 
+          <AtButton type='primary' onClick={this.submit}>提交填报</AtButton> 
         </View>
+        
+        
        <AtModal isOpened={false}>
         <AtModalHeader>选择填答名单</AtModalHeader>
         <AtModalContent>

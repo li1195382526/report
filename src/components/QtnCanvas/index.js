@@ -31,7 +31,6 @@ class QtnCanvas extends Component {
   
   render() {
     const {questionnaire} = this.props
-    console.log('------------------')
     return (
       <View className=''>
         {!!questionnaire.pageList ? questionnaire.pageList.map((item, key) => (

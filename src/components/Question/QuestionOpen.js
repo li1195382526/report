@@ -49,15 +49,17 @@ class QuestionOpen extends Component {
     const {opts} = this.props
     return (
       <View className='open'>
-        <AtInput
-          name='value'
-          title='题目标题'
-          type='text'
-          placeholder='题目标题'
-          value={opts.text}
-          onChange={this.handleText}
-        />
+        <View className='open-width'>
+          <AtInput
+            name='value'
+            title='题目标题'
+            type='text'
+            placeholder='题目标题'
+            value={opts.text}
+            onChange={this.handleText}
+         />
         <QtnSet opts={opts} />
+        </View>
       </View>
     )
   }

@@ -82,14 +82,15 @@ class MultipleChoice extends Component {
     const {opts} = this.props
     return (
       <View className='multi-choice'>
-         <AtInput
-           name='value'
-           title='题目标题'
-           type='text'
-           placeholder={opts.text}
-           value={opts.text}
-           onChange={this.handleText}
-         />
+        <View className='multi-width'>
+          <AtInput
+            name='value'
+            title='题目标题'
+            type='text'
+            placeholder={opts.text}
+            value={opts.text}
+            onChange={this.handleText}
+          />
           {opts.optlist.map((item,key)=>(
             <View className='multi-opt'>
               <View className='multi-input'>
@@ -109,6 +110,8 @@ class MultipleChoice extends Component {
                 </View> 
             </View>
           ))}
+        </View>
+         
       </View>
     )
   }

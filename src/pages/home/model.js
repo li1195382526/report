@@ -120,8 +120,7 @@ export default {
       yield put({
         type: 'save',
         payload: {
-          createList:
-            page > 1 ? [...createList, ...data.data] : data.data,
+          createList:data.data,
         }
       });
     },
