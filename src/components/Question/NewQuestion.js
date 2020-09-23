@@ -5,6 +5,7 @@ import { AtIcon,AtList,AtListItem }  from 'taro-ui'
 import './index.scss'
 // eslint-disable-next-line import/first
 import { connect } from '@tarojs/redux';
+import {choiceOpt,openOpt} from '../../config'
 
 @connect(({edit,home, common }) => ({
     ...edit,
@@ -15,7 +16,7 @@ class NewQuestion extends Component {
   constructor(props) {
       super(props)
       this.state = {
-        selector: ['单选', '多选', '填空文本'],
+        selector: ['单选', '多选', '填空文本','填空数字'],
         selectorChecked: '单选',
       }
       this.onChange = this.onChange.bind(this)
@@ -26,9 +27,16 @@ class NewQuestion extends Component {
     const {isChange} = this.props
     let questionnaire = this.props.questionnaire
     const index = questionnaire.pageList[0].qtList.length
+    let optlist = []
+    if(value == 0 || value == 1){
+      optlist = choiceOpt
+    }else{
+      optlist = openOpt
+    }
+
     const qtList = [{
         "type": value == 0 || value == 1 ? 1 : 2,
-        "selectType": value == 0 ? 0 :value == 1 ? 1 :value == 2 ? 1 :'',
+        "selectType": value == 0 ? 0 :value == 1 ? 1 :value == 2 ? 1 :value == 3 ? 7 :'',
         "disSeq": `Q${index+1}`,
         "fixSeq": `Q${index+1}`,
         "mySeq": `Q${index+1}`,
@@ -36,22 +44,9 @@ class NewQuestion extends Component {
         "img": "",
         "smax": 4,
         "smin": 1,
-        "optlist": [{
-          "fixSeq":"A1",
-          "position":0,
-          "val":1,
-          "mySeq":"A1",
-          "input":false,
-          "fmt":"text",
-          "seq":1,
-          "img":"",
-          "label":"",
-          "conf":{},
-          "required":true,
-          "optQuote":false
-        }
-      ],
+        "optlist": optlist,
         "seq": "1",
+        "required": true,
         "text": value == 0 || value == 1 ? "选择题" : "填空题",
     }]
     const newQtList = questionnaire.pageList[0].qtList.concat(qtList)

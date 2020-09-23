@@ -1,4 +1,10 @@
 .multi-choice{
+    background-color: #fff;
+    
+    .multi-width{
+        width:95%;
+        margin: auto;
+    }
     .multi-opt{
         display: flex;
         background-color: #ffffff;

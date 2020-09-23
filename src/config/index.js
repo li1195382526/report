@@ -132,3 +132,49 @@ export const  info = {
   "pwd": "",
   "creatorName": ""
  }
+
+ export const choiceOpt = [{
+  "fixSeq":"A1",
+  "position":0,
+  "val":1,
+  "mySeq":"A1",
+  "input":false,
+  "fmt":"text",
+  "seq":1,
+  "img":"",
+  "label":"",
+  "conf":{},
+  "required":true,
+  "optQuote":false
+},
+{
+  "fixSeq":"A2",
+  "position":0,
+  "val":1,
+  "mySeq":"A2",
+  "input":false,
+  "fmt":"text",
+  "seq":1,
+  "img":"",
+  "label":"",
+  "conf":{},
+  "required":true,
+  "optQuote":false
+}
+]
+
+export const openOpt = [{
+  "fixSeq":"A1",
+  "position":0,
+  "val":1,
+  "mySeq":"A1",
+  "input":false,
+  "fmt":"text",
+  "seq":1,
+  "img":"",
+  "label":"",
+  "conf":{},
+  "required":true,
+  "optQuote":false
+}
+]

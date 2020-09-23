@@ -37,6 +37,14 @@ class QtSet extends Component {
 
   handleChange(val,type){
     let {info,isChange} = this.props
+    console.log(val)
+    console.log(type)
+    if(val.target.value && type === 'useCount'){
+      info.useNamelist = 0
+    }
+    if(val.target.value && type === 'useNamelist'){
+      info.useCount = 0
+    }
     info[type] = val.target.value ? 1 : 0
     this.props.dispatch({
       type: 'edit/save',
@@ -169,7 +177,8 @@ class QtSet extends Component {
           </AtList>
           
             <AtFloatLayout isOpened={this.state.isShowBeginTime} title='开始时间设置'
-              onClose={()=>this.handleBeginTimeSetting( false)}>
+              onClose={()=>this.handleBeginTimeSetting( false)}
+            >
             <DateTimePicker initValue={info.beginTime}
               onOk={(val)=>this.saveTime(val,"beginTime")}
               onClear={(val)=>this.saveTime(val,"beginTime")} 
