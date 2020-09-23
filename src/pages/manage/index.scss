@@ -13,7 +13,7 @@
         View{
             width:95%;
             margin:auto;
-            padding-top:20px; 
+            // padding-top:20px; 
         }
     }
     //background-color: rgb(228, 228, 228);
@@ -28,19 +28,47 @@
             width: 80%;
             margin: auto;
             background-color: #fff;
+            .fix1 {
+                flex: 0.3;
+                text-align: center;
+            }
+            .fix2 {
+                flex: 1;
+                padding-left: 32rpx;
+            }
+            .fix3 {
+                flex: 0.4;
+                text-align: center;
+            }
         }
     }
     .table{
+        width: 80%;
         height: 100px;
         line-height: 100px;
+        margin: auto;
         display: flex;
-        justify-content:space-around;
+        justify-content: space-around;
         background-color: #fff;
-        .name-text{
-            input{
-                margin-top: 28px;
-                border: 1px solid #ccc;
-            }
+        position: relative;
+        .fix1 {
+            flex: 0.3;
+            text-align: center;
+        }
+        .fix2 {
+            flex: 1;
+        }
+        .fix3 {
+            flex: 0.4;
+            text-align: center;
+        }
+        .bind{
+            color: #71a0f7;
+            text-decoration: underline;
+        }
+        .poicon {
+            position: absolute;
+            right: -10%;
         }
     }
     .namelist-add{
@@ -75,7 +103,7 @@
     height: 80px;
     width: 90%;
     left: 5%;
-    background: #0079fe;
+    background: #71a0f7;
     color: #fff;
     text-align: center;
     line-height: 80px;

@@ -78,7 +78,6 @@ class DataList extends Component {
 		this.setState({
 			// eslint-disable-next-line react/no-unused-state
 			name: value.target.value,
-			value: value.target.value
 		})
 	}
 
@@ -137,66 +136,59 @@ class DataList extends Component {
 	}
 	// 取消
 	cancel() {
-		// Taro.createSelectorQuery().select('#add').fields(rec => {
-		// 	console.log(rec)
-		// }).exec()
-		this.setState({ isMenge: false, isOpen: false, value: '' })
+		this.setState({ isMenge: false, isOpen: false, name: '', nameList: '' })
 	}
 
 	render() {
-		const { isOpen, isMenge } = this.state
-		console.log(this.state.value)
+		const { isOpen, isMenge, nameList, name } = this.state
 		const { dataList } = this.props
+		const personalCenter = this.$router.params.from == 'personalCenter'
 		return (
 			<View>
 				<AtMessage />
 				{dataList.map((item, key) => (
-					<View>
+					<View key={key}>
 						{/* <Checkbox value='选中' checked className='checkobox-data'></Checkbox> */}
-						<AtListItem title={item.tilte} note={item.totalCount} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} />
+						<AtListItem title={item.tilte} note={`共 ${item.totalCount} 人`} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} />
 					</View>
 				))}
 				<View className='edit-footer'>
 					<View className='edit-save' onClick={this.handleAddNameList}>
-						添加新名单
+						添加名单组
 					</View>
-					<View className='edit-send' onClick={this.handleRelease}>
-						引用名单
-					</View>
+					{!personalCenter && <View className='edit-send' onClick={this.handleRelease}>引用名单</View>}
 				</View>
-
-				<AtModal isOpened={isOpen} closeOnClickOverlay={false}>
-					<AtModalHeader>添加填报名单</AtModalHeader>
-					<AtModalContent>
-						<View className="daa-data">
-							<AtTextarea
-								showConfirmBar={true}
-								count={false}
-								value={this.state.value}
-								onChange={this.handleChangeName}
-								height={50}
-								maxLength={200}
-								placeholder='请输入名单的便签名称'
-							/>
-						</View>
-						<View className='daa-data'>
-							<AtTextarea
-								id='add'
-								showConfirmBar={true}
-								count={false}
-								value={this.state.value}
-								onChange={this.handleChange}
-								height={200}
-								maxLength={200}
-								placeholder='请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：
-               小明，13545678921,15637493638
-               小芳，15893839373,18737393738'
-							/>
-						</View>
-						<View style={{textAlign:'center'}}>可将名单信息快捷粘贴至文本框</View>
-					</AtModalContent>
-					<AtModalAction> <Button onClick={this.cancel}>取消</Button> <Button onClick={this.handleConfirm}>确定</Button> </AtModalAction>
-				</AtModal>
+				{isOpen && (
+					<AtModal isOpened={isOpen} closeOnClickOverlay={false}>
+						<AtModalHeader>添加填报名单</AtModalHeader>
+						<AtModalContent>
+							<View className="daa-data">
+								<AtTextarea
+									showConfirmBar={true}
+									count={false}
+									value={name}
+									onChange={this.handleChangeName}
+									height={50}
+									maxLength={200}
+									placeholder='请输入名单的便签名称'
+								/>
+							</View>
+							<View className='daa-data'>
+								<AtTextarea
+									showConfirmBar={true}
+									count={false}
+									value={nameList}
+									onChange={this.handleChange}
+									height={200}
+									maxLength={200}
+									placeholder={`请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：\n小明，13545678921\n小芳,15893839373`}
+								/>
+							</View>
+							<View style={{textAlign:'center'}}>可将名单信息快捷粘贴至文本框</View>
+						</AtModalContent>
+						<AtModalAction> <Button onClick={this.cancel}>取消</Button> <Button onClick={this.handleConfirm}>确定</Button> </AtModalAction>
+					</AtModal>
+				)}
 
 				<AtActionSheet isOpened={isMenge} onClose={this.cancel}>
 					<AtActionSheetItem onClick={this.handleModify}>

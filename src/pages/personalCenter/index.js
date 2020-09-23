@@ -29,7 +29,7 @@ class PersonalCenter extends Component {
   handelListDataBase(){
     if(!!this.props.token){
       Taro.navigateTo({
-            url: '/pages/dataList/index'
+            url: '/pages/dataList/index?from=personalCenter'
           })
     }else{
       this.props.dispatch({
