@@ -5,6 +5,7 @@ export default {
   state: {
     "info": {},
     "questionnaire":{},
+    "anw":{}
   },
 
   effects: {

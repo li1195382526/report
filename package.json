@@ -32,6 +32,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@antv/f2": "^3.6.3",
+		"immutable": "^3.8.1",
 		"@tarojs/async-await": "2.1.5",
 		"@tarojs/components": "2.1.5",
 		"@tarojs/components-qa": "2.1.5",

@@ -47,7 +47,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/getQuestionner',
       token: this.props.token,
-      url:`/v3/report/${20}`
+      url:`/v3/report/${23}`
     })
   }
 
