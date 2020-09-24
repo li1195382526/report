@@ -2,12 +2,13 @@
     //background-color: rgb(228, 228, 228);
     .list-import{
         margin:20px auto;
-        width:85%;
+        width:96%;
         height:160px;
+        background: #fff;
         display:flex;
         line-height: 160px;
         justify-content:space-around;
-        border:1px solid #ccc;
+        border:1px solid #e4e4e4;
     }
     .header{
         display: flex;
@@ -29,6 +30,41 @@
             }
         }
     }
+    .edit-add {
+        width:40%;
+        height: 80px;
+        margin: 20px 0;
+        background-color: #fff;
+        line-height: 80px;
+        text-align: center;
+        color: #666;
+        border:1px solid #666;
+    }
+}
+.edit-footer{
+    display: flex;
+    justify-content: space-around;
+    position:fixed;
+    bottom: 16px;   
+    height:100px;
+    width:90%;
+    left:5%;
+    z-index:1000;
+    .edit-save{
+        flex: 0.9;
+        background-color: #fff;
+        line-height: 100px;
+        text-align: center;
+        color: #71a0f7;
+        border:1px solid #71a0f7;
+    }
+    .edit-send{
+        width: 50%;
+        color: #fff;
+        background-color: #71a0f7;
+        line-height: 100px;
+        text-align: center;
+    }
 }
 .model-input{
     width:100%;
@@ -36,6 +72,7 @@
     border: 1px solid #ccc;
 }
 .model-text{
-    width:80%;
+    width:100%;
     text-align: center;
+    margin-top: 10px;
 }

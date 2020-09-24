@@ -4,5 +4,6 @@ import person from '../pages/personalCenter/model'
 import edit from '../pages/edit/model'
 import data from '../pages/dataList/model'
 import answer from '../pages/answer/model'
+import name from '../pages/nameList/model'
 
-export default [common,home,person,edit,data,answer];
+export default [common,home,person,edit,data,answer,name];

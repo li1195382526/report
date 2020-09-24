@@ -189,9 +189,9 @@ class NameList extends Component {
   handleAddSingle() {
     const { nameData } = this.props
     nameData.push({
-      listIndex: nameData[nameData.length - 1].listIndex + 1,
+      listIndex: nameData.length ? nameData[nameData.length - 1].listIndex + 1 : 0,
       name: '',
-      limit: '',
+      limit: [],
       status: 1
     })
     this.props.dispatch({
