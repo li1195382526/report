@@ -39,9 +39,9 @@ class WxLogin extends Component {
 
   getPhoneNumber = (e) => {
     if(e.detail.errMsg.split(':')[1] == 'ok') {
-      let params = { encryptedData: e.detail.encryptedData, iv: e.detail.iv, code: this.state.wx_code,oid:'gh_13a2c24667b4'}
+      let params = { userId: this.state.id,encryptedData: e.detail.encryptedData, iv: e.detail.iv, code: this.state.wx_code,oid:'gh_13a2c24667b4'}
       this.props.dispatch({
-        type: 'home/wxMobilelogin',
+        type: 'home/bindPhone',
         payload: params
       })
     } else {
