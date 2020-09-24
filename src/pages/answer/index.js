@@ -22,6 +22,9 @@ class Answer extends Component {
     this.state = {
       selector: ['小名', '小花', '小亮', '甜甜'],
       selectorChecked: '小名',
+      mobile:15526080904,
+      reportId:20,
+      periodCount:1//周期数
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
@@ -54,9 +57,17 @@ class Answer extends Component {
   }
 
   submit(){
-    Taro.navigateTo({
+    const {mobile,reportId,periodCount} = this.state
+    this.props.dispatch({
+      type: 'answer/subMitAnswer',
+      token: this.props.token,
+      url:`/v3/participant/${mobile}/report/${reportId}/period/${periodCount}/submit`
+    }).then(()=>{
+      Taro.navigateTo({
       url: '/pages/submits/index'
      })
+    })
+    
   }
 
   render() {

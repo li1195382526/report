@@ -6,3 +6,10 @@ export const getQuestionner = ( token,url) => syncAction({
   token,
   url,
 });
+
+export const subMitAnswer = ( data,token,url) => syncAction({
+  data,
+  method: "POST",
+  token,
+  url,
+});

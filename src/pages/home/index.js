@@ -143,7 +143,10 @@ class Home extends Component {
       url: `/pages/edit/index?isInit=${value}&reportId=${reportId}`
      })
     }else{
-      this.handleWxLogin()
+      Taro.navigateTo({
+        url: `/pages/home/wxlogin`
+       })
+      //this.handleWxLogin()
     }
     this.setState({
       isOpened:false

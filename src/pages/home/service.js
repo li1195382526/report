@@ -48,3 +48,10 @@ export const deleteReport = (data,token,url) => syncAction({
   token,
   url
 });
+
+//获取微信手机号wxMobilelogin
+export const wxMobilelogin = (data,token) => syncAction({
+  data,
+  method: "POST",
+  url:'/v3/user/wxMobilelogin'
+});
