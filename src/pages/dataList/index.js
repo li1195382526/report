@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem, AtMessage } from 'taro-ui'
+import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem, AtMessage, AtCheckbox  } from 'taro-ui'
 import './index.scss';
 
 @connect(({ dataList, home, common }) => ({
@@ -24,7 +24,8 @@ class DataList extends Component {
 			nameList: '',
 			isMenge: false,
 			listId: '',
-			userId: ''
+			userId: '',
+			checkedList: []
 		}
 		this.getDataList = this.getDataList.bind(this)
 		this.handleAddNameList = this.handleAddNameList.bind(this)
@@ -35,6 +36,7 @@ class DataList extends Component {
 		this.handleModify = this.handleModify.bind(this)
 		this.delItem = this.delItem.bind(this)
 		this.cancel = this.cancel.bind(this)
+		this.checkedChange = this.checkedChange.bind(this)
 	}
 
 	componentWillMount() {
@@ -138,6 +140,24 @@ class DataList extends Component {
 	cancel() {
 		this.setState({ isMenge: false, isOpen: false, name: '', nameList: '' })
 	}
+	// 选框change
+	checkedChange(value) {
+		this.setState({checkedList: value})
+	}
+	// 引用名单
+	handleRelease() {
+		const { checkedList } = this.state
+		for(var i in checkedList) {
+			console.log('i',i)
+			this.props.dispatch({
+				type: 'dataList/release',
+				token: this.props.token,
+				now: i,
+				end: checkedList.length - 1,
+				url: `/v3/reportuser/${checkedList[i].creatorId}/namelist/${checkedList[i].id}`
+			})
+		}
+	}
 
 	render() {
 		const { isOpen, isMenge, nameList, name } = this.state
@@ -147,9 +167,21 @@ class DataList extends Component {
 			<View>
 				<AtMessage />
 				{dataList.map((item, key) => (
-					<View key={key}>
-						{/* <Checkbox value='选中' checked className='checkobox-data'></Checkbox> */}
-						<AtListItem title={item.tilte} note={`共 ${item.totalCount} 人`} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} />
+					<View key={key} className='list-item'>
+						{/* <View className='checkobox-data'><Checkbox value={key} onClick={this.checkedChange} dataItem={item} dataKey={key}></Checkbox></View> */}
+						<AtCheckbox
+							options={[{value: item, label:''}]}
+							selectedList={this.state.checkedList}
+							onChange={this.checkedChange}
+						/>
+						<View className='item-content' onClick={() => this.handleManage(item)}>
+							<View className="left">
+								<View className='title'>{item.tilte}</View>
+								<View className='count'>共{item.totalCount}人</View>
+							</View>
+							<View className="right">管理 &gt;</View>
+						</View>
+						{/* <AtListItem title={item.tilte} note={`共 ${item.totalCount} 人`} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} /> */}
 					</View>
 				))}
 				<View className='edit-footer'>
@@ -158,6 +190,7 @@ class DataList extends Component {
 					</View>
 					{!personalCenter && <View className='edit-send' onClick={this.handleRelease}>引用名单</View>}
 				</View>
+
 				{isOpen && (
 					<AtModal isOpened={isOpen} closeOnClickOverlay={false}>
 						<AtModalHeader>添加填报名单</AtModalHeader>

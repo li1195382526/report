@@ -6,7 +6,8 @@ export default {
   state: {
     dataList:[],
     nameData:[],
-    title:''
+    title:'',
+    releaseData: [] // 引用的名单
   },
 
   effects: {
@@ -87,6 +88,21 @@ export default {
         })
       }
     },
+    * release({ payload: value,token,url,now,end }, { call, put, select }) {
+      const { data } = yield call(dataListApi.getName, token, url);
+      let { releaseData } = yield select((state)=> state.dataList);
+      yield put({
+        type: 'save',
+        payload: {
+          releaseData: releaseData.concat( data.data ),
+        }
+      });
+      if(now == end) {
+        Taro.redirectTo({
+          url: '/pages/nameList/index'
+        })
+      }
+    }
   },
 
   reducers: {
