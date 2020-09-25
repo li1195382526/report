@@ -12,7 +12,7 @@ import './index.scss';
 
 class DataList extends Component {
 	config = {
-		navigationBarTitleText: '填报名单',
+		navigationBarTitleText: '名单库',
 	};
 
 	constructor(props) {
@@ -150,6 +150,9 @@ class DataList extends Component {
 	handleRelease() {
 		const { checkedList } = this.state
 		if(checkedList.length) {
+			Taro.showLoading({
+				title: '正在删除...',
+			})
 			for(var i in checkedList) {
 				this.props.dispatch({
 					type: 'dataList/release',

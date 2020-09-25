@@ -35,9 +35,32 @@ export default {
                 yield put({
                     type: 'save'
                 });
-
             }
         },
+        * getData({ payload: value }, { put, select }) {
+            let { info } = yield select((state)=> state.edit);
+            if(info && info.nameList) {
+                yield put({
+                    type: 'save',
+                    payload: {
+                        tableList: info.nameList
+                    }
+                });
+            } else {
+                yield put({
+                    type: 'save',
+                    payload: {
+                        tableList: [{
+                            listIndex: 0,
+                            name: '',
+                            limit: [],
+                            status: 1
+                        }]
+                    }
+                });
+
+            }
+        }
     },
 
     reducers: {

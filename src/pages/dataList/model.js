@@ -111,6 +111,7 @@ export default {
         }
       });
       if(now == end) {
+        Taro.hideLoading()
         Taro.redirectTo({
           url: '/pages/nameList/index?from=dataList'
         })

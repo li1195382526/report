@@ -69,9 +69,9 @@ class NameList extends Component {
       this.props.dispatch({
         type: 'nameList/mergeData'
       })
-    } else {
+    } else if (from == 'edit') {
       this.props.dispatch({
-        type: 'nameList/uploadData',
+        type: 'nameList/getData',
         payload: [{
           listIndex: 0,
           name: '',

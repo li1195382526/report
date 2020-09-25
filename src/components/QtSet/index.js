@@ -58,7 +58,7 @@ class QtSet extends Component {
   //设置名单
   handleSetName(){
     Taro.navigateTo({
-      url: '/pages/nameList/index'
+      url: '/pages/nameList/index?from=edit'
      })
   }
 
