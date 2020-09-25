@@ -3,11 +3,12 @@ import * as editApi from './service';
 export default {
   namespace: 'edit',
   state: {
-    "info": {},
-    "questionnaire":{},
+    info: {},
+    questionnaire:{},
     isChange:'',
     qtnStatus:'',
-    message:''
+    message:'',
+    status:''
   },
 
   effects: {
@@ -29,6 +30,8 @@ export default {
       yield put({
         type: 'save',
         payload: {
+          status:data.status,
+          message:data.message
           //questionnaire:data.questionnaire,
           //info:data.info
         }

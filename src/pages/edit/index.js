@@ -33,10 +33,6 @@ class Edit extends Component {
     this.handleRelease = this.handleRelease.bind(this)
   }
 
-  componentWillMount() {
-   
-  };
-
   //获取问卷
   getQuestionner(){
     const {reportId} = this.$router.params
@@ -47,7 +43,7 @@ class Edit extends Component {
     })
   }
 
-  componentDidMount(){
+  componentWillMount(){
     const init = this.$router.params.isInit
 
     //第一次编辑填报前端数据，编辑中问卷获取问卷信息
@@ -88,7 +84,6 @@ onTimeChange = e => {
 
   //发布填报
   handleRelease(){
-
     // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
     const {reportId} = this.$router.params
@@ -175,7 +170,12 @@ onTimeChange = e => {
       token: this.props.token,
       payload: params,
     }).then(()=>{
-      
+      const {status,message} = this.props
+      if(status == 200){
+        this.handleTips('success','保存成功')
+      }else{
+        this.handleTips('error',message)
+      }
     })
   }
 
