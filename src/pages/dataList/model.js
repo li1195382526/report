@@ -25,6 +25,19 @@ export default {
       yield put({
         type: 'save',
       });
+      if(data.status == 200) {
+        Taro.atMessage({
+          'message': '保存成功',
+          'type': 'success',
+          'duration': 1500
+        })
+      } else {
+        Taro.atMessage({
+          'message': '保存失败',
+          'type': 'error',
+          'duration': 1500
+        })
+      }
     },
     * getName({ payload: value,token,url }, { call, put }) {
       const { data } = yield call(dataListApi.getName, token, url);
@@ -98,10 +111,19 @@ export default {
         }
       });
       if(now == end) {
+        Taro.hideLoading()
         Taro.redirectTo({
-          url: '/pages/nameList/index'
+          url: '/pages/nameList/index?from=dataList'
         })
       }
+    },
+    * resetReleaseData({ payload: value }, { put }) {
+      yield put({
+        type: 'save',
+        payload: {
+          releaseData: [],
+        }
+      });
     }
   },
 

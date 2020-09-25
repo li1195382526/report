@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem, AtMessage, AtCheckbox  } from 'taro-ui'
 import './index.scss';
@@ -12,7 +12,7 @@ import './index.scss';
 
 class DataList extends Component {
 	config = {
-		navigationBarTitleText: '填报名单',
+		navigationBarTitleText: '名单库',
 	};
 
 	constructor(props) {
@@ -40,10 +40,12 @@ class DataList extends Component {
 	}
 
 	componentWillMount() {
-
 	};
-
+	
 	componentDidMount() {
+		this.props.dispatch({
+			type: 'dataList/resetReleaseData',
+		}) // 清空引用
 		this.getDataList()
 	}
 
@@ -147,14 +149,22 @@ class DataList extends Component {
 	// 引用名单
 	handleRelease() {
 		const { checkedList } = this.state
-		for(var i in checkedList) {
-			console.log('i',i)
-			this.props.dispatch({
-				type: 'dataList/release',
-				token: this.props.token,
-				now: i,
-				end: checkedList.length - 1,
-				url: `/v3/reportuser/${checkedList[i].creatorId}/namelist/${checkedList[i].id}`
+		if(checkedList.length) {
+			Taro.showLoading({
+				title: '正在删除...',
+			})
+			for(var i in checkedList) {
+				this.props.dispatch({
+					type: 'dataList/release',
+					token: this.props.token,
+					now: i,
+					end: checkedList.length - 1,
+					url: `/v3/reportuser/${checkedList[i].creatorId}/namelist/${checkedList[i].id}`
+				})
+			}
+		} else {
+			Taro.redirectTo({
+				url: '/pages/nameList/index?from=dataList'
 			})
 		}
 	}
@@ -162,33 +172,38 @@ class DataList extends Component {
 	render() {
 		const { isOpen, isMenge, nameList, name } = this.state
 		const { dataList } = this.props
-		const personalCenter = this.$router.params.from == 'personalCenter'
+		const from = this.$router.params.from
 		return (
 			<View>
 				<AtMessage />
-				{dataList.map((item, key) => (
-					<View key={key} className='list-item'>
-						{/* <View className='checkobox-data'><Checkbox value={key} onClick={this.checkedChange} dataItem={item} dataKey={key}></Checkbox></View> */}
-						<AtCheckbox
-							options={[{value: item, label:''}]}
-							selectedList={this.state.checkedList}
-							onChange={this.checkedChange}
-						/>
-						<View className='item-content' onClick={() => this.handleManage(item)}>
-							<View className="left">
-								<View className='title'>{item.tilte}</View>
-								<View className='count'>共{item.totalCount}人</View>
+				<View className="content">
+					{dataList.map((item, key) => (
+						<View key={key} className='list-item'>
+							{/* <View className='checkobox-data'><Checkbox value={key} onClick={this.checkedChange} dataItem={item} dataKey={key}></Checkbox></View> */}
+							{from == 'nameList' && 
+								<AtCheckbox
+									options={[{value: item, label:''}]}
+									selectedList={this.state.checkedList}
+									onChange={this.checkedChange}
+									className='checkobox-data'
+								/>
+							}
+							<View className='item-content' onClick={() => this.handleManage(item)}>
+								<View className="left">
+									<View className='title'>{item.tilte}</View>
+									<View className='count'>共{item.totalCount}人</View>
+								</View>
+								<View className="right">管理 &gt;</View>
 							</View>
-							<View className="right">管理 &gt;</View>
+							{/* <AtListItem title={item.tilte} note={`共 ${item.totalCount} 人`} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} /> */}
 						</View>
-						{/* <AtListItem title={item.tilte} note={`共 ${item.totalCount} 人`} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} /> */}
-					</View>
-				))}
+					))}
+				</View>
 				<View className='edit-footer'>
 					<View className='edit-save' onClick={this.handleAddNameList}>
 						添加名单组
 					</View>
-					{!personalCenter && <View className='edit-send' onClick={this.handleRelease}>引用名单</View>}
+					{from == 'nameList' && <View className='edit-send' onClick={this.handleRelease}>引用名单</View>}
 				</View>
 
 				{isOpen && (
