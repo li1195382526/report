@@ -174,6 +174,8 @@ onTimeChange = e => {
       type: 'edit/saveQtn',
       token: this.props.token,
       payload: params,
+    }).then(()=>{
+      
     })
   }
 

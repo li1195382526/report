@@ -145,9 +145,9 @@ class PersonalCenter extends Component {
         <AtTabBar
             fixed
             tabList={[
-              { title: '首页', iconType: 'bullet-list' },
-              { title: '模板库', iconType: 'camera' },
-              { title: '个人中心', iconType: 'folder' }
+              { title: '首页', iconType: 'home' },
+              { title: '模板库', iconType: 'list' },
+              { title: '个人中心', iconType: 'user' }
             ]}
             onClick={this.handleClickBar.bind(this)}
             current={this.state.currentBar}
