@@ -23,6 +23,7 @@ class Submits extends Component {
     this.state = {
       
     }
+    this.handleBack = this.handleBack.bind(this)
   }
 
   componentWillMount() {
@@ -42,7 +43,11 @@ class Submits extends Component {
     }
   }
 
-
+  handleBack(){
+    Taro.navigateTo({
+      url: '/pages/home/index'
+     })
+  }
   render() {
     return (
       <View className='release'>
@@ -63,10 +68,13 @@ class Submits extends Component {
             <AtButton type='secondary'>修改填报</AtButton>
           </View>
           <View>
-            <AtButton type='primary'>查看结果</AtButton> 
+            <AtButton type='primary' className='view-data'>查看结果</AtButton> 
           </View>
         </View>
-        
+        <View className='release-bottom'>
+          <View className='release-back' onClick={this.handleBack}>返回首页</View>
+          <View className='copy-right'>版权所有 © 2017 refs.cn</View>
+        </View>
       </View>
     )
   }

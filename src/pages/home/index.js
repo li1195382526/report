@@ -48,19 +48,6 @@ class Home extends Component {
   componentWillMount() {
     const token = this.props.token || Taro.getStorageSync('token');
     if (!token) {
-      Taro.redirectTo({
-        url: '../login/index'
-      })
-    }else{
-      this.setState({
-        isLogin:true
-      })
-    }
-  };
-
-  componentDidMount(){
-    const token = this.props.token || Taro.getStorageSync('token');
-    if (!token) {
       this.setState({
         isLogin:false
       })
@@ -71,6 +58,10 @@ class Home extends Component {
         isLogin:true
       })
     }
+  };
+
+  componentDidShow = () => {
+    this.getOwnerlist()
   }
 
   handleOpen (value,item){

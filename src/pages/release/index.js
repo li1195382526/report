@@ -23,6 +23,7 @@ class Release extends Component {
     this.state = {
       
     }
+    this.handleBack = this.handleBack.bind(this)
   }
 
   componentWillMount() {
@@ -40,6 +41,12 @@ class Release extends Component {
       path: '/pages/answer/index?',
       imageUrl: 'https://www.epanel.cn/images/answer.jpg'
     }
+  }
+
+  handleBack(){
+    Taro.navigateTo({
+      url: '/pages/home/index'
+     })
   }
 
 
@@ -63,10 +70,13 @@ class Release extends Component {
             <AtButton type='secondary'>生成二维码</AtButton>
           </View>
           <View>
-            <AtButton loading type='primary'>修改填报内容</AtButton> 
+            <AtButton type='primary'>修改填报内容</AtButton> 
           </View>
         </View>
-        
+        <View className='release-bottom'>
+          <View className='release-back' onClick={this.handleBack}>返回首页</View>
+          <View className='copy-right'>版权所有 © 2017 refs.cn</View>
+        </View>
       </View>
     )
   }

@@ -33,8 +33,9 @@ class List extends Component {
           <AtCard
             note={`${item.creatorName} | ${item.updateTime || item.createTime} | 参与${item.pnlCount}/${item.totalCount}`}
             extra={item.status == 0 ? '编辑中':item.status == 2 ? '收集中' :'已结束'}
+            extraStyle={{color:item.status == 0 ? '#F59A23' :'#1BA918'}}
             title={item.title}
-            thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
+            thumb=''
             onClick={()=>this.handleClick(item)}
           >
           {item.memo}

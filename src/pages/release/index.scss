@@ -6,16 +6,30 @@
     .release-mes{
         color:#ccc;
         line-height:80px;
+        margin-bottom: 40px;
     }
     .release-text{
-       line-height:50px;
+       line-height:100px;
     }
     .release-btn{
         margin-top:50px;
         width: 90%;
         margin: auto;
         View{
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+        }
+    }
+    .release-bottom{
+        position: absolute;
+        bottom: 50px;
+        text-align: center;
+        width: 100%;
+        .release-back{
+            color: #576B95;
+            line-height: 56px;
+        }
+        .copy-right{
+            font-size: 24px;
         }
     }
 }
