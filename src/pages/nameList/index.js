@@ -1,12 +1,11 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtIcon, AtInput, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtTextarea, AtMessage } from 'taro-ui'
+import { AtIcon, AtInput, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtTextarea, AtMessage, AtBadge, AtButton } from 'taro-ui'
 // import { BeginToCollect } from '../../components/beginToCollect'
 // import { Quota } from '../../components/Quota'
 // import { Link } from '../../components/link'
 import './index.scss';
-import '../manage/index.scss'
 
 @connect(({ NameList, home, common, nameList, dataList }) => ({
   ...NameList,
@@ -271,7 +270,11 @@ class NameList extends Component {
                   onFocus={() => this.nameFocus(key)}
                 />
               </View>
-              <View onClick={()=>this.bindNum(key)} className='fix3 bind'>关联</View>
+              <View  className='fix3 bind'>
+                <AtBadge value={item.limit.length} maxValue={9}>
+                  <AtButton size='small' onClick={()=>this.bindNum(key)} style={{position:'relative'}}>关联</AtButton>
+                </AtBadge>
+              </View>
               <View onClick={()=>this.delItem(key)} className='poicon'><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
             </View>
           </View>
