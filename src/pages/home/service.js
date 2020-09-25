@@ -55,3 +55,11 @@ export const wxMobilelogin = (data,token) => syncAction({
   method: "POST",
   url:'/v3/user/wxMobilelogin'
 });
+
+//获取我参与填报列表
+export const getParticipantlist = (data,token,url) => syncAction({
+  data,
+  method: "POST",
+  token,
+  url
+});

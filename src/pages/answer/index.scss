@@ -35,4 +35,67 @@
         margin:auto;
         
     }
+
+    .pass-content{
+        min-height: 50px;
+    }
+    .answer-namelist{
+        .tip{
+            height: 60px;
+            line-height: 60px;
+            color: #ccc;
+            text-align: center;
+        }
+        .content-name{
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            .name{
+                width:40%;
+                height:80px;
+                line-height: 80px;
+                border:1px solid rgba(52, 120, 247, 1);
+                text-align: center;
+                display: flex;
+                margin-bottom: 10px;
+                .name-key{
+                    width:30%;
+                    height:80px;
+                    border-right:1px solid rgba(52, 120, 247, 1);
+                }
+                .name-text{
+                    text-align: center;
+                    width: 70%;
+                }
+            }
+        }
+    }
+    .finish{
+        height: 50px;
+        line-height: 50px;
+        color: #ccc;
+        text-align: center;
+    }
+    .finish-namelist{
+        display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            .finish-name{
+                width:40%;
+                height:80px;
+                line-height: 80px;
+                border:1px solid rgb(223, 221, 221);
+                text-align: center;
+                display: flex;
+                margin-bottom: 10px;
+                .finish-key{
+                    width:30%;
+                    height:80px;
+                    border-right:1px solid rgb(223, 221, 221);
+                }
+                .name{
+                    width: 70%;
+                }
+            }
+    }
 }

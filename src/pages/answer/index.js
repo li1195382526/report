@@ -24,10 +24,15 @@ class Answer extends Component {
       selectorChecked: '小名',
       mobile:15526080904,
       reportId:20,
-      periodCount:1//周期数
+      periodCount:1,//周期数
+      passWord:'',
+      isPassWord:false,
+      isHavename:false
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
+    this.handlePassword = this.handlePassword.bind(this)
+    this.handleNum = this.handleNum.bind(this)
   }
 
   componentWillMount() {
@@ -70,10 +75,23 @@ class Answer extends Component {
     
   }
 
+  //确认填报密码
+  handlePassword(){
+    const {passWord} = this.state
+    this.setState({isPassWord:false})
+    console.log(passWord)
+  }
+
+  //密码填写
+  handleNum(val){
+    // eslint-disable-next-line react/no-unused-state
+    this.setState({passWord:val.target.value})
+  }
+
   render() {
+    const {isPassWord,isHavename} = this.state
     // eslint-disable-next-line no-shadow
     const {questionnaire,info} = this.props
-    console.log(questionnaire)
     return (
       <View className='answer'>
         <View className='change-name'>
@@ -94,17 +112,59 @@ class Answer extends Component {
         </View>
         
         
-       <AtModal isOpened={false}>
+       <AtModal isOpened={isHavename} closeOnClickOverlay={false}>
         <AtModalHeader>选择填答名单</AtModalHeader>
         <AtModalContent>
+            <View className='answer-namelist'>
+              <View className='tip'>请对号入座，选择正确的名单进行填报</View>
+              <View className='content-name'>
+                <View className='name'>
+                  <View className='name-key'>1</View>
+                  <View className='name-text'>小名</View>
+                </View>
+                <View className='name'>
+                  <View className='name-key'>1</View>
+                  <View className='name-text'>小名</View>
+                </View>
+                <View className='name'>
+                  <View className='name-key'>1</View>
+                  <View className='name-text'>小名</View>
+                </View>
+                <View className='name'>
+                  <View className='name-key'>1</View>
+                  <View className='name-text'>小名</View>
+                </View>
+              </View>
             <View>
-                12321
+              <View className='finish'>已填报</View>
+              <View className='finish-namelist'>
+                <View className='finish-name'>
+                  <View className='finish-key'>1</View>
+                  <View className='name'>小小</View>
+                </View>
+                <View className='finish-name'>
+                  <View className='finish-key'>1</View>
+                  <View className='name'>小小</View>
+                </View>
+                <View className='finish-name'>
+                  <View className='finish-key'>1</View>
+                  <View className='name'>小小</View>
+                </View>
+              </View>
             </View>
-            这里是正文内容，欢迎加入京东凹凸实验室
-            这里是正文内容，欢迎加入京东凹凸实验室
-            这里是正文内容，欢迎加入京东凹凸实验室
+            </View>
         </AtModalContent>
-        <AtModalAction> <Button>取消</Button> <Button>确定</Button> </AtModalAction>
+        
+        </AtModal>
+        <AtModal isOpened={isPassWord} closeOnClickOverlay={false}>
+        <AtModalHeader>密码验证</AtModalHeader>
+        <AtModalContent className='pass-content'>
+            <Input type='text' 
+              placeholder='请输入填报密码' 
+              onChange={(val)=>this.handleNum(val)}
+            />
+        </AtModalContent>
+        <AtModalAction> <Button>取消</Button> <Button onClick={this.handlePassword}>确定</Button> </AtModalAction>
         </AtModal>
       </View>
     )

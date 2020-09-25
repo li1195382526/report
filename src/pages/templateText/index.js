@@ -21,16 +21,25 @@ class TemplateText extends Component {
   }
 
   handleClickBar(value){
-    if(value === 0){
-      Taro.navigateTo({
-        url: '/pages/home/index'
-       })
-    }
-    if(value === 2){
-      Taro.navigateTo({
-        url: '/pages/personalCenter/index'
-       })
-    }
+    switch (value) {
+      case 0:
+          Taro.redirectTo({
+              url: '/pages/home/index'
+          })
+          break;
+      case 1:
+          Taro.redirectTo({
+              url: '/pages/templateText/index'
+          })
+          break;
+      case 2:
+          Taro.redirectTo({
+              url: '/pages/personalCenter/index'
+          })
+          break;           
+      default:
+          break;
+    } 
   }
   render() {
 

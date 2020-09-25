@@ -6,7 +6,8 @@ export default {
     token: Taro.getStorageSync('token'),
     userinfo: Taro.getStorageSync('userinfo'),
     logintime: Taro.getStorageSync('loginTime'),
-    wxInfo:Taro.getStorageSync('wxInfo')
+    wxInfo:Taro.getStorageSync('wxInfo'),
+    mobile:Taro.getStorageSync('mobile')
   },
 
   effects: {},

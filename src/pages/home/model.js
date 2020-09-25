@@ -33,6 +33,10 @@ export default {
           data: data.data.user
         })
         Taro.setStorage({
+          key: "mobile",
+          data: data.data.mobile
+        })
+        Taro.setStorage({
           key: "logintime",
           data: now
         })
@@ -138,6 +142,13 @@ export default {
       Taro.setStorage({
         key: "wxMobile",
         data: data.data.mobile
+      })
+    },
+    * getParticipantlist({ payload: values,token,url }, { call, put }) {
+      const { data } = yield call(homeApi.getParticipantlist, values,token,url);
+      yield put({
+        type: 'save',
+        //payload: data
       })
     },
   },

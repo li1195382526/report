@@ -100,15 +100,32 @@ onTimeChange = e => {
       this.handleTips('error','填报主题不能超过20个字符')
       return
     }
-    if(info.memo.length === 0){
-    this.handleTips('error','填报说明不能为空')
-    return
-    }
 
     if(info.memo.length >= 200){
     this.handleTips('error','填报说明不能超过200个字符')
     return
     }
+
+    if(info.useCount == 1 && info.pnlCount.length === 0){
+      this.handleTips('error','填报人数不能为空')
+      return
+    }
+    
+    if(info.useNamelist == 1 && info.namelist.length === 0){
+      this.handleTips('error','填报名单不能为空')
+      return
+    }
+
+    if(info.usePeriod == 1 && info.periodType.length === 0){
+      this.handleTips('error','填报周期类别不能为空')
+      return
+    }
+
+    if(info.usePeriod == 1 && info.periodSize.length === 0){
+      this.handleTips('error','填报周期长度不能为空')
+      return
+    }
+    
 
     const params = {
       info,

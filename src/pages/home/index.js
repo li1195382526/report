@@ -28,7 +28,8 @@ class Home extends Component {
       isOpened:false,
       isLogin:false,
       pageSize:10,
-      status:null
+      status:null,
+      ispartOpened:false
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -40,6 +41,8 @@ class Home extends Component {
     this.getCycle = this.getCycle.bind(this)
     this.handleCopy = this.handleCopy.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleColse = this.handleColse.bind(this)
+    this.handlePart = this.handlePart.bind(this)
   }
 
   componentWillMount() {
@@ -126,7 +129,8 @@ class Home extends Component {
   handleClick (value) {
     this.setState({
       current: value,
-      isOpened:false
+      isOpened:false,
+      ispartOpened:false
     })
   }
 
@@ -146,7 +150,8 @@ class Home extends Component {
       this.handleWxLogin()
     }
     this.setState({
-      isOpened:false
+      isOpened:false,
+      ispartOpened:false
     })
   }
 
@@ -187,26 +192,46 @@ class Home extends Component {
 
 
   handleClickBar(value){
-    if(value === 1){
-      Taro.navigateTo({
-        url: '/pages/templateText/index'
-       })
-    }
-    if(value === 2){
-      Taro.navigateTo({
-        url: '/pages/personalCenter/index'
-       })
-    }
+    // if(value === 1){
+    //   Taro.navigateTo({
+    //     url: '/pages/templateText/index'
+    //    })
+    // }
+    // if(value === 2){
+    //   Taro.navigateTo({
+    //     url: '/pages/personalCenter/index'
+    //    })
+    // }
     this.setState({
-      isOpened:false
+      isOpened:false,
+      ispartOpened:false
     })
+
+    this.setState({
+      currentBar: value
+    })
+    switch (value) {
+      case 0:
+          Taro.redirectTo({
+              url: '/pages/home/index'
+          })
+          break;
+      case 1:
+          Taro.redirectTo({
+              url: '/pages/templateText/index'
+          })
+          break;
+      case 2:
+          Taro.redirectTo({
+              url: '/pages/personalCenter/index'
+          })
+          break;           
+      default:
+          break;
+    }    
   }
 
-  submit = () =>{
-    Taro.navigateTo({
-      url: '/pages/answer/index'
-     })
-  }
+  
 
   //复制填报
   handleCopy(){
@@ -269,6 +294,19 @@ class Home extends Component {
     //this.onShareAppMessage()
   }
 
+  handleColse(){
+    this.setState({
+      isOpened:false,
+      ispartOpened:false
+    })
+  }
+
+  handlePart(val){
+    this.setState({
+      ispartOpened:true
+    })
+  }
+
   render() {
     const {createList } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
@@ -304,7 +342,7 @@ class Home extends Component {
             <Image src={image} className='list-img' />}
           </AtTabsPane>
           <AtTabsPane current={this.state.current} index={1}>
-            <Participate />
+            <Participate handlePart={this.handlePart} />
           </AtTabsPane>
         </AtTabs>
         
@@ -342,7 +380,23 @@ class Home extends Component {
             <AtActionSheetItem onClick={this.handleDelete}>
                 删除填报
             </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.submit}>
+            <AtActionSheetItem onClick={this.handleColse}>
+                取消
+            </AtActionSheetItem>
+          </AtActionSheet> 
+
+
+          <AtActionSheet isOpened={this.state.ispartOpened}>
+             <AtActionSheetItem onClick={()=>this.toEdit(1)}>
+                修改填报
+            </AtActionSheetItem> 
+             <AtActionSheetItem>
+               <AtButton type='primary'  plain='true' openType='share' className='share-btn'>分享填报</AtButton>
+            </AtActionSheetItem>
+            <AtActionSheetItem onClick={this.handleData}>
+             查看答案
+            </AtActionSheetItem>
+            <AtActionSheetItem onClick={this.handleColse}>
                 取消
             </AtActionSheetItem>
           </AtActionSheet> 
@@ -352,9 +406,9 @@ class Home extends Component {
           <AtTabBar
             fixed
             tabList={[
-              { title: '首页', iconType: 'bullet-list' },
-              { title: '模板库', iconType: 'camera' },
-              { title: '个人中心', iconType: 'folder' }
+              { title: '首页', iconType: 'home' },
+              { title: '模板库', iconType: 'list' },
+              { title: '个人中心', iconType: 'user' }
             ]}
             onClick={this.handleClickBar}
             current={this.state.currentBar}

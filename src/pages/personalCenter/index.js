@@ -94,16 +94,25 @@ class PersonalCenter extends Component {
   }
 
   handleClickBar(value){
-    if(value === 0){
-      Taro.navigateTo({
-        url: '/pages/home/index'
-       })
-    }
-    if(value === 1){
-      Taro.navigateTo({
-        url: '/pages/templateText/index'
-       })
-    }
+    switch (value) {
+      case 0:
+          Taro.redirectTo({
+              url: '/pages/home/index'
+          })
+          break;
+      case 1:
+          Taro.redirectTo({
+              url: '/pages/templateText/index'
+          })
+          break;
+      case 2:
+          Taro.redirectTo({
+              url: '/pages/personalCenter/index'
+          })
+          break;           
+      default:
+          break;
+    } 
   }
 
   render() {
