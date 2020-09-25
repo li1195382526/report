@@ -41,14 +41,18 @@
     display: flex;
     margin-bottom: 4px;
     .checkobox-data {
-        flex: 0.3;
-        height: 100%;
-        line-height: 140px;
-        margin-left: 2%;
+        width: 100px;
+        overflow: hidden;
+    }
+    .at-checkbox::before {
+        border: 0;
+    }
+    .at-checkbox::after {
+        border: 0;
     }
     .item-content {
         flex: 0.9;
-        margin-left: 11%;
+        margin-left: 100px;
         display: flex;
         justify-content: space-between;
         .left {
@@ -68,4 +72,7 @@
             color: #999;
         }
     }
+}
+.content {
+    margin-bottom: 130px;
 }

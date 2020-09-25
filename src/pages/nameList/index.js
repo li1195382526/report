@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtIcon, AtInput, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtTextarea } from 'taro-ui'
+import { AtIcon, AtInput, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtTextarea, AtMessage } from 'taro-ui'
 // import { BeginToCollect } from '../../components/beginToCollect'
 // import { Quota } from '../../components/Quota'
 // import { Link } from '../../components/link'
@@ -35,7 +35,6 @@ class NameList extends Component {
       devalue: ''
       
     }
-    this.handleChange = this.handleChange.bind(this)
     this.handleSubUsername = this.handleSubUsername.bind(this)
     this.handleImport = this.handleImport.bind(this)
     this.onConfirm = this.onConfirm.bind(this)
@@ -51,16 +50,37 @@ class NameList extends Component {
     this.onConfirmBind = this.onConfirmBind.bind(this)
     this.handleBind = this.handleBind.bind(this)
     this.delItem = this.delItem.bind(this)
+    this.finish = this.finish.bind(this)
+    this.initialization = this.initialization.bind(this)
   }
 
   componentWillMount() {
 
   };
 
-  handleChange() {
-
+  componentDidMount() {
+    this.initialization()
   }
 
+  // 初始数据
+  initialization() {
+    const from = this.$router.params.from
+    if(from == 'dataList') { // 引用名单库的
+      this.props.dispatch({
+        type: 'nameList/mergeData'
+      })
+    } else {
+      this.props.dispatch({
+        type: 'nameList/uploadData',
+        payload: [{
+          listIndex: 0,
+          name: '',
+          limit: [],
+          status: 1
+        }],
+      })
+    }
+  }
   handleSubUsername(event) {
     const username = event.target.value.replace(/\t+/g, ',')
     // const newUsername = username.split(' ').join(',')
@@ -113,7 +133,7 @@ class NameList extends Component {
   // 引用名单库
   handleQuote() {
     Taro.navigateTo({
-      url: '/pages/dataList/index'
+      url: '/pages/dataList/index?from=nameList'
     })
   }
   // 单个添加
@@ -208,12 +228,19 @@ class NameList extends Component {
       })
     }, 0);
   }
+  // 完成
+  finish() {
+    Taro.redirectTo({
+      url: '../edit/index'
+    })
+  }
 
   render() {
     const { isOpen, imvalue, poolTitle, isPool, isBindNum, devalue } = this.state
     const { tableList } = this.props
     return (
       <View className='namelist'>
+        <AtMessage />
         <View className='list-import'>
           <View onClick={this.handleImport}>导入名单</View>
           <View onClick={this.handleQuote}>引用名单库</View>
@@ -256,7 +283,7 @@ class NameList extends Component {
 					<View className='edit-save' onClick={this.handleAddNameList}>
 						保存名单库
 					</View>
-					<View className='edit-send' onClick={this.handleRelease}>完成</View>
+					<View className='edit-send' onClick={this.finish}>完成</View>
 				</View>
 
         {isOpen && (

@@ -9,25 +9,10 @@ export default {
             name: '',
             limit: [],
             status: 1
-        }]
+        }]  // 填报名单
     },
 
     effects: {
-        * release({ payload: value, token, url, now, end }, { call, put, select }) {
-            const { data } = yield call(dataListApi.getName, token, url);
-            let { releaseData } = yield select((state) => state.dataList);
-            yield put({
-                type: 'save',
-                payload: {
-                    releaseData: releaseData.concat(data.data),
-                }
-            });
-            if (now == end) {
-                Taro.redirectTo({
-                    url: '/pages/nameList/index'
-                })
-            }
-        },
         * uploadData({ payload: value }, { put }) {
             yield put({
                 type: 'save',
@@ -35,7 +20,24 @@ export default {
                     tableList: value
                 }
             });
-          },
+        },
+        * mergeData({ payload: value }, { put, select }) {
+            let { releaseData } = yield select((state)=> state.dataList);
+            let { tableList } = yield select((state)=> state.nameList);
+            if(releaseData.length) {
+                yield put({
+                    type: 'save',
+                    payload: {
+                        tableList: tableList.concat(releaseData)
+                    }
+                });
+            } else {
+                yield put({
+                    type: 'save'
+                });
+
+            }
+        },
     },
 
     reducers: {
