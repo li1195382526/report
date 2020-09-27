@@ -24,7 +24,6 @@ class SingleChoice extends Component {
   handleChange (value,item) {
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq === item.mySeq ? val.label = value :val)
-    console.log(newOptList)
     let questionnaire = this.props.questionnaire
     questionnaire.pageList[0].qtList.map((item,key)=>{
       if(item.disSeq === opts.disSeq){
@@ -64,11 +63,13 @@ class SingleChoice extends Component {
     console.log(key)
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq !== item.mySeq)
+    newOptList.map((val,key1)=>{
+      val.mySeq = `A${key1+1}`
+    })
     let questionnaire = this.props.questionnaire
-    console.log(questionnaire)
-    questionnaire.pageList[0].qtList.map((item,key)=>{
-      if(item.disSeq === opts.disSeq){
-         item.optlist = newOptList
+    questionnaire.pageList[0].qtList.map((qt,key)=>{
+      if(qt.disSeq === opts.disSeq){
+         qt.optlist = newOptList
       } 
     })
     
@@ -87,13 +88,13 @@ class SingleChoice extends Component {
       <View className='multi-choice'>
         <View className='multi-width'>
         <AtInput
-            name='value'
-            title='题目标题'
-            type='text'
-            placeholder={opts.text}
-            value={opts.text}
-            onChange={this.handleText}
-          />
+          name='value'
+          title='题目标题'
+          type='text'
+          placeholder='请输入题目标题'
+          value={opts.text}
+          onChange={this.handleText}
+        />
           {opts.optlist.map((item,key)=>(
             <View className='multi-opt'>
               <View className='multi-input'>

@@ -91,6 +91,25 @@ onTimeChange = e => {
     // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
     const {reportId} = this.$router.params
+    questionnaire.pageList.map((pg)=>{
+      pg.qtList.map((qt)=>{
+        var messageText = ''
+        console.log(qt)
+        if(qt.text.length === 0){
+          messageText =  `${qt.disSeq}未填写题目标题`
+          this.handleTips('error',messageText)
+          return
+        }
+        qt.optlist.map((opt)=>{
+          if(opt.label === '' && qt.type != 2 ){
+            messageText =  `${qt.disSeq}未填写选项内容`
+            this.handleTips('error',messageText)
+            return
+          }
+        })
+
+      })
+    })
     if(info.title.length === 0){
         this.handleTips('error','填报主题不能为空')
         return
@@ -108,6 +127,12 @@ onTimeChange = e => {
     if(info.useCount == 1 && info.pnlCount.length === 0){
       this.handleTips('error','填报人数不能为空')
       return
+    }else if(info.useCount == 1 && parseInt(info.pnlCount) <= 0){
+      this.handleTips('error','填报人数必须大于零')
+      return
+    }else if(info.useCount == 1 && isNaN(parseInt(info.pnlCount))){
+      this.handleTips('error','填报人数必须是正整数')
+      return
     }
     
     if(info.useNamelist == 1 && info.namelist.length === 0){
@@ -121,7 +146,30 @@ onTimeChange = e => {
     }
 
     if(info.usePeriod == 1 && info.periodSize.length === 0){
-      this.handleTips('error','填报周期长度不能为空')
+      this.handleTips('error','填报周期不能为空')
+      return
+    }
+    console.log(parseInt(info.periodSize))
+    if(info.usePeriod == 1 && info.periodSize.length > 0 && parseInt(info.periodSize) < 0){
+      this.handleTips('error','填报周期数必须为正整数')
+      return
+    }else if(info.usePeriod == 1 && isNaN(parseInt(info.periodSize))){
+      this.handleTips('error','填报周期数必须是正整数')
+      return
+    }
+
+    if(info.needPwd == 1 && info.pwd.length === 0){
+      this.handleTips('error','填报密码必须为四位正整数')
+      return
+    }
+
+    if(info.needPwd == 1 && info.pwd.length > 4){
+      this.handleTips('error','填报密码必须为四位正整数')
+      return
+    }
+
+    if(info.needPwd == 1 &&  isNaN(parseInt(info.pwd))){
+      this.handleTips('error','填报密码必须为四位正整数')
       return
     }
     
@@ -130,28 +178,28 @@ onTimeChange = e => {
       info,
       questionnaire
     }
-    this.props.dispatch({
-      type: 'edit/saveQtn',
-      token: this.props.token,
-      payload: params,
-    }).then(()=>{
-      this.props.dispatch({
-        type: 'edit/publish',
-        token: this.props.token,
-        payload: {reportId},
-        url:`/v3/report/${reportId}/publish`
-      }).then(()=>{
-        const {qtnStatus,message} = this.props
-        if(qtnStatus === 200){
-          Taro.navigateTo({
-            url: '/pages/release/index'
-           })
-        }else{
-          this.handleTips('error',message)
-        }
+    // this.props.dispatch({
+    //   type: 'edit/saveQtn',
+    //   token: this.props.token,
+    //   payload: params,
+    // }).then(()=>{
+    //   this.props.dispatch({
+    //     type: 'edit/publish',
+    //     token: this.props.token,
+    //     payload: {reportId},
+    //     url:`/v3/report/${reportId}/publish`
+    //   }).then(()=>{
+    //     const {qtnStatus,message} = this.props
+    //     if(qtnStatus === 200){
+    //       Taro.navigateTo({
+    //         url: '/pages/release/index'
+    //        })
+    //     }else{
+    //       this.handleTips('error',message)
+    //     }
         
-      })
-    })  
+    //   })
+    // })  
   }
 
   handleTips (type,message) {
@@ -165,6 +213,19 @@ onTimeChange = e => {
   handleSave(){
     // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
+    if(info.title.length === 0){
+      this.handleTips('error','填报主题不能为空')
+      return
+    }
+    if(info.title.length >= 20){
+      this.handleTips('error','填报主题不能超过20个字符')
+      return
+    }
+
+    if(info.memo.length >= 200){
+    this.handleTips('error','填报说明不能超过200个字符')
+    return
+    }
     const params = {
       info,
       questionnaire

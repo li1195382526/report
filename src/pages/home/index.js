@@ -49,14 +49,15 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    const token = this.props.token || Taro.getStorageSync('token');
+    const token = Taro.getStorageSync('token');
     if (!token) {
       this.setState({
         isLogin:false
       })
     }else{
       this.getOwnerlist()
-      this.getCycle()
+      //获取周期
+      //this.getCycle()
       this.setState({
         isLogin:true
       })
@@ -357,7 +358,7 @@ class Home extends Component {
            )}
            {(status === 5 || status === 2) && (
              
-             <AtActionSheetItem>
+             <AtActionSheetItem onClick={this.handleColse}>
                <AtButton type='primary'  plain='true' openType='share' className='share-btn'>分享到微信群</AtButton>
             </AtActionSheetItem>
            ) }

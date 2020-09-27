@@ -106,6 +106,7 @@ export const questionnaire = {
   ],
     "seq": "1",
     "text": "",
+    "required":true,
 }
 ],
   }],

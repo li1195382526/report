@@ -56,7 +56,7 @@ class Answer extends Component {
     })
   }
 
-   //周期类型
+  //切换人员名单
    onChange (e)  {
     console.log(e.detail.value)
   }

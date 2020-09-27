@@ -33,12 +33,12 @@ class NewQuestion extends Component {
     }else{
       optlist = openOpt
     }
-
+    const fixSeq = questionnaire.pageList[0].qtList[index-1].fixSeq.replace(/[^0-9]/ig,"")
     const qtList = [{
         "type": value == 0 || value == 1 ? 1 : 2,
         "selectType": value == 0 ? 0 :value == 1 ? 1 :value == 2 ? 1 :value == 3 ? 7 :'',
         "disSeq": `Q${index+1}`,
-        "fixSeq": `Q${index+1}`,
+        "fixSeq": `Q${parseInt(fixSeq)+1}`,
         "mySeq": `Q${index+1}`,
         "cols": 1,
         "img": "",
@@ -47,7 +47,7 @@ class NewQuestion extends Component {
         "optlist": optlist,
         "seq": "1",
         "required": true,
-        "text": value == 0 || value == 1 ? "选择题" : "填空题",
+        "text": '',
     }]
     const newQtList = questionnaire.pageList[0].qtList.concat(qtList)
     questionnaire.pageList.map((item,key)=>{

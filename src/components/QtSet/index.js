@@ -36,10 +36,9 @@ class QtSet extends Component {
       this.saveTime = this.saveTime.bind(this)
   }
 
+  //填报设置
   handleChange(val,type){
     let {info,isChange} = this.props
-    console.log(val)
-    console.log(type)
     if(val.target.value && type === 'useCount'){
       info.useNamelist = 0
     }
@@ -77,6 +76,7 @@ class QtSet extends Component {
       })
     }
 
+    //设置时间
     saveTime(val,type){
       let {info,isChange} = this.props
       const time = val.current + ':00'
@@ -152,7 +152,7 @@ class QtSet extends Component {
     const {info,tableList} = this.props
     let beginTimeList = !!info.beginTime ? info.beginTime :'未设置'
     let expireTimeList = !!info.endTime ? info.endTime  :'未设置'
-    const nameSet = tableList && tableList.length > 0 ? tableList.length + '人' :'未设置'
+    const nameSet =  info.namelist && info.namelist.length > 0 ? info.namelist.length + '人' :'未设置'
     return (
         <View className='qtn-setting'>
           <AtList>

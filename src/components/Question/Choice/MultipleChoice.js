@@ -24,7 +24,6 @@ class MultipleChoice extends Component {
   handleChange (value,item) {
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq === item.mySeq ? val.label = value :val)
-    console.log(newOptList)
     let questionnaire = this.props.questionnaire
     questionnaire.pageList[0].qtList.map((item,key)=>{
       if(item.disSeq === opts.disSeq){
@@ -63,6 +62,9 @@ class MultipleChoice extends Component {
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq !== item.mySeq)
     let questionnaire = this.props.questionnaire
+    newOptList.map((val,key1)=>{
+      val.mySeq = `A${key1+1}`
+    })
     questionnaire.pageList[0].qtList.map((item,key)=>{
       if(item.disSeq === opts.disSeq){
          item.optlist = newOptList
@@ -87,7 +89,7 @@ class MultipleChoice extends Component {
             name='value'
             title='题目标题'
             type='text'
-            placeholder={opts.text}
+            placeholder='请输入题目标题'
             value={opts.text}
             onChange={this.handleText}
           />

@@ -23,9 +23,12 @@ class QuestionBottom extends Component {
   handleChange () {
     const {opts,isChange} = this.props
     const index = opts.optlist.length
+    let questionnaire = this.props.questionnaire
+    console.log(opts)
     //Object.assign(newObj,user,page)
+    const fixSeq = opts.optlist[opts.optlist.length-1].fixSeq.replace(/[^0-9]/ig,"")
     const opt = [{
-      "fixSeq":`A${index+1 }`,
+      "fixSeq":`A${parseInt(fixSeq)+1 }`,
       "position":0,
       "val":1,
       "mySeq":`A${index+1 }`,
@@ -39,7 +42,6 @@ class QuestionBottom extends Component {
       "optQuote":false
     }]
     const newOptList = opts.optlist.concat(opt)
-    let questionnaire = this.props.questionnaire
     questionnaire.pageList[0].qtList.map((item,key)=>{
       if(item.disSeq === opts.disSeq){
          item.optlist = newOptList
