@@ -46,14 +46,15 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    const token = this.props.token || Taro.getStorageSync('token');
+    const token = Taro.getStorageSync('token');
     if (!token) {
       this.setState({
         isLogin:false
       })
     }else{
       this.getOwnerlist()
-      this.getCycle()
+      //获取周期
+      //this.getCycle()
       this.setState({
         isLogin:true
       })
