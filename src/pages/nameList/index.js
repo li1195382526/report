@@ -229,8 +229,9 @@ class NameList extends Component {
   }
   // 完成
   finish() {
+    const reportId = Taro.getStorageSync('reportId')
     Taro.redirectTo({
-      url: '../edit/index'
+      url:`/pages/edit/index?isInit=${1}&reportId=${reportId}`
     })
   }
 

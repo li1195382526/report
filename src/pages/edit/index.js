@@ -36,6 +36,10 @@ class Edit extends Component {
   //获取问卷
   getQuestionner(){
     const {reportId} = this.$router.params
+    Taro.setStorage({
+      key: "reportId",
+      data: reportId
+    })
     this.props.dispatch({
       type: 'edit/getQuestionner',
       token: this.props.token,
