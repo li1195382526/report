@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View,Swiper,SwiperItem } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtActionSheet, AtMessage, AtButton,AtTabs, AtTabsPane,AtActionSheetItem,AtTabBar } from 'taro-ui'
+import { AtActionSheet, AtMessage, AtButton,AtTabs, AtTabsPane,AtActionSheetItem,AtTabBar, AtModal } from 'taro-ui'
 import Questionaires from '../../components/questionaire'
 import './index.scss';
 import List from '../../components/list';
@@ -29,7 +29,8 @@ class Home extends Component {
       isLogin:false,
       pageSize:10,
       status:null,
-      ispartOpened:false
+      ispartOpened:false,
+      isDel: false,
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -43,6 +44,8 @@ class Home extends Component {
     this.handleDelete = this.handleDelete.bind(this)
     this.handleColse = this.handleColse.bind(this)
     this.handlePart = this.handlePart.bind(this)
+    this.confimDelete = this.confimDelete.bind(this)
+    this.delCancel = this.delCancel.bind(this)
   }
 
   componentWillMount() {
@@ -252,19 +255,15 @@ class Home extends Component {
     const params = {
       reportId
     }
-    this.setState({
-      isOpened:false
-    })
     this.props.dispatch({
       type: 'home/deleteReport',
       payload: params,
       token: this.props.token,
       url:`/v3/report/${reportId}`
-    }).then(
-      ()=>{
-        this.getOwnerlist()
-      }
-    )
+    }).then(()=>{
+      this.getOwnerlist()
+    })
+    this.delCancel()
   }
 
   //小程序分享
@@ -297,11 +296,19 @@ class Home extends Component {
       ispartOpened:true
     })
   }
+  // 删除填报确认？
+  confimDelete() {
+    this.setState({isDel: true, isOpened:false})
+  }
+  // 删除填报取消
+  delCancel() {
+    this.setState({isDel: false})
+  }
 
   render() {
     const {createList } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
-    const {isLogin,status} = this.state
+    const {isLogin,status, isDel, current} = this.state
     return (
       <View className='page'>
         {/* 首页跑马灯及创建填报列表 */}
@@ -368,7 +375,7 @@ class Home extends Component {
             <AtActionSheetItem onClick={this.handleCopy}>
                 复制填报
             </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.handleDelete}>
+            <AtActionSheetItem onClick={this.confimDelete}>
                 删除填报
             </AtActionSheetItem>
             <AtActionSheetItem onClick={this.handleColse}>
@@ -392,7 +399,17 @@ class Home extends Component {
             </AtActionSheetItem>
           </AtActionSheet> 
         </View>
-        
+        {isDel && (
+          <AtModal
+            isOpened={isDel}
+            cancelText='取消'
+            confirmText='删除'
+            onClose={ this.delCancel }
+            onCancel={ this.delCancel }
+            onConfirm={ this.handleDelete }
+            content={`确认删除<${createList[current].title}>填报?`}
+          />
+        )}
           {/* 底部bar */}
           <AtTabBar
             fixed
