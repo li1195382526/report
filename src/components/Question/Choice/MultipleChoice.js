@@ -97,6 +97,7 @@ class MultipleChoice extends Component {
             <View className='multi-opt'>
               <View className='multi-input'>
                 <AtInput
+                  border={false}
                   style={{width:'90%'}}
                   subtract
                   name='value'
@@ -108,7 +109,7 @@ class MultipleChoice extends Component {
                 />
               </View>
                 <View className='multi-icon' onClick={(val)=>this.handleDeleteOpt(item,key)}>
-                  <AtIcon value='subtract' size='15' color='red'></AtIcon>
+                  <AtIcon value='subtract-circle' size='20' color='red'></AtIcon>
                 </View> 
             </View>
           ))}
