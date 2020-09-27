@@ -30,16 +30,20 @@
             }
         }
     }
-    .header-color{
+    .content {
+        width: 96%;
+        margin: 0 2% 130px 2%;
+        border: 1px solid #e4e4e4;
         background-color: #fff;
-        border-bottom: 1px solid rgba(249, 249, 249, 1);
+    }
+    .header-color{
         .header{
             display: flex;
             height:80px;
             line-height: 80px;
             justify-content:space-around;
             width: 80%;
-            margin: auto;
+            margin-left: 4%;
             background-color: #fff;
             .fix1 {
                 flex: 0.3;
@@ -59,7 +63,7 @@
         width: 80%;
         height: 100px;
         line-height: 100px;
-        margin: auto;
+        margin-left: 4%;
         display: flex;
         justify-content: space-around;
         background-color: #fff;
@@ -81,22 +85,35 @@
         }
         .poicon {
             position: absolute;
-            right: -10%;
+            right: -14%;
+        }
+        .at-button {
+            border: 0;
+            color: #71a0f7;
+            text-decoration: underline;
+        }
+        .at-input__container {
+            border: 1px solid #d7d7d7;
+        }
+        .at-input::after {
+            border: 0;
         }
     }
     .namelist-add{
-        height:80px;
+        width: 96%;
+        height: 120px;
         background-color: #fff;
         display: flex;
         justify-content: space-around;
-        margin: 20px 2%;
+        margin: 2px 2%;
         .edit-add{
             width:40%;
+            margin: 20px 0;
             background-color: #fff;
             line-height: 80px;
             text-align: center;
-            color: #666;
-            border:1px solid #666;
+            color: #7f7f7f;
+            border:1px solid #d7d7d7;
         }
     }
 }

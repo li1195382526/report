@@ -151,7 +151,7 @@ class DataList extends Component {
 		const { checkedList } = this.state
 		if(checkedList.length) {
 			Taro.showLoading({
-				title: '正在删除...',
+				title: '正在处理...',
 			})
 			for(var i in checkedList) {
 				this.props.dispatch({

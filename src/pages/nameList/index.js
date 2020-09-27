@@ -6,6 +6,8 @@ import { AtIcon, AtInput, AtModal, AtModalHeader, AtModalContent, AtModalAction,
 // import { Quota } from '../../components/Quota'
 // import { Link } from '../../components/link'
 import './index.scss';
+import image1 from '../../assets/images/u745.png'
+import image2 from '../../assets/images/u748.png'
 
 @connect(({ NameList, home, common, nameList, dataList }) => ({
   ...NameList,
@@ -188,7 +190,8 @@ class NameList extends Component {
 			payload: params,
 			token: this.props.token,
 			url: `/v3/reportuser/${userinfo.id}/namelist/create`
-		})
+    })
+    this.onClose()
   }
   // 关联按钮
   bindNum(key) {
@@ -241,46 +244,52 @@ class NameList extends Component {
       <View className='namelist'>
         <AtMessage />
         <View className='list-import'>
-          <View onClick={this.handleImport}>导入名单</View>
-          <View onClick={this.handleQuote}>引用名单库</View>
+          <View onClick={this.handleImport}>
+            <Image src={image1} style={{width: '36px',height: '36px', objectFit: 'contain', verticalAlign: 'middle'}}></Image>
+            导入名单</View>
+          <View onClick={this.handleQuote}>
+            <Image src={image2} style={{width: '36px',height: '36px', objectFit: 'contain', verticalAlign: 'middle'}}></Image>
+            引用名单库</View>
         </View>
-        <View className='header-color'>
-          <View className='header'>
-            <View className="fix1">
-              编号
-            </View>
-            <View className="fix2">
-              预设名字
-            </View>
-            <View className="fix3">
-              填报人员
+        <View className='content'>
+          <View className='header-color'>
+            <View className='header'>
+              <View className="fix1">
+                编号
+              </View>
+              <View className="fix2">
+                预设名字
+              </View>
+              <View className="fix3">
+                填报人员
+              </View>
             </View>
           </View>
-        </View>
-        {tableList.map((item, key) => (
-          <View className='header-color' key={key}>
-            <View className='table' key={key}>
-              <View className='fix1'>{`${key + 1}.`}</View>
-              <View className='fix2'>
-                <AtInput
-                  type='text'
-                  placeholder='名字'
-                  value={item.name}
-                  onChange={this.nameChange}
-                  onFocus={() => this.nameFocus(key)}
-                />
+          {tableList.map((item, key) => (
+            <View className='header-color' key={key}>
+              <View className='table' key={key}>
+                <View className='fix1'>{`${key + 1}.`}</View>
+                <View className='fix2'>
+                  <AtInput
+                    type='text'
+                    placeholder='名字'
+                    value={item.name}
+                    onChange={this.nameChange}
+                    onFocus={() => this.nameFocus(key)}
+                  />
+                </View>
+                <View  className='fix3 bind'>
+                  <AtBadge value={item.limit.length} maxValue={9}>
+                    <AtButton size='small' onClick={()=>this.bindNum(key)} style={{position:'relative'}}>关联</AtButton>
+                  </AtBadge>
+                </View>
+                <View onClick={()=>this.delItem(key)} className='poicon'><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
               </View>
-              <View  className='fix3 bind'>
-                <AtBadge value={item.limit.length} maxValue={9}>
-                  <AtButton size='small' onClick={()=>this.bindNum(key)} style={{position:'relative'}}>关联</AtButton>
-                </AtBadge>
-              </View>
-              <View onClick={()=>this.delItem(key)} className='poicon'><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
             </View>
+          ))}
+          <View className='namelist-add'>
+            <View className='edit-add' onClick={this.handleAddSingle}>+ 继续添加</View>
           </View>
-        ))}
-        <View className='namelist-add'>
-          <View className='edit-add' onClick={this.handleAddSingle}>+ 继续添加</View>
         </View>
         <View className='edit-footer'>
 					<View className='edit-save' onClick={this.handleAddNameList}>

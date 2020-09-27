@@ -237,45 +237,47 @@ class NameList extends Component {
           </View>
         </View>
         <View className='title'>详细人员</View>
-        <View className='header-color'>
-          <View className='header'>
-            <View className="fix1">
-              编号
-            </View>
-            <View className="fix2">
-              预设名字
-            </View>
-            <View className="fix3">
-              填报人员
-            </View>
-          </View>
-        </View>
-        {nameData.map((item, key) => (
+        <View className='content'>
           <View className='header-color'>
-            <View className='table' key={key}>
-              <View className='fix1'>{`${key + 1}.`}</View>
-              <View className='fix2'>
-                {/* <input type="text" placeholder='名字' value={item.name} onChange={() => this.nameChange(key)} /> */}
-                <AtInput
-                  type='text'
-                  placeholder='名字'
-                  value={item.name}
-                  onChange={this.nameChange}
-                  onFocus={() => this.nameFocus(key)}
-                />
+            <View className='header'>
+              <View className="fix1">
+                编号
               </View>
-              <View className='fix3 bind'>
-                <AtBadge value={item.limit.length} maxValue={9}>
-                  <AtButton size='small'  onClick={()=>this.bindNum(key)}>关联</AtButton>
-                </AtBadge>
+              <View className="fix2">
+                预设名字
               </View>
-              <View onClick={()=>this.delItem(key)} className='poicon'><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
+              <View className="fix3">
+                填报人员
+              </View>
             </View>
           </View>
-        ))}
-        <View className='namelist-add'>
-          <View className='edit-add' onClick={this.handleAddMultiple}>批量添加</View>
-          <View className='edit-add' onClick={this.handleAddSingle} >单个添加</View>
+          {nameData.map((item, key) => (
+            <View className='header-color'>
+              <View className='table' key={key}>
+                <View className='fix1'>{`${key + 1}.`}</View>
+                <View className='fix2'>
+                  {/* <input type="text" placeholder='名字' value={item.name} onChange={() => this.nameChange(key)} /> */}
+                  <AtInput
+                    type='text'
+                    placeholder='名字'
+                    value={item.name}
+                    onChange={this.nameChange}
+                    onFocus={() => this.nameFocus(key)}
+                  />
+                </View>
+                <View className='fix3 bind'>
+                  <AtBadge value={item.limit.length} maxValue={9}>
+                    <AtButton size='small'  onClick={()=>this.bindNum(key)}>关联</AtButton>
+                  </AtBadge>
+                </View>
+                <View onClick={()=>this.delItem(key)} className='poicon'><AtIcon value='close-circle' size='30' color='red'></AtIcon></View>
+              </View>
+            </View>
+          ))}
+          <View className='namelist-add'>
+            <View className='edit-add' onClick={this.handleAddMultiple}>批量添加</View>
+            <View className='edit-add' onClick={this.handleAddSingle} >单个添加</View>
+          </View>
         </View>
         <View className="save-change" onClick={this.save}>保存名单</View>
 
