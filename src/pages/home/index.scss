@@ -20,3 +20,10 @@
     border: none;
     height: 66px;
 }
+.page {
+    .at-modal__content {
+        min-height: 100px;
+        text-align: center;
+        line-height: 100px;
+    }
+}
