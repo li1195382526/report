@@ -53,7 +53,7 @@ class Questionnaire extends Component {
       "optlist": optlist,
       "seq": "1",
       "required": true,
-      "text": value == 0 || value == 1 ? "选择题" : "填空题",
+      "text": '',
   }
     questionnaire.pageList.map((item,key)=>{
       // eslint-disable-next-line no-shadow 

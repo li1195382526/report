@@ -54,7 +54,7 @@ class QuestionOpen extends Component {
             name='value'
             title='题目标题'
             type='text'
-            placeholder='题目标题'
+            placeholder='请输入题目标题'
             value={opts.text}
             onChange={this.handleText}
          />

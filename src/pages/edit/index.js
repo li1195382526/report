@@ -165,6 +165,19 @@ onTimeChange = e => {
   handleSave(){
     // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
+    if(info.title.length === 0){
+      this.handleTips('error','填报主题不能为空')
+      return
+    }
+    if(info.title.length >= 20){
+      this.handleTips('error','填报主题不能超过20个字符')
+      return
+    }
+
+    if(info.memo.length >= 200){
+    this.handleTips('error','填报说明不能超过200个字符')
+    return
+    }
     const params = {
       info,
       questionnaire

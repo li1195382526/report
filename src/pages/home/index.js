@@ -350,7 +350,7 @@ class Home extends Component {
            )}
            {(status === 5 || status === 2) && (
              
-             <AtActionSheetItem>
+             <AtActionSheetItem onClick={this.handleColse}>
                <AtButton type='primary'  plain='true' openType='share' className='share-btn'>分享到微信群</AtButton>
             </AtActionSheetItem>
            ) }
