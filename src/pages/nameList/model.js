@@ -34,11 +34,11 @@ export default {
         },
         * getData({ payload: value }, { put, select }) {
             let { info } = yield select((state)=> state.edit);
-            if(info && info.nameList) {
+            if(info && info.namelist) {
                 yield put({
                     type: 'save',
                     payload: {
-                        tableList: info.nameList
+                        tableList: info.namelist
                     }
                 });
             } else {
