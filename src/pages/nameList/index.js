@@ -7,12 +7,13 @@ import { AtIcon, AtInput, AtModal, AtModalHeader, AtModalContent, AtModalAction,
 // import { Link } from '../../components/link'
 import './index.scss';
 
-@connect(({ NameList, home, common, nameList, dataList }) => ({
+@connect(({ NameList, home, common, nameList, dataList,edit }) => ({
   ...NameList,
   ...home,
   ...common,
   ...nameList,
-  ...dataList
+  ...dataList,
+  ...edit
 }))
 
 class NameList extends Component {
@@ -229,10 +230,26 @@ class NameList extends Component {
   }
   // 完成
   finish() {
-    const reportId = Taro.getStorageSync('reportId')
-    Taro.redirectTo({
-      url:`/pages/edit/index?isInit=${1}&reportId=${reportId}`
+    const { tableList,info,isChange } = this.props
+    info.namelist = tableList
+    this.props.dispatch({
+      type: 'edit/save',
+      payload: {
+        info,
+        isChange:!isChange
+      }
     })
+
+    const from = this.$router.params.from
+    if(from == 'dataList') { 
+    Taro.navigateBack({
+      delta: 2
+    })
+  }else{
+    Taro.navigateBack({
+      delta: 1
+    })
+  }
   }
 
   render() {
