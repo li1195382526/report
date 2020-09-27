@@ -108,6 +108,12 @@ onTimeChange = e => {
     if(info.useCount == 1 && info.pnlCount.length === 0){
       this.handleTips('error','填报人数不能为空')
       return
+    }else if(info.useCount == 1 && parseInt(info.pnlCount) <= 0){
+      this.handleTips('error','填报人数必须大于零')
+      return
+    }else if(info.useCount == 1 && isNaN(parseInt(info.pnlCount))){
+      this.handleTips('error','填报人数必须是正整数')
+      return
     }
     
     if(info.useNamelist == 1 && info.namelist.length === 0){
@@ -121,7 +127,30 @@ onTimeChange = e => {
     }
 
     if(info.usePeriod == 1 && info.periodSize.length === 0){
-      this.handleTips('error','填报周期长度不能为空')
+      this.handleTips('error','填报周期不能为空')
+      return
+    }
+    console.log(parseInt(info.periodSize))
+    if(info.usePeriod == 1 && info.periodSize.length > 0 && parseInt(info.periodSize) < 0){
+      this.handleTips('error','填报周期数必须为正整数')
+      return
+    }else if(info.usePeriod == 1 && isNaN(parseInt(info.periodSize))){
+      this.handleTips('error','填报周期数必须是正整数')
+      return
+    }
+
+    if(info.needPwd == 1 && info.pwd.length === 0){
+      this.handleTips('error','填报密码必须为四位正整数')
+      return
+    }
+
+    if(info.needPwd == 1 && info.pwd.length > 4){
+      this.handleTips('error','填报密码必须为四位正整数')
+      return
+    }
+
+    if(info.needPwd == 1 &&  isNaN(parseInt(info.pwd))){
+      this.handleTips('error','填报密码必须为四位正整数')
       return
     }
     

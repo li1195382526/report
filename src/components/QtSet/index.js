@@ -152,7 +152,7 @@ class QtSet extends Component {
     const {info,tableList} = this.props
     let beginTimeList = !!info.beginTime ? info.beginTime :'未设置'
     let expireTimeList = !!info.endTime ? info.endTime  :'未设置'
-    const nameSet = tableList && tableList.length > 0 ? tableList.length + '人' :'未设置'
+    const nameSet =  info.namelist.length > 0 ? info.namelist.length + '人' :'未设置'
     return (
         <View className='qtn-setting'>
           <AtList>
