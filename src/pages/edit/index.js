@@ -91,6 +91,25 @@ onTimeChange = e => {
     // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
     const {reportId} = this.$router.params
+    questionnaire.pageList.map((pg)=>{
+      pg.qtList.map((qt)=>{
+        var messageText = ''
+        console.log(qt)
+        if(qt.text.length === 0){
+          messageText =  `${qt.disSeq}未填写题目标题`
+          this.handleTips('error',messageText)
+          return
+        }
+        qt.optlist.map((opt)=>{
+          if(opt.label === '' && qt.type != 2 ){
+            messageText =  `${qt.disSeq}未填写选项内容`
+            this.handleTips('error',messageText)
+            return
+          }
+        })
+
+      })
+    })
     if(info.title.length === 0){
         this.handleTips('error','填报主题不能为空')
         return
@@ -159,28 +178,28 @@ onTimeChange = e => {
       info,
       questionnaire
     }
-    this.props.dispatch({
-      type: 'edit/saveQtn',
-      token: this.props.token,
-      payload: params,
-    }).then(()=>{
-      this.props.dispatch({
-        type: 'edit/publish',
-        token: this.props.token,
-        payload: {reportId},
-        url:`/v3/report/${reportId}/publish`
-      }).then(()=>{
-        const {qtnStatus,message} = this.props
-        if(qtnStatus === 200){
-          Taro.navigateTo({
-            url: '/pages/release/index'
-           })
-        }else{
-          this.handleTips('error',message)
-        }
+    // this.props.dispatch({
+    //   type: 'edit/saveQtn',
+    //   token: this.props.token,
+    //   payload: params,
+    // }).then(()=>{
+    //   this.props.dispatch({
+    //     type: 'edit/publish',
+    //     token: this.props.token,
+    //     payload: {reportId},
+    //     url:`/v3/report/${reportId}/publish`
+    //   }).then(()=>{
+    //     const {qtnStatus,message} = this.props
+    //     if(qtnStatus === 200){
+    //       Taro.navigateTo({
+    //         url: '/pages/release/index'
+    //        })
+    //     }else{
+    //       this.handleTips('error',message)
+    //     }
         
-      })
-    })  
+    //   })
+    // })  
   }
 
   handleTips (type,message) {

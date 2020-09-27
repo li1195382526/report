@@ -24,7 +24,6 @@ class SingleChoice extends Component {
   handleChange (value,item) {
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq === item.mySeq ? val.label = value :val)
-    console.log(newOptList)
     let questionnaire = this.props.questionnaire
     questionnaire.pageList[0].qtList.map((item,key)=>{
       if(item.disSeq === opts.disSeq){
@@ -64,7 +63,6 @@ class SingleChoice extends Component {
     console.log(key)
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq !== item.mySeq)
-    console.log(newOptList)
     newOptList.map((val,key1)=>{
       val.mySeq = `A${key1+1}`
     })
