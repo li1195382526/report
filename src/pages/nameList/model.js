@@ -4,12 +4,7 @@ import Taro from '@tarojs/taro';
 export default {
     namespace: 'nameList',
     state: {
-        tableList: [{
-            listIndex: 0,
-            name: '',
-            limit: [],
-            status: 1
-        }]  // 填报名单
+        tableList: []  // 填报名单
     },
 
     effects: {

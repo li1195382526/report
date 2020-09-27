@@ -9,12 +9,13 @@ import './index.scss';
 import image1 from '../../assets/images/u745.png'
 import image2 from '../../assets/images/u748.png'
 
-@connect(({ NameList, home, common, nameList, dataList }) => ({
+@connect(({ NameList, home, common, nameList, dataList,edit }) => ({
   ...NameList,
   ...home,
   ...common,
   ...nameList,
-  ...dataList
+  ...dataList,
+  ...edit
 }))
 
 class NameList extends Component {
@@ -232,9 +233,26 @@ class NameList extends Component {
   }
   // 完成
   finish() {
-    Taro.redirectTo({
-      url: '../edit/index'
+    const { tableList,info,isChange } = this.props
+    info.namelist = tableList
+    this.props.dispatch({
+      type: 'edit/save',
+      payload: {
+        info,
+        isChange:!isChange
+      }
     })
+
+    const from = this.$router.params.from
+    if(from == 'dataList') { 
+    Taro.navigateBack({
+      delta: 2
+    })
+  }else{
+    Taro.navigateBack({
+      delta: 1
+    })
+  }
   }
 
   render() {

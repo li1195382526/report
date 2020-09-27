@@ -8,10 +8,11 @@ import Model from '../Model/model'
 import { connect } from '@tarojs/redux';
 
 
-@connect(({ edit, home, common }) => ({
+@connect(({ edit, home, common,nameList }) => ({
   ...edit,
   ...home,
-  ...common
+  ...common,
+  ...nameList
 }))
 class QtSet extends Component {
   constructor(props) {
@@ -148,9 +149,10 @@ class QtSet extends Component {
   
   render() {
     const {isLimit,hint} = this.state
-    const {info} = this.props
+    const {info,tableList} = this.props
     let beginTimeList = !!info.beginTime ? info.beginTime :'未设置'
     let expireTimeList = !!info.endTime ? info.endTime  :'未设置'
+    const nameSet = tableList && tableList.length > 0 ? tableList.length + '人' :'未设置'
     return (
         <View className='qtn-setting'>
           <AtList>
@@ -218,7 +220,7 @@ class QtSet extends Component {
                   onSwitchChange={(val)=>this.handleChange(val,'useNamelist')}
                 />
                 
-              {info.useNamelist == 1 && (<AtListItem title='名单设置'  extraText='未设置' onClick={this.handleSetName} arrow='right'/>)}
+              {info.useNamelist == 1 && (<AtListItem title='名单设置'  extraText={nameSet} onClick={this.handleSetName} arrow='right'/>)}
               {info.useNamelist == 1 && (
                 <AtSwitch 
                   title='填报人员限制' 
