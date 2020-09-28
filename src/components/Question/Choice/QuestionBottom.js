@@ -24,9 +24,9 @@ class QuestionBottom extends Component {
     const {opts,isChange} = this.props
     const index = opts.optlist.length
     let questionnaire = this.props.questionnaire
-    console.log(opts)
     //Object.assign(newObj,user,page)
-    const fixSeq = opts.optlist[opts.optlist.length-1].fixSeq.replace(/[^0-9]/ig,"")
+    const isHaveFixsew = opts.optlist[opts.optlist.length-1]
+    const fixSeq = isHaveFixsew  ? isHaveFixsew.fixSeq .replace(/[^0-9]/ig,"") : 0
     const opt = [{
       "fixSeq":`A${parseInt(fixSeq)+1 }`,
       "position":0,
