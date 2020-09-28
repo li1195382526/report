@@ -178,28 +178,28 @@ onTimeChange = e => {
       info,
       questionnaire
     }
-    // this.props.dispatch({
-    //   type: 'edit/saveQtn',
-    //   token: this.props.token,
-    //   payload: params,
-    // }).then(()=>{
-    //   this.props.dispatch({
-    //     type: 'edit/publish',
-    //     token: this.props.token,
-    //     payload: {reportId},
-    //     url:`/v3/report/${reportId}/publish`
-    //   }).then(()=>{
-    //     const {qtnStatus,message} = this.props
-    //     if(qtnStatus === 200){
-    //       Taro.navigateTo({
-    //         url: '/pages/release/index'
-    //        })
-    //     }else{
-    //       this.handleTips('error',message)
-    //     }
+    this.props.dispatch({
+      type: 'edit/saveQtn',
+      token: this.props.token,
+      payload: params,
+    }).then(()=>{
+      this.props.dispatch({
+        type: 'edit/publish',
+        token: this.props.token,
+        payload: {reportId},
+        url:`/v3/report/${reportId}/publish`
+      }).then(()=>{
+        const {qtnStatus,message} = this.props
+        if(qtnStatus === 200){
+          Taro.navigateTo({
+            url: '/pages/release/index'
+           })
+        }else{
+          this.handleTips('error',message)
+        }
         
-    //   })
-    // })  
+      })
+    })  
   }
 
   handleTips (type,message) {
