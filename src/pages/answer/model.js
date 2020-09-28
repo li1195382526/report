@@ -28,6 +28,12 @@ export default {
        
       });
     },
+    * joinReport({ payload: values,token,url }, { call, put }) {
+      const { data } = yield call(answerApi.joinReport, values,token, url);
+      yield put({
+        type: 'save',
+      });
+    },
   },
 
   reducers: {

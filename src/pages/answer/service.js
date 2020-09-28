@@ -13,3 +13,10 @@ export const subMitAnswer = ( data,token,url) => syncAction({
   token,
   url,
 });
+
+export const joinReport = ( data,token,url) => syncAction({
+  data,
+  method: "POST",
+  token,
+  url,
+});
