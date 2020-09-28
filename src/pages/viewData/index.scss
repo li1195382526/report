@@ -1,7 +1,7 @@
 .view{
     background-color: rgba(244, 244, 244, 1);
         .view-data{
-        height:230px;
+        height:280px;
         width: 100%;
         background-color: rgba(52, 120, 247, 0.682352941176471);
         position: relative;
@@ -12,7 +12,7 @@
     }
     .view-text{
         text-align: center;
-        padding-top:90px;
+        padding-top:140px;
         color:#fff;
         font-size: 30px;
     }
@@ -26,7 +26,7 @@
         justify-content: space-around;
         color:#ccc;
         z-index: 100;
-        top: 140px;
+        top: 192px;
         border-radius: 10px;
         left: 10%;
         .view-num{

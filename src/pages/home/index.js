@@ -286,6 +286,11 @@ class Home extends Component {
   }
 
   handleColse(){
+    //二维码页面
+    Taro.navigateTo({
+          url: '/pages/code/index'
+         })
+    
     this.setState({
       isOpened:false,
       ispartOpened:false
@@ -369,7 +374,7 @@ class Home extends Component {
             )}
             
             {status === 2 && (
-             <AtActionSheetItem onClick={()=>this.toEdit(1)}>
+             <AtActionSheetItem onClick={()=>this.toEdit(2)}>
                 修改填报
             </AtActionSheetItem>
            )}

@@ -23,6 +23,9 @@ class MultipleChoice extends Component {
 
   handleChange (value,item) {
     const {opts,isChange} = this.props
+    if(value === ''){
+      return
+    }
     let newOptList = opts.optlist.filter((val)=> val.mySeq === item.mySeq ? val.label = value :val)
     let questionnaire = this.props.questionnaire
     questionnaire.pageList[0].qtList.map((item,key)=>{

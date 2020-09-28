@@ -49,9 +49,8 @@ class Edit extends Component {
 
   componentWillMount(){
     const init = this.$router.params.isInit
-
     //第一次编辑填报前端数据，编辑中问卷获取问卷信息
-    if(init == 1){
+    if(init == 1 || init == 2){
       this.getQuestionner()
     }else{
       this.props.dispatch({
@@ -59,6 +58,14 @@ class Edit extends Component {
         payload: {
           info,
           questionnaire
+        }
+      })
+    }
+    if(init == 2){
+      this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          isModify:true
         }
       })
     }
