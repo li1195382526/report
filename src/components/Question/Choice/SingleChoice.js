@@ -22,6 +22,9 @@ class SingleChoice extends Component {
   }
 
   handleChange (value,item) {
+    if(value === ''){
+      return
+    }
     const {opts,isChange} = this.props
     let newOptList = opts.optlist.filter((val)=> val.mySeq === item.mySeq ? val.label = value :val)
     let questionnaire = this.props.questionnaire
