@@ -27,12 +27,14 @@ class Answer extends Component {
       periodCount:1,//周期数
       passWord:'',
       isPassWord:false,
-      isHavename:false
+      isHavename:false,
+      userAgent: ''
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
     this.handlePassword = this.handlePassword.bind(this)
     this.handleNum = this.handleNum.bind(this)
+    this.join = this.join.bind(this)
   }
 
   componentWillMount() {
@@ -48,11 +50,25 @@ class Answer extends Component {
 
   //获取问卷
   getQuestionner(){
+    Taro.getSystemInfo({
+      success: (res) => {
+        this.setState({userAgent: JSON.stringify(res)})
+      }
+    })
     //const {reportId} = this.$router.params
     this.props.dispatch({
       type: 'answer/getQuestionner',
       token: this.props.token,
       url:`/v3/report/${23}`
+    }).then(() => {
+      let { info } = this.props
+      if(info.needPwd == 0) {
+        this.setState({isPassWord: true})
+        return
+      }
+      if(info.useNamelist == 1) {
+        this.setState({isHavename: true})
+      }
     })
   }
 
@@ -78,18 +94,57 @@ class Answer extends Component {
   //确认填报密码
   handlePassword(){
     const {passWord} = this.state
-    this.setState({isPassWord:false})
-    console.log(passWord)
+    let { info } = this.props
+    if(!passWord) {
+      Taro.showToast({
+        title: '密码必须输入且不能为空格',
+        icon: 'none',
+        duration: 1500
+      })
+      return
+    } else {
+      this.setState({isPassWord:false})
+      if(info.useNamelist == 1) {
+        this.setState({isHavename: true})
+        return
+      }
+      this.join()
+    }
   }
-
-  //密码填写
+  // 密码填写oninput
   handleNum(val){
     // eslint-disable-next-line react/no-unused-state
-    this.setState({passWord:val.target.value})
+    this.setState({passWord:val.target.value.replace(/\s+/g,'')})
+  }
+  // 密码框取消
+  cancelPwd() {
+    Taro.showToast({
+      title: '密码必须输入',
+      icon: 'none',
+      duration: 1500
+    })
+    return
+  }
+  // 进入填报
+  join() {
+    const {reportId, passWord, userAgent} = this.state
+    var mobile = Taro.getStorageSync('mobile')
+    let params = {
+      mobile,
+      password: passWord,
+      nameListNum: 1,
+      userAgent
+    }
+    this.props.dispatch({
+      type: 'answer/joinReport',
+      token: this.props.token,
+      url:`/v3/report/${reportId}/join`,
+      payload: params
+    })
   }
 
   render() {
-    const {isPassWord,isHavename} = this.state
+    const {isPassWord,isHavename, passWord} = this.state
     // eslint-disable-next-line no-shadow
     const {questionnaire,info} = this.props
     return (
@@ -118,7 +173,7 @@ class Answer extends Component {
             <View className='answer-namelist'>
               <View className='tip'>请对号入座，选择正确的名单进行填报</View>
               <View className='content-name'>
-                <View className='name'>
+                <View className='name' onClick={this.join}>
                   <View className='name-key'>1</View>
                   <View className='name-text'>小名</View>
                 </View>
@@ -161,11 +216,13 @@ class Answer extends Component {
         <AtModalContent className='pass-content'>
             <Input type='text' 
               placeholder='请输入填报密码' 
-              onChange={(val)=>this.handleNum(val)}
+              value={passWord}
+              onInput={(val)=>this.handleNum(val)}
             />
         </AtModalContent>
-        <AtModalAction> <Button>取消</Button> <Button onClick={this.handlePassword}>确定</Button> </AtModalAction>
+        <AtModalAction> <Button onClick={this.cancelPwd}>取消</Button> <Button onClick={this.handlePassword}>确定</Button> </AtModalAction>
         </AtModal>
+
       </View>
     )
   }
