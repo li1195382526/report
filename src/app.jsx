@@ -72,7 +72,8 @@ class App extends Component {
       'pages/personalCenter/index',
       'pages/templateText/index',
       'pages/manage/index',
-      'pages/share/index'
+      'pages/share/index',
+      'pages/code/index'
     ],
     window: {
       backgroundTextStyle: 'light',

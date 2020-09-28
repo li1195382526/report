@@ -8,7 +8,8 @@ export default {
     isChange:'',
     qtnStatus:'',
     message:'',
-    status:''
+    status:'',
+    isModify:false
   },
 
   effects: {
