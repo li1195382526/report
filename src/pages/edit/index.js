@@ -98,25 +98,27 @@ onTimeChange = e => {
     // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
     const {reportId} = this.$router.params
-    questionnaire.pageList.map((pg)=>{
-      pg.qtList.map((qt)=>{
+    for(let pg of questionnaire.pageList) {
+      if(!pg.qtList.length) {
+        this.handleTips('error','填报题目不能为空')
+        return
+      }
+      for(let qt of pg.qtList) {
         var messageText = ''
-        console.log(qt)
         if(qt.text.length === 0){
           messageText =  `${qt.disSeq}未填写题目标题`
           this.handleTips('error',messageText)
           return
         }
-        qt.optlist.map((opt)=>{
+        for(let opt of qt.optlist) {
           if(opt.label === '' && qt.type != 2 ){
             messageText =  `${qt.disSeq}未填写选项内容`
             this.handleTips('error',messageText)
             return
           }
-        })
-
-      })
-    })
+        }
+      }
+    }
     if(info.title.length === 0){
         this.handleTips('error','填报主题不能为空')
         return
@@ -190,11 +192,12 @@ onTimeChange = e => {
       token: this.props.token,
       payload: params,
     }).then(()=>{
+      const {response} = this.props
       this.props.dispatch({
         type: 'edit/publish',
         token: this.props.token,
-        payload: {reportId},
-        url:`/v3/report/${reportId}/publish`
+        payload: {reportId: response.data.id},
+        url:`/v3/report/${response.data.id}/publish`
       }).then(()=>{
         const {qtnStatus,message} = this.props
         if(qtnStatus === 200){

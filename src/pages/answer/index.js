@@ -23,7 +23,7 @@ class Answer extends Component {
       selector: ['小名', '小花', '小亮', '甜甜'],
       selectorChecked: '小名',
       mobile:15526080904,
-      reportId:35,
+      reportId:52,
       periodCount:1,//周期数
       passWord:'',
       isPassWord:false,
@@ -59,7 +59,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/getQuestionner',
       token: this.props.token,
-      url:`/v3/report/${35}`
+      url:`/v3/report/${52}`
     }).then(() => {
       let { info } = this.props
       if(info.needPwd == 1) {
@@ -94,7 +94,7 @@ class Answer extends Component {
   //确认填报密码
   handlePassword(){
     const {passWord} = this.state
-    let { info } = this.props
+    var { info, res } = this.props
     if(!passWord) {
       Taro.showToast({
         title: '密码必须输入且不能为空格',
@@ -104,7 +104,7 @@ class Answer extends Component {
       return
     } else {
       this.setState({isPassWord:false})
-      if(info.useNamelist == 1) {
+      if(info.useNamelist == 1 && !res.status) {
         this.setState({isHavename: true})
         return
       }
@@ -131,8 +131,8 @@ class Answer extends Component {
     var mobile = Taro.getStorageSync('mobile')
     let params = {
       mobile,
-      password: passWord,
-      nameListNum: 1,
+      pwd: passWord,
+      listIndex: 1,
       userAgent
     }
     Taro.showLoading({
@@ -155,9 +155,9 @@ class Answer extends Component {
           duration: 2000,
           mask: true
         })
-        // setTimeout(() => {
-        //   Taro.redirectTo({url: '../home/index'})
-        // }, (2000));
+        setTimeout(() => {
+          Taro.redirectTo({url: '../home/index'})
+        }, (2000));
       } else if(res.status == -1001) {
         Taro.showToast({
           title: res.message,

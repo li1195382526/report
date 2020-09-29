@@ -26,7 +26,8 @@
 		"dev:qq": "npm run build:qq -- --watch",
 		"dev:quickapp": "npm run build:quickapp -- --watch",
 		"tep": "node scripts/template",
-		"com": "node scripts/component"
+		"com": "node scripts/component",
+		"dev:mini": "cross-env NODE_ENV=production taro build --type weapp --watch"
 	},
 	"author": "",
 	"license": "MIT",

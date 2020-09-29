@@ -46,7 +46,7 @@ export default {
                     type: 'save',
                     payload: {
                         tableList: [{
-                            listIndex: 0,
+                            listIndex: 1,
                             name: '',
                             limit: [],
                             status: 1

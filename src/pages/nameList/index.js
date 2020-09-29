@@ -75,7 +75,7 @@ class NameList extends Component {
       this.props.dispatch({
         type: 'nameList/getData',
         payload: [{
-          listIndex: 0,
+          listIndex: 1,
           name: '',
           limit: [],
           status: 1
@@ -106,7 +106,7 @@ class NameList extends Component {
     list.forEach((item, index) => {
       if(item) {
         let obj = {
-          listIndex: tableList[tableList.length - 1].listIndex + 1,
+          listIndex: tableList.length ? tableList[tableList.length - 1].listIndex + 1 : 1,
           name: item.split(/[,，]/g)[0],
           limit: item.split(/[,，]/g).slice(1),
           status: 1
@@ -142,7 +142,7 @@ class NameList extends Component {
   handleAddSingle() {
     let { tableList } = this.props
     tableList.push({
-      listIndex: tableList.length ? tableList[tableList.length - 1].listIndex + 1 : 0,
+      listIndex: tableList.length ? tableList[tableList.length - 1].listIndex + 1 : 1,
       name: '',
       limit: [],
       status: 1

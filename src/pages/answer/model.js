@@ -7,7 +7,7 @@ export default {
     "info": {},
     "questionnaire":{},
     "anw":{},
-    "res": '' // 进入填报的返回结果
+    "res": {} // 进入填报的返回结果
   },
 
   effects: {

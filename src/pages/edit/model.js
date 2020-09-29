@@ -9,7 +9,8 @@ export default {
     qtnStatus:'',
     message:'',
     status:'',
-    isModify:false
+    isModify:false,
+    response: ''
   },
 
   effects: {
@@ -27,12 +28,13 @@ export default {
     * saveQtn({ payload: values,token }, { call, put, select }) {
       const { page, createList } = yield select(state => state.home);
       const { data } = yield call(editApi.saveQtn, values,token);
-      console.log(data)
+      // console.log(data)
       yield put({
         type: 'save',
         payload: {
           status:data.status,
-          message:data.message
+          message:data.message,
+          response: data
           //questionnaire:data.questionnaire,
           //info:data.info
         }

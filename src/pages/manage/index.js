@@ -91,7 +91,7 @@ class NameList extends Component {
     list.forEach((item, index) => {
       if(item) {
         let obj = {
-          listIndex: nameData[nameData.length - 1].listIndex + 1,
+          listIndex: nameData.length ? nameData[nameData.length - 1].listIndex + 1 : 1,
           name: item.split(/[,，]/g)[0],
           limit: item.split(/[,，]/g).slice(1),
           status: 1
@@ -189,7 +189,7 @@ class NameList extends Component {
   handleAddSingle() {
     const { nameData } = this.props
     nameData.push({
-      listIndex: nameData.length ? nameData[nameData.length - 1].listIndex + 1 : 0,
+      listIndex: nameData.length ? nameData[nameData.length - 1].listIndex + 1 : 1,
       name: '',
       limit: [],
       status: 1

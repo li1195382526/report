@@ -339,7 +339,7 @@ class Home extends Component {
               <View className='demo-text-3'>3</View>
             </SwiperItem>
         </Swiper>
-        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick}>
+        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
           <AtTabsPane current={this.state.current} index={0} >
             {!!isLogin ? <List handleOpen={this.handleOpen} createList={createList}/> : 
             // eslint-disable-next-line react/jsx-no-undef

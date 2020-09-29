@@ -33,7 +33,7 @@ class NewQuestion extends Component {
     }else{
       optlist = openOpt
     }
-    const fixSeq = questionnaire.pageList[0].qtList[index-1].fixSeq.replace(/[^0-9]/ig,"")
+    const fixSeq = questionnaire.pageList[0].qtList.length ? questionnaire.pageList[0].qtList[index-1].fixSeq.replace(/[^0-9]/ig,"") : 0
     const qtList = [{
         "type": value == 0 || value == 1 ? 1 : 2,
         "selectType": value == 0 ? 0 :value == 1 ? 1 :value == 2 ? 1 :value == 3 ? 7 :'',
