@@ -23,7 +23,7 @@ class Answer extends Component {
       selector: ['小名', '小花', '小亮', '甜甜'],
       selectorChecked: '小名',
       mobile:15526080904,
-      reportId:20,
+      reportId:35,
       periodCount:1,//周期数
       passWord:'',
       isPassWord:false,
@@ -59,10 +59,10 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/getQuestionner',
       token: this.props.token,
-      url:`/v3/report/${23}`
+      url:`/v3/report/${35}`
     }).then(() => {
       let { info } = this.props
-      if(info.needPwd == 0) {
+      if(info.needPwd == 1) {
         this.setState({isPassWord: true})
         return
       }
@@ -135,11 +135,46 @@ class Answer extends Component {
       nameListNum: 1,
       userAgent
     }
+    Taro.showLoading({
+      title: '加载中...',
+      mask: true
+    })
+    this.setState({isHavename: false})
     this.props.dispatch({
       type: 'answer/joinReport',
       token: this.props.token,
       url:`/v3/report/${reportId}/join`,
       payload: params
+    }).then(() => {
+      Taro.hideLoading()
+      let {res} = this.props
+      if(res.status == 203) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000,
+          mask: true
+        })
+        // setTimeout(() => {
+        //   Taro.redirectTo({url: '../home/index'})
+        // }, (2000));
+      } else if(res.status == -1001) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000,
+          mask: true
+        })
+        this.setState({isPassWord: true})
+      } else if(res.status == -1003) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000,
+          mask: true
+        })
+        this.setState({isHavename: true})
+      }
     })
   }
 
@@ -151,9 +186,11 @@ class Answer extends Component {
       <View className='answer'>
         <View className='change-name'>
           <View>小名</View>
-          <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-              <View>切换名单</View>
-          </Picker>
+          {info.canEdit == 1 && (
+            <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
+                <View>切换名单</View>
+            </Picker>
+          )}
         </View>
         <View className='answer-title'>
           <View className='title'>{info.title}</View>
