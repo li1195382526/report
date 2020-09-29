@@ -1,11 +1,13 @@
 import * as answerApi from './service';
+import Taro from '@tarojs/taro';
 
 export default {
   namespace: 'answer',
   state: {
     "info": {},
     "questionnaire":{},
-    "anw":{}
+    "anw":{},
+    "res": '' // 进入填报的返回结果
   },
 
   effects: {
@@ -16,7 +18,8 @@ export default {
         type: 'save',
         payload: {
           questionnaire:data.questionnaire,
-          info:data.info
+          info:data.info,
+          res: {}
         }
       });
     },
@@ -32,6 +35,9 @@ export default {
       const { data } = yield call(answerApi.joinReport, values,token, url);
       yield put({
         type: 'save',
+        payload: {
+          res: data
+        }
       });
     },
   },
