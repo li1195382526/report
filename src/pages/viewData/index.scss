@@ -10,6 +10,12 @@
             bottom: 120px;
         }
     }
+    .at-list__item-extra {
+        max-width: 500px;
+    }
+    .at-list__item .item-extra__info {
+        font-size: 28px;
+    }
     .view-text{
         text-align: center;
         padding-top:140px;
@@ -36,6 +42,9 @@
                 line-height: 60px;
                 font-size: 36px;
             }
+        }
+        .view-num-checked{
+            color: #71a0f7;
         }
     }
     .view-atlist{
