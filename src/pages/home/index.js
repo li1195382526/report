@@ -46,6 +46,8 @@ class Home extends Component {
     this.handlePart = this.handlePart.bind(this)
     this.confimDelete = this.confimDelete.bind(this)
     this.delCancel = this.delCancel.bind(this)
+    this.handleShut = this.handleShut.bind(this)
+    this.close = this.close.bind(this)
   }
 
   componentWillMount() {
@@ -296,6 +298,12 @@ class Home extends Component {
       ispartOpened:false
     })
   }
+  close() {
+    this.setState({
+      isOpened:false,
+      ispartOpened:false
+    })
+  }
 
   handlePart(val){
     this.setState({
@@ -309,6 +317,10 @@ class Home extends Component {
   // 删除填报取消
   delCancel() {
     this.setState({isDel: false})
+  }
+  // 关闭填报
+  handleShut() {
+
   }
 
   render() {
@@ -381,10 +393,17 @@ class Home extends Component {
             <AtActionSheetItem onClick={this.handleCopy}>
                 复制填报
             </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.confimDelete}>
-                删除填报
-            </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.handleColse}>
+            {(status === 0 || status === 5) && (
+              <AtActionSheetItem onClick={this.confimDelete}>
+                  删除填报
+              </AtActionSheetItem>
+            )}
+            {status === 2 && (
+              <AtActionSheetItem onClick={this.handleShut}>
+                  关闭填报
+              </AtActionSheetItem>
+            )}
+            <AtActionSheetItem onClick={this.close}>
                 取消
             </AtActionSheetItem>
           </AtActionSheet> 
@@ -400,7 +419,7 @@ class Home extends Component {
             <AtActionSheetItem onClick={this.handleData}>
              查看答案
             </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.handleColse}>
+            <AtActionSheetItem onClick={this.close}>
                 取消
             </AtActionSheetItem>
           </AtActionSheet> 

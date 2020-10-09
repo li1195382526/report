@@ -24,6 +24,7 @@ class Submits extends Component {
       
     }
     this.handleBack = this.handleBack.bind(this)
+    this.handleResult = this.handleResult.bind(this)
   }
 
   componentWillMount() {
@@ -44,9 +45,13 @@ class Submits extends Component {
   }
 
   handleBack(){
-    Taro.navigateTo({
+    Taro.redirectTo({
       url: '/pages/home/index'
      })
+  }
+  // 查看结果
+  handleResult() {
+    Taro.navigateTo({url: '../answerDetail/index'})
   }
   render() {
     return (
@@ -62,13 +67,14 @@ class Submits extends Component {
         </View>
         <View className='release-btn'>
           <View>
-            <AtButton type='primary' className='btn' openType='share'>我要创建</AtButton>
+            <AtButton type='primary' className='btn' onClick={this.handleBack}>我要创建</AtButton>
+            {/* <AtButton type='primary' className='btn' openType='share'>我要创建</AtButton> */}
           </View>
           <View>
             <AtButton type='secondary'>修改填报</AtButton>
           </View>
           <View>
-            <AtButton type='primary' className='view-data'>查看结果</AtButton> 
+            <AtButton type='primary' className='view-data' onClick={this.handleResult}>查看结果</AtButton> 
           </View>
         </View>
         <View className='release-bottom'>

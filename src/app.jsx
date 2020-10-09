@@ -73,7 +73,8 @@ class App extends Component {
       'pages/templateText/index',
       'pages/manage/index',
       'pages/share/index',
-      'pages/code/index'
+      'pages/code/index',
+      'pages/answerDetail/index',
     ],
     window: {
       backgroundTextStyle: 'light',

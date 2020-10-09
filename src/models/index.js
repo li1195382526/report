@@ -5,5 +5,6 @@ import edit from '../pages/edit/model'
 import data from '../pages/dataList/model'
 import answer from '../pages/answer/model'
 import name from '../pages/nameList/model'
+import answerDetail from '../pages/answerDetail/model'
 
-export default [common,home,person,edit,data,answer,name];
+export default [common,home,person,edit,data,answer,name,answerDetail];

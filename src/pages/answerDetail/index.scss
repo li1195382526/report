@@ -1,0 +1,38 @@
+.view-data{
+    height:220px;
+    width: 100%;
+    background-color: rgba(52, 120, 247, 0.682352941176471);
+    position: relative;
+    .data-step{
+        position:absolute;
+        bottom: 110px;
+    }
+    .view-plain {
+        padding-top:120px;
+        .view-text{
+            text-align: center;
+            color:#fff;
+            font-size: 28px;
+        }
+    }
+}
+.handle {
+    height: 100px;
+    line-height: 100px;
+    background: #fff;
+    padding: 0 40px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    .edit {
+        color: #71a0f7;
+        text-decoration: underline;
+    }
+}
+.answer__info {
+    padding: 10px 40px;
+    background: #fff;
+    .answer__qtn {
+        padding: 16px 0;
+    }
+}

@@ -95,9 +95,9 @@ onTimeChange = e => {
 
   //发布填报
   handleRelease(){
-    // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
     const {reportId} = this.$router.params
+    console.log(info)
     for(let pg of questionnaire.pageList) {
       if(!pg.qtList.length) {
         this.handleTips('error','填报题目不能为空')
@@ -132,7 +132,10 @@ onTimeChange = e => {
     this.handleTips('error','填报说明不能超过200个字符')
     return
     }
-
+    if(info.useTimelimit == 1 && !info.beginTime || info.useTimelimit == 1 && !info.endTime) {
+      this.handleTips('error','开启时间限制时开始与结束时间为必填')
+      return
+    }
     if(info.useCount == 1 && info.pnlCount.length === 0){
       this.handleTips('error','填报人数不能为空')
       return

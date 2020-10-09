@@ -61,13 +61,15 @@ class Answer extends Component {
       token: this.props.token,
       url:`/v3/report/${52}`
     }).then(() => {
-      let { info } = this.props
-      if(info.needPwd == 1) {
-        this.setState({isPassWord: true})
-        return
-      }
-      if(info.useNamelist == 1) {
-        this.setState({isHavename: true})
+      if(this.$router.params.from != 'viewData') {
+        let { info } = this.props
+        if(info.needPwd == 1) {
+          this.setState({isPassWord: true})
+          return
+        }
+        if(info.useNamelist == 1) {
+          this.setState({isHavename: true})
+        }
       }
     })
   }
@@ -182,16 +184,19 @@ class Answer extends Component {
     const {isPassWord,isHavename, passWord} = this.state
     // eslint-disable-next-line no-shadow
     const {questionnaire,info} = this.props
+    const from = this.$router.params.from
     return (
       <View className='answer'>
-        <View className='change-name'>
-          <View>小名</View>
-          {info.canEdit == 1 && (
-            <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-                <View>切换名单</View>
-            </Picker>
-          )}
-        </View>
+        {from != 'viewData' && (
+          <View className='change-name'>
+            <View>小名</View>
+            {info.canEdit == 1 && (
+              <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
+                  <View>切换名单</View>
+              </Picker>
+            )}
+          </View>
+        )}
         <View className='answer-title'>
           <View className='title'>{info.title}</View>
           <View className='memo'>{info.memo}</View>
@@ -199,66 +204,70 @@ class Answer extends Component {
         <View className='answer-list'>
           <QtnCanvas questionnaire={questionnaire} />
         </View>
-        <View className='answer-footer'>
-          <AtButton type='primary' onClick={this.submit}>提交填报</AtButton> 
-        </View>
+        {from != 'viewData' && (
+          <View className='answer-footer'>
+            <AtButton type='primary' onClick={this.submit}>提交填报</AtButton> 
+          </View>
+        )}
         
-        
-       <AtModal isOpened={isHavename} closeOnClickOverlay={false}>
-        <AtModalHeader>选择填答名单</AtModalHeader>
-        <AtModalContent>
-            <View className='answer-namelist'>
-              <View className='tip'>请对号入座，选择正确的名单进行填报</View>
-              <View className='content-name'>
-                <View className='name' onClick={this.join}>
-                  <View className='name-key'>1</View>
-                  <View className='name-text'>小名</View>
+        {isHavename && (
+          <AtModal isOpened={isHavename} closeOnClickOverlay={false}>
+            <AtModalHeader>选择填答名单</AtModalHeader>
+            <AtModalContent>
+              <View className='answer-namelist'>
+                <View className='tip'>请对号入座，选择正确的名单进行填报</View>
+                <View className='content-name'>
+                  <View className='name' onClick={this.join}>
+                    <View className='name-key'>1</View>
+                    <View className='name-text'>小名</View>
+                  </View>
+                  <View className='name'>
+                    <View className='name-key'>1</View>
+                    <View className='name-text'>小名</View>
+                  </View>
+                  <View className='name'>
+                    <View className='name-key'>1</View>
+                    <View className='name-text'>小名</View>
+                  </View>
+                  <View className='name'>
+                    <View className='name-key'>1</View>
+                    <View className='name-text'>小名</View>
+                  </View>
                 </View>
-                <View className='name'>
-                  <View className='name-key'>1</View>
-                  <View className='name-text'>小名</View>
+                <View>
+                  <View className='finish'>已填报</View>
+                  <View className='finish-namelist'>
+                    <View className='finish-name'>
+                      <View className='finish-key'>1</View>
+                      <View className='name'>小小</View>
+                    </View>
+                    <View className='finish-name'>
+                      <View className='finish-key'>1</View>
+                      <View className='name'>小小</View>
+                    </View>
+                    <View className='finish-name'>
+                      <View className='finish-key'>1</View>
+                      <View className='name'>小小</View>
+                    </View>
+                  </View>
                 </View>
-                <View className='name'>
-                  <View className='name-key'>1</View>
-                  <View className='name-text'>小名</View>
                 </View>
-                <View className='name'>
-                  <View className='name-key'>1</View>
-                  <View className='name-text'>小名</View>
-                </View>
-              </View>
-            <View>
-              <View className='finish'>已填报</View>
-              <View className='finish-namelist'>
-                <View className='finish-name'>
-                  <View className='finish-key'>1</View>
-                  <View className='name'>小小</View>
-                </View>
-                <View className='finish-name'>
-                  <View className='finish-key'>1</View>
-                  <View className='name'>小小</View>
-                </View>
-                <View className='finish-name'>
-                  <View className='finish-key'>1</View>
-                  <View className='name'>小小</View>
-                </View>
-              </View>
-            </View>
-            </View>
-        </AtModalContent>
-        
-        </AtModal>
-        <AtModal isOpened={isPassWord} closeOnClickOverlay={false}>
-        <AtModalHeader>密码验证</AtModalHeader>
-        <AtModalContent className='pass-content'>
-            <Input type='text' 
-              placeholder='请输入填报密码' 
-              value={passWord}
-              onInput={(val)=>this.handleNum(val)}
-            />
-        </AtModalContent>
-        <AtModalAction> <Button onClick={this.cancelPwd}>取消</Button> <Button onClick={this.handlePassword}>确定</Button> </AtModalAction>
-        </AtModal>
+            </AtModalContent>
+          </AtModal>
+        )}
+        {isPassWord && (
+          <AtModal isOpened={isPassWord} closeOnClickOverlay={false}>
+            <AtModalHeader>密码验证</AtModalHeader>
+            <AtModalContent className='pass-content'>
+                <Input type='text' 
+                  placeholder='请输入填报密码' 
+                  value={passWord}
+                  onInput={(val)=>this.handleNum(val)}
+                />
+            </AtModalContent>
+            <AtModalAction> <Button onClick={this.cancelPwd}>取消</Button> <Button onClick={this.handlePassword}>确定</Button> </AtModalAction>
+          </AtModal>
+        )}
 
       </View>
     )

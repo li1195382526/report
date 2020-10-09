@@ -66,11 +66,12 @@ class ViewData extends Component {
   }
   // 查看记录
   handleView() {
-
+    this.cancel()
+    Taro.redirectTo({url: '../answer/index?from=viewData'})
   }
   // 删除记录
   delItem() {
-
+    this.cancel()
   }
   cancel() {
     this.setState({isMenge: false})
@@ -96,7 +97,10 @@ class ViewData extends Component {
             current={this.state.current}
             onChange={this.onChange}
            />
-           <View className='view-text'>当前进行至第2期</View>
+           <View className="view-plain">
+              <View className='view-text'>当前进行至第2周期</View>
+              <View className='view-text'>截止时间2020-09-12 23:59</View>
+           </View>
         </View>
         <View className='view-statistics'>
           <View className={isFinished?'view-num view-num-checked':'view-num'} onClick={this.handelToggle}>

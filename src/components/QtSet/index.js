@@ -41,10 +41,31 @@ class QtSet extends Component {
     let {info,isChange} = this.props
     if(val.target.value && type === 'useCount'){
       info.useNamelist = 0
+      info.namelist = []
     }
     if(val.target.value && type === 'useNamelist'){
       info.useCount = 0
+      info.pnlCount = ''
     }
+    if(!val.target.value && type === 'useTimelimit') {
+      info.beginTime = ''
+      info.endTime = ''
+    } // 时间限制
+    if(!val.target.value && type === 'useCount'){
+      info.pnlCount = ''
+    } // 填写人数
+    if(!val.target.value && type === 'useNamelist'){
+      info.namelist = []
+      info.isUserlimit = ''
+    } // 填报名单
+    if(!val.target.value && type === 'usePeriod'){
+      info.periodType = ''
+      info.periodSize = ''
+      info.isStrict = ''
+    } // 填写周期
+    if(!val.target.value && type === 'needPwd'){
+      info.pwd = ''
+    } // 填报密码
     info[type] = val.target.value ? 1 : 0
     this.props.dispatch({
       type: 'edit/save',
@@ -79,7 +100,7 @@ class QtSet extends Component {
     //设置时间
     saveTime(val,type){
       let {info,isChange} = this.props
-      const time = val.current + ':00'
+      const time = val ? val.current + ':00' : ''
       info[type] = !!val  ? time :''
       this.props.dispatch({
         type: 'edit/save',
@@ -177,22 +198,24 @@ class QtSet extends Component {
               </View>
               )}
           </AtList>
-          
+          {this.state.isShowBeginTime && (
             <AtFloatLayout isOpened={this.state.isShowBeginTime} title='开始时间设置'
               onClose={()=>this.handleBeginTimeSetting( false)}
             >
-            <DateTimePicker initValue={info.beginTime}
-              onOk={(val)=>this.saveTime(val,"beginTime")}
-              onClear={(val)=>this.saveTime(val,"beginTime")} 
-            />
-          </AtFloatLayout>
-            <AtFloatLayout isOpened={this.state.isShowExpireTime} title='结束时间设置'
-              onClose={()=>this.handleExpireTimeSetting(false)}>
-            <DateTimePicker initValue={info.endTime}
-              onOk={(val)=>this.saveTime(val,"endTime")}
-              onClear={(val)=>this.saveTime(val,"endTime")}
-            />
-          </AtFloatLayout> 
+              <DateTimePicker initValue={info.beginTime}
+                onOk={(val)=>this.saveTime(val,"beginTime")}
+                onClear={(val)=>this.saveTime(val,"beginTime")} 
+              />
+            </AtFloatLayout>
+          )}
+          {this.state.isShowExpireTime && (
+            <AtFloatLayout isOpened={this.state.isShowExpireTime} title='结束时间设置' onClose={()=>this.handleExpireTimeSetting(false)}>
+              <DateTimePicker initValue={info.endTime}
+                onOk={(val)=>this.saveTime(val,"endTime")}
+                onClear={(val)=>this.saveTime(val,"endTime")}
+              />
+            </AtFloatLayout> 
+          )}
            
           <AtList>
           <AtListItem

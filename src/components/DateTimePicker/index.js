@@ -21,9 +21,14 @@ export default class DateTimePicker extends Component {
             hour: '',
             minute: '',
         }
+        this.setDefaultValue = this.setDefaultValue.bind(this)
+        this.openModal = this.openModal.bind(this)
+        this.clearHandel = this.clearHandel.bind(this)
+        this.okHandel = this.okHandel.bind(this)
+        this.changeHandel = this.changeHandel.bind(this)
     }
 
-    setDefaultValue = () => {
+    setDefaultValue() {
         const { yearList, monthLsit, dayList, hourList, minuteList } = getPickerViewList()
         this.setState({
             yearList,
@@ -35,13 +40,11 @@ export default class DateTimePicker extends Component {
     }
 
     // 打开时间选择的模态框 - 根据当前时间初始化picker-view的数据
-    openModal = (fmtInitValue) => {
+    openModal(fmtInitValue){
         const { yearList, monthLsit, dayList, hourList, minuteList } = this.state
         const selectIndexList = []
         const arr = getArrWithTime(fmtInitValue) //优先当前选择的值，其次默认值，其次当前值
-
         const [year, month, day, hour, minute] = arr
-
         //根据arr  数据索引
         selectIndexList[0] = yearList.indexOf(arr[0] + '年')
         selectIndexList[1] = monthLsit.indexOf(arr[1] + '月')
@@ -57,22 +60,22 @@ export default class DateTimePicker extends Component {
             hour,
             minute
         })
+        this.changeHandel({detail: {value: selectIndexList}})
     };
 
     // 清空
-    clearHandel = () => {
+    clearHandel() {
         this.props.onClear && this.props.onClear();
     };
 
     // 确定
-    okHandel = () => {
+    okHandel() {
         const { current } = this.state
-       
         this.props.onOk && this.props.onOk({ current })
     };
 
     // 切换
-    changeHandel = (e) => {
+    changeHandel(e) {
         const selectIndexList = e.detail.value
         const [yearIndex, monthIndex, dayIndex, hourIndex, minuteIndex] = selectIndexList
         const { yearList, monthLsit, dayList, hourList, minuteList } = this.state
@@ -86,11 +89,9 @@ export default class DateTimePicker extends Component {
         const day = Number(dayStr.substr(0, dayStr.length - 1))
         const hour = Number(hourStr.substr(0, hourStr.length - 1))
         const minute = Number(minuteStr.substr(0, minuteStr.length - 1))
-
         // 更新年、天数
         const newDayList = getDayList(year, month)
         const current = formatDate(year, month, day, hour, minute)
-
         this.setState({
             dayList: newDayList,
             year,
@@ -100,19 +101,19 @@ export default class DateTimePicker extends Component {
             minute,
             current
         })
-        // console.log('current change = ' + current)
     }
 
     componentWillMount() {
         this.setDefaultValue()
     }
+    componentDidMount() {
+        const { initValue } = this.props
+        const fmtInitValue = getDate(initValue)
+        this.openModal(fmtInitValue)
+    }
 
     render() {
         const { yearList, monthLsit, dayList, hourList, minuteList, selectIndexList } = this.state
-        const { initValue } = this.props
-        const fmtInitValue = getDate(initValue)
-
-        this.openModal(fmtInitValue)
         return (
             <View className="datetime-picker-wrap wrap-class">
                 <View className="wrapper">
