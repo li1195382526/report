@@ -28,8 +28,18 @@ export default {
       const { data } = yield call(answerApi.subMitAnswer, values,token, url);
       yield put({
         type: 'save',
-       
       });
+      if(data.status == 200) {
+        Taro.navigateTo({
+          url: '/pages/submits/index'
+        })
+      } else {
+        Taro.showToast({
+          title: '提交失败',
+          icon: 'none',
+          duration: 1500
+        })
+      }
     },
     * joinReport({ payload: values,token,url }, { call, put }) {
       const { data } = yield call(answerApi.joinReport, values,token, url);

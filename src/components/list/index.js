@@ -38,7 +38,7 @@ class List extends Component {
           <AtCard
             note={`${item.creatorName || wxInfo.nickName} | ${item.updateTime || item.createTime} | 参与${item.pnlCount}/${item.totalCount}`}
             extra={item.status == 0 ? '编辑中':item.status == 2 ? '收集中' :'已结束'}
-            extraStyle={{color:item.status == 0 ? '#F59A23' :'#1BA918'}}
+            extraStyle={{color:item.status == 0 ? '#F59A23' : item.status == 2 ?'#1BA918' : '#c5c5c5'}}
             title={item.title}
             thumb=''
             onClick={()=>this.handleClick(item)}

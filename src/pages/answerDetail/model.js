@@ -40,6 +40,7 @@ export default {
       "selectType": 0,
       "type": 1
     }],
+    periods: []
   },
 
   effects: {
@@ -49,6 +50,15 @@ export default {
         type: 'save',
         payload: {
           detail: data.data
+        }
+      });
+    },
+    * getPeriods({ payload: value, url }, { call, put }) {
+      const { data } = yield call(detailApi.getPeriods, url);
+      yield put({
+        type: 'save',
+        payload: {
+          periods: data
         }
       });
     },

@@ -47,7 +47,7 @@ class AnswerOptList extends Component {
           <ul key={key || 0}>
             {(type != 7 && doc.selectType != 11 && doc.selectType != 12) && (
               <li className="qtn__opt clear-fix" style={{ display: 'block' }}>
-                {!opt.img && <span dangerouslySetInnerHTML={{ __html: utils.strip(opt.label) }}></span>}
+                {!opt.img && <span>{opt.label}</span>}
                 <span>{opt.text ? '（ ' + opt.text + ' ）' : ''}</span>
                 {opt.img && <View style={{ background: `url(${opt.img}) 0 0 / cover no-repeat`, width: '49%', height: '162.5px', marginRight: '1%', marginTop: '6px', float: 'left' }}></View>}
               </li>
@@ -55,7 +55,7 @@ class AnswerOptList extends Component {
             {type == 7 && (
               <li className="qtn__opt">
                 <View>
-                  <a href={`/v2/files/upload/answer/${qtnId}/${opt.text}`} download={opt.text} dangerouslySetInnerHTML={{ __html: utils.strip(opt.text) }} style={{ display: 'block' }}></a>
+            <a href={`/v2/files/upload/answer/${qtnId}/${opt.text}`} download={opt.text} style={{ display: 'block' }}>{opt.text}</a>
                   <a href={`/v2/files/upload/answer/${qtnId}/${opt.text}`} download={opt.text}
                     style={{ color: '#1296DB' }}
                   >下载</a>

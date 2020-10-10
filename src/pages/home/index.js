@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View,Swiper,SwiperItem } from '@tarojs/components';
+import { View, Swiper, SwiperItem } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtActionSheet, AtMessage, AtButton,AtTabs, AtTabsPane,AtActionSheetItem,AtTabBar, AtModal } from 'taro-ui'
+import { AtActionSheet, AtMessage, AtButton, AtTabs, AtTabsPane, AtActionSheetItem, AtTabBar, AtModal } from 'taro-ui'
 import Questionaires from '../../components/questionaire'
 import './index.scss';
 import List from '../../components/list';
@@ -22,15 +22,16 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentBar:0,
-      current: 0,
-      currentPage:1,
-      isOpened:false,
-      isLogin:false,
-      pageSize:10,
-      status:null,
-      ispartOpened:false,
+      currentBar: 0,
+      current: 1,
+      currentPage: 1,
+      isOpened: false,
+      isLogin: false,
+      pageSize: 10,
+      status: null,
+      ispartOpened: false,
       isDel: false,
+      opened: false
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -48,20 +49,22 @@ class Home extends Component {
     this.delCancel = this.delCancel.bind(this)
     this.handleShut = this.handleShut.bind(this)
     this.close = this.close.bind(this)
+    this.partHandleData = this.partHandleData.bind(this)
+    this.editAns = this.editAns.bind(this)
   }
 
   componentWillMount() {
     const token = Taro.getStorageSync('token');
     if (!token) {
       this.setState({
-        isLogin:false
+        isLogin: false
       })
-    }else{
+    } else {
       this.getOwnerlist()
       //获取周期
       //this.getCycle()
       this.setState({
-        isLogin:true
+        isLogin: true
       })
     }
   };
@@ -70,29 +73,29 @@ class Home extends Component {
     this.getOwnerlist()
   }
 
-  handleOpen (value,item){
-      this.setState({
-        isOpened:true,
-        reportId:item.id,
-        status:item.status
-      })
+  handleOpen(value, item) {
+    this.setState({
+      isOpened: true,
+      reportId: item.id,
+      status: item.status
+    })
   }
 
   //获取周期
-  getCycle(){
-    const {reportId} = this.state
+  getCycle() {
+    const { reportId } = this.state
     this.props.dispatch({
       type: 'home/getCycle',
       token: this.props.token,
-      url:`/v3/report/${reportId}/periods`
+      url: `/v3/report/${reportId}/periods`
     })
   }
 
   //获取创建填报的列表
-  getOwnerlist(){
-    const {currentPage, pageSize} = this.state
+  getOwnerlist() {
+    const { currentPage, pageSize } = this.state
     const params = {
-      current:currentPage,
+      current: currentPage,
       pageSize
     }
     this.props.dispatch({
@@ -102,18 +105,20 @@ class Home extends Component {
     })
   }
 
-   // 小程序上拉加载
-   onReachBottom() {
-    this.props.dispatch({
-      type: 'home/save',
-      payload: {
-        page: this.props.page + 1,
-      },
-    });
-    this.getOwnerlist()
+  // 小程序上拉加载
+  onReachBottom() {
+    if(this.state.current == 0) {
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          page: this.props.page + 1,
+        },
+      });
+      this.getOwnerlist()
+    }
   }
-  
-  componentWillUnmount = ()=>{
+
+  componentWillUnmount = () => {
     this.props.dispatch({
       type: 'home/save',
       payload: {
@@ -123,32 +128,39 @@ class Home extends Component {
     });
   }
 
-  handleClick (value) {
+  handleClick(value) {
     this.setState({
       current: value,
-      isOpened:false,
-      ispartOpened:false
+      isOpened: false,
+      ispartOpened: false
     })
   }
 
-  handleData () {
-       Taro.navigateTo({
-       url: '/pages/viewData/index'
-      })
+  handleData() {
+    this.close()
+    Taro.navigateTo({
+      url: `/pages/viewData/index?reportId=${this.state.reportId}`
+    })
+  }
+  partHandleData() {
+    this.close()
+    Taro.navigateTo({
+      url: `/pages/answerDetail/index?reportId=${this.state.reportId}`
+    })
   }
 
-  toEdit (value) {
-    const {isLogin,reportId} = this.state
-    if(!!isLogin){
+  toEdit(value) {
+    const { isLogin, reportId } = this.state
+    if (!!isLogin) {
       Taro.navigateTo({
-      url: `/pages/edit/index?isInit=${value}&reportId=${reportId}`
-     })
-    }else{
+        url: `/pages/edit/index?isInit=${value}&reportId=${reportId}`
+      })
+    } else {
       this.handleWxLogin()
     }
     this.setState({
-      isOpened:false,
-      ispartOpened:false
+      isOpened: false,
+      ispartOpened: false
     })
   }
 
@@ -168,10 +180,10 @@ class Home extends Component {
                 data: res.userInfo
               })
               encryptedData = res.encryptedData
-              iv = res.iv    
+              iv = res.iv
             }
-          }).then(()=>{
-            let params = { encryptedData: encryptedData, iv: iv, code: code, userId: '0',oid:'gh_13a2c24667b4' }
+          }).then(() => {
+            let params = { encryptedData: encryptedData, iv: iv, code: code, userId: '0', oid: 'gh_13a2c24667b4' }
             if (!!encryptedData && !!iv) {
               this.props.dispatch({
                 type: 'home/wxLogin',
@@ -180,15 +192,14 @@ class Home extends Component {
             } else {
               this.errorMessage('微信获取用户信息失败')
             }
-          }) 
+          })
         } else {
           this.errorMessage('微信授权登录失败')
         }
       })
   }
 
-
-  handleClickBar(value){
+  handleClickBar(value) {
     // if(value === 1){
     //   Taro.navigateTo({
     //     url: '/pages/templateText/index'
@@ -200,61 +211,57 @@ class Home extends Component {
     //    })
     // }
     this.setState({
-      isOpened:false,
-      ispartOpened:false
+      isOpened: false,
+      ispartOpened: false
     })
-
     this.setState({
       currentBar: value
     })
     switch (value) {
       case 0:
-          Taro.redirectTo({
-              url: '/pages/home/index'
-          })
-          break;
+        Taro.redirectTo({
+          url: '/pages/home/index'
+        })
+        break;
       case 1:
-          Taro.redirectTo({
-              url: '/pages/templateText/index'
-          })
-          break;
+        Taro.redirectTo({
+          url: '/pages/templateText/index'
+        })
+        break;
       case 2:
-          Taro.redirectTo({
-              url: '/pages/personalCenter/index'
-          })
-          break;           
+        Taro.redirectTo({
+          url: '/pages/personalCenter/index'
+        })
+        break;
       default:
-          break;
-    }    
+        break;
+    }
   }
 
-  
-
   //复制填报
-  handleCopy(){
-    const {reportId} = this.state
+  handleCopy() {
+    const { reportId } = this.state
     const params = {
       reportId
     }
     this.setState({
-      isOpened:false
+      isOpened: false
     })
     this.props.dispatch({
       type: 'home/copyReport',
       payload: params,
       token: this.props.token,
-      url:`/v3/report/${reportId}/copy`
+      url: `/v3/report/${reportId}/copy`
     }).then(
-      ()=>{
+      () => {
         this.getOwnerlist()
       }
     )
-
   }
 
   //删除填报
-  handleDelete(){
-    const {reportId} = this.state
+  handleDelete() {
+    const { reportId } = this.state
     const params = {
       reportId
     }
@@ -262,8 +269,8 @@ class Home extends Component {
       type: 'home/deleteReport',
       payload: params,
       token: this.props.token,
-      url:`/v3/report/${reportId}`
-    }).then(()=>{
+      url: `/v3/report/${reportId}`
+    }).then(() => {
       this.getOwnerlist()
     })
     this.delCancel()
@@ -277,70 +284,88 @@ class Home extends Component {
       console.log(res.target)
     }
     return {
-      title:  '云调查',
+      title: '云调查',
       path: '/pages/answer/index?',
       imageUrl: 'https://www.epanel.cn/images/answer.jpg'
     }
   }
 
-  handleShare(){
+  handleShare() {
     //this.onShareAppMessage()
   }
 
-  handleColse(){
+  handleColse() {
     //二维码页面
     Taro.navigateTo({
-          url: '/pages/code/index'
-         })
-    
+      url: '/pages/code/index'
+    })
     this.setState({
-      isOpened:false,
-      ispartOpened:false
+      isOpened: false,
+      ispartOpened: false
     })
   }
   close() {
     this.setState({
-      isOpened:false,
-      ispartOpened:false
+      isOpened: false,
+      ispartOpened: false
     })
   }
 
-  handlePart(val){
-    this.setState({
-      ispartOpened:true
-    })
+  handlePart(val) {
+    if(val.status == 0) {
+      Taro.navigateTo({url: '../answer/index'})
+    } else {
+      this.setState({
+        ispartOpened: true,
+        status: val.status,
+        reportId: val.id
+      })
+    }
   }
   // 删除填报确认？
   confimDelete() {
-    this.setState({isDel: true, isOpened:false})
+    this.setState({ isDel: true, isOpened: false })
   }
   // 删除填报取消
   delCancel() {
-    this.setState({isDel: false})
+    this.setState({ isDel: false })
   }
   // 关闭填报
   handleShut() {
-
+    const { reportId } = this.state
+    this.close()
+    this.props.dispatch({
+      type: 'home/closeReport',
+      token: this.props.token,
+      url: `/v3/report/${reportId}/close`
+    }).then(() => {
+      this.getOwnerlist()
+    })
+  }
+  // 修改填报
+  editAns() {
+    this.close()
+    Taro.navigateTo({url: '../answer/index?from=home'})
   }
 
   render() {
-    const {createList } = this.props
+    const { createList } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
-    const {isLogin,status, isDel, current} = this.state
+    const { isLogin, status, isDel, current, opened } = this.state
     return (
       <View className='page'>
         {/* 首页跑马灯及创建填报列表 */}
-           <View>
+        <View>
           <AtMessage />
-           <Swiper
-             className='test-h'
-             indicatorColor='#999'
-             indicatorActiveColor='#333'
-             vertical={false}
-             circular
-             indicatorDots
-             autoplay 
-           >
+          <Swiper
+            className='test-h'
+            indicatorColor='#999'
+            indicatorActiveColor='#333'
+            vertical={false}
+            circular
+            indicatorDots
+            autoplay
+          >
             <SwiperItem>
               <View className='demo-text-1'>1</View>
             </SwiperItem>
@@ -350,102 +375,106 @@ class Home extends Component {
             <SwiperItem>
               <View className='demo-text-3'>3</View>
             </SwiperItem>
-        </Swiper>
-        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
-          <AtTabsPane current={this.state.current} index={0} >
-            {!!isLogin ? <List handleOpen={this.handleOpen} createList={createList}/> : 
-            // eslint-disable-next-line react/jsx-no-undef
-            <Image src={image} className='list-img' />}
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={1}>
-            <Participate handlePart={this.handlePart} />
-          </AtTabsPane>
-        </AtTabs>
-        
-        <View className='create-fill' onClick={()=>this.toEdit(0)}>
-          <AtButton type='primary' openType='getUserInfo'>{isLogin?"创建填报":"立即登录"}</AtButton>
-        </View>
-        
-         {/* 列表选择项 */}
-         <AtActionSheet isOpened={this.state.isOpened}>
-           {status === 0 && (
-             <AtActionSheetItem onClick={()=>this.toEdit(1)}>
-                编辑填报
-            </AtActionSheetItem>
-           )}
-           {(status === 5 || status === 2) && (
-             
-             <AtActionSheetItem onClick={this.handleColse}>
-               <AtButton type='primary'  plain='true' openType='share' className='share-btn'>分享到微信群</AtButton>
-            </AtActionSheetItem>
-           ) }
-            {(status === 2 || status === 5) && (
-              <AtActionSheetItem onClick={this.handleData}>
-             查看结果
-            </AtActionSheetItem>
-            )}
-            
-            {status === 2 && (
-             <AtActionSheetItem onClick={()=>this.toEdit(2)}>
-                修改填报
-            </AtActionSheetItem>
-           )}
-            <AtActionSheetItem onClick={this.handleCopy}>
+          </Swiper>
+          <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
+            <AtTabsPane current={this.state.current} index={0} >
+              {this.state.current == 0 && !!isLogin ? <List handleOpen={this.handleOpen} createList={createList} /> :
+                <Image src={image} className='list-img' />
+              }
+            </AtTabsPane>
+            <AtTabsPane current={this.state.current} index={1}>
+              {this.state.current == 1 && (
+                <Participate handlePart={this.handlePart} />
+              )}
+            </AtTabsPane>
+          </AtTabs>
+
+          <View className='create-fill' onClick={() => this.toEdit(0)}>
+            <AtButton type='primary' openType='getUserInfo'>{isLogin ? "创建填报" : "立即登录"}</AtButton>
+          </View>
+
+          {/* 列表选择项 */}
+          {this.state.current == 0 && (
+            <AtActionSheet isOpened={this.state.isOpened}>
+              {status === 0 && (
+                <AtActionSheetItem onClick={() => this.toEdit(1)}>
+                  编辑填报
+                </AtActionSheetItem>
+              )}
+              {(status === 5 || status === 2) && (
+                <AtActionSheetItem onClick={this.handleColse}>
+                  <AtButton type='primary' plain='true' openType='share' className='share-btn'>分享到微信群</AtButton>
+                </AtActionSheetItem>
+              )}
+              {(status === 2 || status === 5) && (
+                <AtActionSheetItem onClick={this.handleData}>
+                  查看结果
+                </AtActionSheetItem>
+              )}
+              {status === 2 && (
+                <AtActionSheetItem onClick={() => this.toEdit(2)}>
+                  修改填报
+                </AtActionSheetItem>
+              )}
+              <AtActionSheetItem onClick={this.handleCopy}>
                 复制填报
-            </AtActionSheetItem>
-            {(status === 0 || status === 5) && (
-              <AtActionSheetItem onClick={this.confimDelete}>
+              </AtActionSheetItem>
+              {(status === 0 || status === 5) && (
+                <AtActionSheetItem onClick={this.confimDelete}>
                   删除填报
-              </AtActionSheetItem>
-            )}
-            {status === 2 && (
-              <AtActionSheetItem onClick={this.handleShut}>
+                </AtActionSheetItem>
+              )}
+              {status === 2 && (
+                <AtActionSheetItem onClick={this.handleShut}>
                   关闭填报
+                </AtActionSheetItem>
+              )}
+              <AtActionSheetItem onClick={this.close}>
+                取消
               </AtActionSheetItem>
-            )}
-            <AtActionSheetItem onClick={this.close}>
+            </AtActionSheet>
+          )}
+          {this.state.current == 1 && (
+            <AtActionSheet isOpened={this.state.ispartOpened}>
+              {status == 1 && (
+                <AtActionSheetItem>
+                  <AtButton type='primary' plain='true' openType='share' className='share-btn'>分享填报</AtButton>
+                </AtActionSheetItem>
+              )}
+              {status == 1 && <AtActionSheetItem onClick={this.editAns}>修改填报</AtActionSheetItem>}
+              <AtActionSheetItem onClick={this.partHandleData}>
+                {status == 1 ? '查看答案' : '查看结果'}
+              </AtActionSheetItem>
+              <AtActionSheetItem onClick={this.close}>
                 取消
-            </AtActionSheetItem>
-          </AtActionSheet> 
-
-
-          <AtActionSheet isOpened={this.state.ispartOpened}>
-             <AtActionSheetItem onClick={()=>this.toEdit(1)}>
-                修改填报
-            </AtActionSheetItem> 
-             <AtActionSheetItem>
-               <AtButton type='primary'  plain='true' openType='share' className='share-btn'>分享填报</AtButton>
-            </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.handleData}>
-             查看答案
-            </AtActionSheetItem>
-            <AtActionSheetItem onClick={this.close}>
-                取消
-            </AtActionSheetItem>
-          </AtActionSheet> 
+              </AtActionSheetItem>
+            </AtActionSheet>
+          )}
         </View>
+
         {isDel && (
           <AtModal
             isOpened={isDel}
             cancelText='取消'
             confirmText='删除'
-            onClose={ this.delCancel }
-            onCancel={ this.delCancel }
-            onConfirm={ this.handleDelete }
+            onClose={this.delCancel}
+            onCancel={this.delCancel}
+            onConfirm={this.handleDelete}
             content={`确认删除<${createList[current].title}>填报?`}
           />
         )}
-          {/* 底部bar */}
-          <AtTabBar
-            fixed
-            tabList={[
-              { title: '首页', iconType: 'home' },
-              { title: '模板库', iconType: 'list' },
-              { title: '个人中心', iconType: 'user' }
-            ]}
-            onClick={this.handleClickBar}
-            current={this.state.currentBar}
-          />
+
+        {/* 底部bar */}
+        <AtTabBar
+          fixed
+          tabList={[
+            { title: '首页', iconType: 'home' },
+            { title: '模板库', iconType: 'list' },
+            { title: '个人中心', iconType: 'user' }
+          ]}
+          onClick={this.handleClickBar}
+          current={this.state.currentBar}
+        />
       </View>
     )
   }

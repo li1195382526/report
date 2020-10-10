@@ -24,8 +24,16 @@ class answerDetail extends Component {
         this.lookAnswerResultById = this.lookAnswerResultById.bind(this)
         this.onChange = this.onChange.bind(this)
         this.handleEdit = this.handleEdit.bind(this)
+        this.getPeriods = this.getPeriods.bind(this)
     }
-
+    // 获取周期
+    getPeriods() {
+        const reportId = this.$router.params.reportId
+        this.props.dispatch({
+            type: 'answerDetail/getPeriods',
+            url: `/v3/report/${reportId}/peroids`
+        })
+    }
     // 查看单个样本答题数据
     lookAnswerResultById() {
         const mobile = Taro.getStorageSync('mobile')
@@ -41,10 +49,11 @@ class answerDetail extends Component {
     }
     // 修改填报
     handleEdit() {
-        Taro.navigateTo({url: '../answer/index'})
+        Taro.navigateTo({url: '../answer/index?from=answerDetail'})
     }
 
     componentWillMount() {
+        this.getPeriods()
     }
 
     componentDidMount() {
@@ -52,26 +61,22 @@ class answerDetail extends Component {
     }
 
     render() {
-        const { detail } = this.props
+        const { detail, periods } = this.props
         const qtnId = 52
-        const items = [
-            { 'title': ''},
-            { 'title': '' },
-            { 'title': '' }
-          ]
+        const index = periods.findIndex((item) => item.isCurrent == 1)
         return (
             <View className="content">
                 <View className="main">
                     <View className='view-data'>
                         <AtSteps
                             className='data-step'
-                            items={items}
+                            items={periods}
                             current={this.state.current}
                             onChange={this.onChange}
                         />
                         <View className="view-plain">
-                            <View className='view-text'>当前进行至第2周期</View>
-                            <View className='view-text'>截止时间2020-09-12 23:59</View>
+                            <View className='view-text'>当前进行至第 {index + 1} 周期</View>
+                            <View className='view-text'>截止时间 {periods[index].endTime}</View>
                         </View>
                     </View>
                     <View className='handle'>

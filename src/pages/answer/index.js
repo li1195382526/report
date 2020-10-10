@@ -23,7 +23,7 @@ class Answer extends Component {
       selector: ['小名', '小花', '小亮', '甜甜'],
       selectorChecked: '小名',
       mobile:15526080904,
-      reportId:52,
+      reportId:57,
       periodCount:1,//周期数
       passWord:'',
       isPassWord:false,
@@ -59,17 +59,10 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/getQuestionner',
       token: this.props.token,
-      url:`/v3/report/${52}`
+      url:`/v3/report/${57}`
     }).then(() => {
-      if(this.$router.params.from != 'viewData') {
-        let { info } = this.props
-        if(info.needPwd == 1) {
-          this.setState({isPassWord: true})
-          return
-        }
-        if(info.useNamelist == 1) {
-          this.setState({isHavename: true})
-        }
+      if(!this.$router.params.from) {
+        this.join()
       }
     })
   }
@@ -81,14 +74,21 @@ class Answer extends Component {
 
   submit(){
     const {mobile,reportId,periodCount} = this.state
+    const {res, anw, wxInfo} = this.props
+    // let obj = {}
+    // for(let i in anw) {
+    //   obj[i] = JSON.stringify(anw[i])
+    // }
+    let params = {
+      nickname: wxInfo.nickName,
+      ctl: res.data.ctl,
+      anw
+    }
     this.props.dispatch({
       type: 'answer/subMitAnswer',
       token: this.props.token,
-      url:`/v3/participant/${mobile}/report/${reportId}/period/${periodCount}/submit`
-    }).then(()=>{
-      Taro.navigateTo({
-      url: '/pages/submits/index'
-     })
+      url:`/v3/report/${reportId}/participant/${mobile}/submit`,
+      payload: params
     })
     
   }
@@ -106,10 +106,6 @@ class Answer extends Component {
       return
     } else {
       this.setState({isPassWord:false})
-      if(info.useNamelist == 1 && !res.status) {
-        this.setState({isHavename: true})
-        return
-      }
       this.join()
     }
   }
@@ -150,17 +146,7 @@ class Answer extends Component {
     }).then(() => {
       Taro.hideLoading()
       let {res} = this.props
-      if(res.status == 203) {
-        Taro.showToast({
-          title: res.message,
-          icon: 'none',
-          duration: 2000,
-          mask: true
-        })
-        setTimeout(() => {
-          Taro.redirectTo({url: '../home/index'})
-        }, (2000));
-      } else if(res.status == -1001) {
+      if((res.status == 203 && res.message == '密码错误') || res.status == -1001) {
         Taro.showToast({
           title: res.message,
           icon: 'none',
@@ -176,27 +162,34 @@ class Answer extends Component {
           mask: true
         })
         this.setState({isHavename: true})
+      } else if(res.status == 203) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000,
+          mask: true
+        })
+        setTimeout(() => {
+          Taro.redirectTo({url: '../home/index'})
+        }, (2000));
       }
     })
   }
 
   render() {
     const {isPassWord,isHavename, passWord} = this.state
-    // eslint-disable-next-line no-shadow
     const {questionnaire,info} = this.props
     const from = this.$router.params.from
     return (
       <View className='answer'>
-        {from != 'viewData' && (
           <View className='change-name'>
             <View>小名</View>
-            {info.canEdit == 1 && (
+            {!from && (
               <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
                   <View>切换名单</View>
               </Picker>
             )}
           </View>
-        )}
         <View className='answer-title'>
           <View className='title'>{info.title}</View>
           <View className='memo'>{info.memo}</View>

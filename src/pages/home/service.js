@@ -57,9 +57,14 @@ export const wxMobilelogin = (data,token) => syncAction({
 });
 
 //获取我参与填报列表
-export const getParticipantlist = (data,token,url) => syncAction({
-  data,
-  method: "POST",
+export const getParticipantlist = (token,url) => syncAction({
+  method: "GET",
+  token,
+  url
+});
+// 关闭填报
+export const closeReport = (token,url) => syncAction({
+  method: "PUT",
   token,
   url
 });

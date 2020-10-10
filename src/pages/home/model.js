@@ -8,6 +8,7 @@ export default {
     createList:[],
     page: 1,
     isPersonal:0,//0首页登录，1，个人中心等，2，获取名单库登录
+    Participantlist: []
   },
 
   effects: {
@@ -145,11 +146,24 @@ export default {
       })
     },
     * getParticipantlist({ payload: values,token,url }, { call, put }) {
-      const { data } = yield call(homeApi.getParticipantlist, values,token,url);
+      const { data } = yield call(homeApi.getParticipantlist, token,url);
       yield put({
         type: 'save',
-        //payload: data
+        payload: {Participantlist: data}
       })
+    },
+    * closeReport({ payload: values,token,url }, { call, put }) {
+      const { data } = yield call(homeApi.closeReport, token, url);
+      yield put({
+        type: 'save'
+      })
+      if(data.status == 200) {
+        Taro.atMessage({
+          'message': '操作成功，已关闭填报',
+          'type': 'success',
+          'duration': 2000
+        })
+      }
     },
   },
 

@@ -7,10 +7,11 @@ import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
 import './index.scss';
 
-@connect(({ ViewData, home, common }) => ({
+@connect(({ ViewData, home, common, answerDetail }) => ({
   ...ViewData,
   ...home,
-  ...common
+  ...common,
+  ...answerDetail
 }))
 
 class ViewData extends Component {
@@ -33,12 +34,21 @@ class ViewData extends Component {
     this.delItem = this.delItem.bind(this)
     this.cancel = this.cancel.bind(this)
     this.share = this.share.bind(this)
+    this.getPeriods = this.getPeriods.bind(this)
   }
 
   componentWillMount() {
-   
+    this.getPeriods()
   };
 
+  // 获取周期
+  getPeriods() {
+    const reportId = this.$router.params.reportId
+    this.props.dispatch({
+      type: 'answerDetail/getPeriods',
+      url: `/v3/report/${reportId}/peroids`
+    })
+  }
   // 列表点击
   handleClick(item) {
     const {isFinished} = this.state
@@ -67,7 +77,7 @@ class ViewData extends Component {
   // 查看记录
   handleView() {
     this.cancel()
-    Taro.redirectTo({url: '../answer/index?from=viewData'})
+    Taro.navigateTo({url: '../answer/index?from=viewData'})
   }
   // 删除记录
   delItem() {
@@ -82,24 +92,21 @@ class ViewData extends Component {
 
   render() {
     const {isFinished, isMenge} = this.state
-    const items = [
-      { 'title': ''},
-      { 'title': '' },
-      { 'title': '' }
-    ]
+    const {periods} = this.props
+    const index = periods.findIndex((item) => item.isCurrent == 1)
     const list = isFinished ? [{}] : [{}, {}]
     return (
       <View className='view'>
         <View className='view-data'>
            <AtSteps
             className='data-step'
-            items={items}
+            items={periods}
             current={this.state.current}
             onChange={this.onChange}
            />
            <View className="view-plain">
-              <View className='view-text'>当前进行至第2周期</View>
-              <View className='view-text'>截止时间2020-09-12 23:59</View>
+              <View className='view-text'>当前进行至第 {index + 1} 周期</View>
+              <View className='view-text'>截止时间 {periods[index].endTime}</View>
            </View>
         </View>
         <View className='view-statistics'>
@@ -113,8 +120,8 @@ class ViewData extends Component {
           </View>
         </View>
         <AtList className='view-atlist'>
-          {list.map((item, index) => (
-            <AtListItem key={index} title={`${index+1}. 李琴`} onClick={() => this.handleClick(item)} extraText={isFinished?'2020-08-24 10:35填报':'督促填报'} arrow='right'  />
+          {list.map((item, key) => (
+            <AtListItem key={key} title={`${key+1}. 李琴`} onClick={() => this.handleClick(item)} extraText={isFinished?'2020-08-24 10:35填报':'督促填报'} arrow='right'  />
           ))}
           {list.length == 0 && <View>暂无数据</View>}
         </AtList>

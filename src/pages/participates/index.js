@@ -13,111 +13,64 @@ class Participates extends Component {
   config = {
     navigationBarTitleText: '收集数据',
   };
-
   constructor(props) {
     super(props)
     this.state = {
-      currentPage:1,
-      pageSize:10,
-      isOpened:true
+      opened: true,
+      status: ''
     }
     this.getParticipantlist = this.getParticipantlist.bind(this)
     this.submit = this.submit.bind(this)
-    this.handleColse = this.handleColse.bind(this)
-    this.handleData = this.handleData.bind(this)
-    this.handleClick = this.handleClick.bind(this)
   }
-
   componentWillMount() {
-   
-  };
 
-  componentDidMount(){
+  };
+  componentDidMount() {
     const token = this.props.token || Taro.getStorageSync('token');
     if (!token) {
-     
-    }else{
+
+    } else {
       this.getParticipantlist()
     }
-    
   }
-
-  //获取我参与的列表
-  getParticipantlist(){
-    const {currentPage, pageSize} = this.state
-    const {mobile} = this.props
-    const params = {
-      current:currentPage,
-      pageSize,
-      mobile
-    }
+  // 获取我参与的列表
+  getParticipantlist() {
+    const { mobile } = this.props
     this.props.dispatch({
       type: 'home/getParticipantlist',
-      payload: params,
       token: this.props.token,
-      url:`/v3/participant/${mobile}/participantlist`
+      url: `/v3/report/participant/${mobile}/list`
     })
   }
-
-  submit (){
-    Taro.navigateTo({
-      url: '/pages/answer/index'
-     })
-  }
-
-  handleColse(){
-    this.setState({
-      isOpened:false
+  submit(item) {
+    this.setState({ status: item.status }, () => {
+      if (item.status == 0) {
+        Taro.navigateTo({
+          url: '/pages/answer/index'
+        })
+      } else {
+        this.props.handlePart(item)
+        console.log('true', this)
+      }
     })
   }
-
-  handleData () {
-    Taro.navigateTo({
-    url: '/pages/viewData/index'
-   })
-}
-
-  handleClick() {
-    const {handlePart} = this.props
-    handlePart(true)
-}
 
   render() {
+    const { Participantlist, wxInfo } = this.props
     return (
       <View className='page'>
-          <View className='participate-list'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.submit}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View> 
-          <View className='participate-list'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View> 
-          <View className='participate-list'>
-             <AtCard
-               note='小Tips'
-               extra='额外信息'
-               title='这是个标题'
-               thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
-               onClick={this.handleClick}
-             >
-            这也是内容区 可以随意定义功能
-            </AtCard> 
-          </View> 
+        {Participantlist.map((item, key) => (
+          <View className='participate-list' key={key} onClick={() => this.submit(item)}>
+            <AtCard
+              note={`${item.creatorName || wxInfo.nickName} | ${item.publishTime}`}
+              extra={item.status == 0 ? '未填报' : item.status == 1 ? '已填报' : '已结束'}
+              extraStyle={{ color: item.status == 0 ? '#d9001b' : item.status == 1 ? '#1BA918' : '#c5c5c5' }}
+              title={item.title}
+            >
+              {item.memo}
+            </AtCard>
+          </View>
+        ))}
       </View>
     )
   }
