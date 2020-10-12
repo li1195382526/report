@@ -61,14 +61,12 @@ class Edit extends Component {
         }
       })
     }
-    if(init == 2){
       this.props.dispatch({
         type: 'edit/save',
         payload: {
-          isModify:false
+          isModify:init == 2 ? false : true
         }
       })
-    }
   }
 
   onChange = e => {
