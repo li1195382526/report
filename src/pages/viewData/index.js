@@ -23,7 +23,7 @@ class ViewData extends Component {
     super(props)
     this.state = {
       current: 0,
-      isFinished: true, // 默认先展示已填报的
+      isFinished: false, // 默认先展示已填报的
       isMenge: false,
       itemInfo: {}
     }
@@ -35,11 +35,22 @@ class ViewData extends Component {
     this.cancel = this.cancel.bind(this)
     this.share = this.share.bind(this)
     this.getPeriods = this.getPeriods.bind(this)
+    this.getResList = this.getResList.bind(this)
   }
 
   componentWillMount() {
     this.getPeriods()
   };
+
+  //小程序分享
+  onShareAppMessage(res) {
+    console.log(res)
+    return {
+      title: '云调查',
+      path: `/pages/answer/index?listId=${this.$router.params.reportId}`,
+      imageUrl: 'https://www.epanel.cn/images/answer.jpg'
+    }
+  }
 
   // 获取周期
   getPeriods() {
@@ -47,6 +58,22 @@ class ViewData extends Component {
     this.props.dispatch({
       type: 'answerDetail/getPeriods',
       url: `/v3/report/${reportId}/peroids`
+    }).then(() => {
+      const {periods} = this.props
+      const index = periods.findIndex((item) => item.isCurrent == 1)
+      this.setState({current: index})
+      this.getResList()
+    })
+  }
+  // 获取结果列表
+  getResList() {
+    const {periods} = this.props
+    const {current} = this.state
+    const reportId = this.$router.params.reportId
+    const period = periods[current].num
+    this.props.dispatch({
+      type: 'answerDetail/getResList',
+      url: `/v3/report/${reportId}/period/${period}/results`
     })
   }
   // 列表点击
@@ -65,8 +92,8 @@ class ViewData extends Component {
   }
   // 步骤条change事件
   onChange (current) {
-    this.setState({
-      current
+    this.setState({ current }, () => {
+      this.getResList()
     })
   }
   // 已填报/未填报点击
@@ -77,7 +104,7 @@ class ViewData extends Component {
   // 查看记录
   handleView() {
     this.cancel()
-    Taro.navigateTo({url: '../answer/index?from=viewData'})
+    Taro.navigateTo({url: `../answer/index?from=viewData&listId=${this.$router.params.reportId}`})
   }
   // 删除记录
   delItem() {
@@ -92,9 +119,9 @@ class ViewData extends Component {
 
   render() {
     const {isFinished, isMenge} = this.state
-    const {periods} = this.props
+    const {periods, resList} = this.props
     const index = periods.findIndex((item) => item.isCurrent == 1)
-    const list = isFinished ? [{}] : [{}, {}]
+    const list = isFinished ? resList.finished || [] : resList.unfinished || []
     return (
       <View className='view'>
         <View className='view-data'>
@@ -111,20 +138,29 @@ class ViewData extends Component {
         </View>
         <View className='view-statistics'>
           <View className={isFinished?'view-num view-num-checked':'view-num'} onClick={this.handelToggle}>
-            <View className='num'>4</View>
+            <View className='num'>{resList.finished?resList.finished.length:0}</View>
             <View>已填报人数</View>
           </View>
           <View className={isFinished?'view-num':'view-num view-num-checked'} onClick={this.handelToggle}>
-            <View className='num'>6</View>
+            <View className='num'>{resList.unfinished?resList.unfinished.length:0}</View>
             <View>未填报人数</View>
           </View>
         </View>
-        <AtList className='view-atlist'>
-          {list.map((item, key) => (
-            <AtListItem key={key} title={`${key+1}. 李琴`} onClick={() => this.handleClick(item)} extraText={isFinished?'2020-08-24 10:35填报':'督促填报'} arrow='right'  />
+        <View className='view-atlist'>
+          {list.length && list.map((item, key) => (
+            // <AtListItem key={key} title={`${key+1}. 李琴`} onClick={() => this.handleClick(item)} extraText={isFinished?'2020-08-24 10:35填报':'督促填报'} arrow='right'  />
+            <View className='item-content' onClick={() => this.handleClick(item)}>
+              <View className="left">{key+1+'.'+item.resultName}</View>
+              {isFinished && (<View className="right">{item.finishTime+'填报'}&gt;</View>)}
+              {!isFinished && (
+                <View className="right">
+                  <Button openType='share' className='r-btn'>督促填报&gt;</Button>
+                </View>
+              )}
+            </View>
           ))}
-          {list.length == 0 && <View>暂无数据</View>}
-        </AtList>
+          {list.length == 0 && <View className='notice'>暂无数据</View>}
+        </View>
         {!isFinished && <Button className='view-radius' openType='share' onClick={this.share}>全部督促</Button>}
         <AtActionSheet isOpened={isMenge} onClose={this.cancel}>
           <AtActionSheetItem onClick={this.handleView}>

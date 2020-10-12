@@ -40,7 +40,8 @@ export default {
       "selectType": 0,
       "type": 1
     }],
-    periods: []
+    periods: [],
+    resList: {}
   },
 
   effects: {
@@ -59,6 +60,15 @@ export default {
         type: 'save',
         payload: {
           periods: data
+        }
+      });
+    },
+    * getResList({ payload: value, url }, { call, put }) {
+      const { data } = yield call(detailApi.getResList, url);
+      yield put({
+        type: 'save',
+        payload: {
+          resList: data
         }
       });
     },

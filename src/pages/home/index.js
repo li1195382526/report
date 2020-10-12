@@ -23,7 +23,7 @@ class Home extends Component {
     super(props)
     this.state = {
       currentBar: 0,
-      current: 1,
+      current: 0,
       currentPage: 1,
       isOpened: false,
       isLogin: false,
@@ -31,7 +31,8 @@ class Home extends Component {
       status: null,
       ispartOpened: false,
       isDel: false,
-      opened: false
+      opened: false,
+      reportId: ''
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -285,7 +286,7 @@ class Home extends Component {
     }
     return {
       title: '云调查',
-      path: '/pages/answer/index?',
+      path: `/pages/answer/index?listId=${this.state.reportId}`,
       imageUrl: 'https://www.epanel.cn/images/answer.jpg'
     }
   }
@@ -313,7 +314,7 @@ class Home extends Component {
 
   handlePart(val) {
     if(val.status == 0) {
-      Taro.navigateTo({url: '../answer/index'})
+      Taro.navigateTo({url: `../answer/index?listId=${this.state.reportId}`})
     } else {
       this.setState({
         ispartOpened: true,
@@ -345,7 +346,7 @@ class Home extends Component {
   // 修改填报
   editAns() {
     this.close()
-    Taro.navigateTo({url: '../answer/index?from=home'})
+    Taro.navigateTo({url: `../answer/index?from=home&listId=${this.state.reportId}`})
   }
 
   render() {

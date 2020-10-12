@@ -49,7 +49,7 @@ class answerDetail extends Component {
     }
     // 修改填报
     handleEdit() {
-        Taro.navigateTo({url: '../answer/index?from=answerDetail'})
+        Taro.navigateTo({url: `../answer/index?from=answerDetail?listId=${this.state.reportId}`})
     }
 
     componentWillMount() {

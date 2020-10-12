@@ -20,3 +20,8 @@ export const joinReport = ( data,token,url) => syncAction({
   token,
   url,
 });
+
+export const getNamelist = ( url) => syncAction({
+  method: "Get",
+  url,
+});

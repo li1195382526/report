@@ -36,6 +36,7 @@ class Participates extends Component {
   // 获取我参与的列表
   getParticipantlist() {
     const { mobile } = this.props
+    console.log(this.props)
     this.props.dispatch({
       type: 'home/getParticipantlist',
       token: this.props.token,
@@ -46,7 +47,7 @@ class Participates extends Component {
     this.setState({ status: item.status }, () => {
       if (item.status == 0) {
         Taro.navigateTo({
-          url: '/pages/answer/index'
+          url: `/pages/answer/index?listId=${item.id}`
         })
       } else {
         this.props.handlePart(item)
