@@ -60,11 +60,16 @@ class QtnSet extends Component {
   }
   
   render() {
-    const {opts} = this.props
+    const {opts,isModify} = this.props
     return (
       <View className='qt-set'>
-         <View><Checkbox value='选中' checked={opts.required} onClick={()=>this.handleRequired(opts.required)}></Checkbox> 必填</View>
-         <View onClick={this.handleDelete}><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>
+         <View><Checkbox value='选中' checked={opts.required} disabled={!isModify}  onClick={()=>this.handleRequired(opts.required)}></Checkbox> 必填</View>
+         {isModify && (
+           <View onClick={this.handleDelete}><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>
+         )}
+         {!isModify && (
+           <View><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>
+         )}
       </View>
     )
   }

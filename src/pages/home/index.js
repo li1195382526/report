@@ -23,7 +23,7 @@ class Home extends Component {
     super(props)
     this.state = {
       currentBar: 0,
-      current: 1,
+      current: 0,
       currentPage: 1,
       isOpened: false,
       isLogin: false,
@@ -93,9 +93,10 @@ class Home extends Component {
 
   //获取创建填报的列表
   getOwnerlist() {
-    const { currentPage, pageSize } = this.state
+    const { pageSize } = this.state
+    const {page} = this.props
     const params = {
-      current: currentPage,
+      current: page,
       pageSize
     }
     this.props.dispatch({
@@ -107,7 +108,6 @@ class Home extends Component {
 
   // 小程序上拉加载
   onReachBottom() {
-    if(this.state.current == 0) {
       this.props.dispatch({
         type: 'home/save',
         payload: {
@@ -115,7 +115,6 @@ class Home extends Component {
         },
       });
       this.getOwnerlist()
-    }
   }
 
   componentWillUnmount = () => {

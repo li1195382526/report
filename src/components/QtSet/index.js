@@ -78,9 +78,12 @@ class QtSet extends Component {
 
   //设置名单
   handleSetName(){
-    Taro.navigateTo({
+    const {isModify} = this.props
+    if(isModify){
+      Taro.navigateTo({
       url: '/pages/nameList/index?from=edit'
      })
+    }
   }
 
    // 开始时间设置开关
@@ -170,7 +173,7 @@ class QtSet extends Component {
   
   render() {
     const {isLimit,hint} = this.state
-    const {info,tableList} = this.props
+    const {info,isModify} = this.props
     let beginTimeList = !!info.beginTime ? info.beginTime :'未设置'
     let expireTimeList = !!info.endTime ? info.endTime  :'未设置'
     const nameSet =  info.namelist && info.namelist.length > 0 ? info.namelist.length + '人' :'未设置'
@@ -180,17 +183,20 @@ class QtSet extends Component {
           <AtListItem
             title='时间限制'
             isSwitch
+            disabled={!isModify}
             switchIsCheck={info.useTimelimit == 1 ? true :false} 
             onSwitchChange={(val)=>this.handleChange(val,'useTimelimit')} 
           />
               {info.useTimelimit == 1 && (
                 <View>
                 <AtListItem title='开始时间'
+                  disabled={!isModify}
                   arrow='right'
                   extraText={beginTimeList}
                   onClick={()=>this.handleBeginTimeSetting(true)}
                 />
                   <AtListItem title='结束时间'
+                    disabled={!isModify}
                     arrow='right'
                     extraText={expireTimeList}
                     onClick={()=>this.handleExpireTimeSetting(true)}
@@ -220,6 +226,7 @@ class QtSet extends Component {
           <AtList>
           <AtListItem
             title='填写人数'
+            disabled={!isModify}
             isSwitch
             switchIsCheck={info.useCount == 1 ? true :false}  
             onSwitchChange={(val)=>this.handleChange(val,'useCount')} 
@@ -229,6 +236,7 @@ class QtSet extends Component {
                   <View className='set-cycle'>
                     <View>设置人数<Text>（不填为不限）</Text></View>
                     <Input type='text' 
+                      disabled={!isModify}
                       placeholder='请输入填报人数' 
                       onChange={(val)=>this.handleNum(val,'pnlCount')}
                       value={info.pnlCount} 
@@ -239,6 +247,7 @@ class QtSet extends Component {
                 <AtListItem
                   title='填报名单'
                   isSwitch
+                  disabled={!isModify}
                   switchIsCheck={info.useNamelist == 1 ? true :false}
                   onSwitchChange={(val)=>this.handleChange(val,'useNamelist')}
                 />
@@ -246,20 +255,22 @@ class QtSet extends Component {
               {info.useNamelist == 1 && (<AtListItem title='名单设置'  extraText={nameSet} onClick={this.handleSetName} arrow='right'/>)}
               {info.useNamelist == 1 && (
                 <AtSwitch 
-                  title='填报人员限制' 
+                  title='填报人员限制'
+                  disabled={!isModify} 
                   checked={info.isUserlimit == 1 ? true :false} 
                   onChange={(val)=>this.handlePeopleLimit(val,0,"isUserlimit")} 
                 />
               )} 
                <AtListItem
-                  title='填写周期'
-                  isSwitch
-                  switchIsCheck={info.usePeriod == 1 ? true :false}
-                  onSwitchChange={(val)=>this.handleChange(val,'usePeriod')} 
+                 title='填写周期'
+                 disabled={!isModify}
+                 isSwitch
+                 switchIsCheck={info.usePeriod == 1 ? true :false}
+                 onSwitchChange={(val)=>this.handleChange(val,'usePeriod')} 
                />
                 {info.usePeriod == 1 && (
                   <View>
-                  <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
+                  <Picker mode='selector' range={this.state.selector} onChange={this.onChange} disabled={!isModify}>
                     <AtList>
                       <AtListItem
                         title='周期类型'
@@ -271,7 +282,8 @@ class QtSet extends Component {
                       <View className='set-cycle'>
                         <View>连续周期数</View>
                         <Input 
-                          type='text' 
+                          type='text'
+                          disabled={!isModify} 
                           placeholder='请输入周期数'
                           value={info.periodSize}
                           onChange={(val)=>this.handleNum(val,'periodSize')}
@@ -279,7 +291,8 @@ class QtSet extends Component {
                       </View>
                   </AtList>
                   <AtSwitch 
-                    title='连续填报' 
+                    title='连续填报'
+                    disabled={!isModify} 
                     checked={info.isStrict == 1 ? true :false} 
                     onChange={(val)=>this.handlePeopleLimit(val,1,'isStrict')}
                   />
@@ -287,12 +300,14 @@ class QtSet extends Component {
                 )}
                 <AtListItem
                   title='允许填报人修改'
+                  disabled={!isModify}
                   isSwitch
                   switchIsCheck={info.canEdit == 1 ? true :false} 
                   onSwitchChange={(val)=>this.handleChange(val,'canEdit')} 
                 />
                 <AtListItem
                   title='填报密码'
+                  disabled={!isModify}
                   isSwitch
                   switchIsCheck={info.needPwd == 1 ? true :false}  
                   onSwitchChange={(val)=>this.handleChange(val,'needPwd')} 
@@ -302,6 +317,7 @@ class QtSet extends Component {
                     <View className='set-cycle'>
                       <View>设置密码</View>
                       <Input 
+                        disabled={!isModify}
                         type='text' 
                         placeholder='请输入填报密码'
                         value={info.pwd}
@@ -315,6 +331,7 @@ class QtSet extends Component {
           <View className='set-publisher'>
             <View>发布人昵称</View>
             <Input 
+              disabled={!isModify}
               type='text' 
               placeholder='示例:李老师'
               value={info.creatorName}

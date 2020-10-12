@@ -65,7 +65,7 @@ class Edit extends Component {
       this.props.dispatch({
         type: 'edit/save',
         payload: {
-          isModify:true
+          isModify:false
         }
       })
     }

@@ -9,7 +9,7 @@ export default {
     qtnStatus:'',
     message:'',
     status:'',
-    isModify:false,
+    isModify:true,
     response: ''
   },
 

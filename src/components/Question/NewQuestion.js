@@ -74,10 +74,10 @@ class NewQuestion extends Component {
  
   
   render() {
-    const {opts} = this.props
+    const {opts,isModify} = this.props
     return (
       <View className='new-question'>
-          <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
+          <Picker mode='selector' range={this.state.selector} onChange={this.onChange} disabled={!isModify}>
           <View className='add-question'>
           <AtIcon value='add' size='30' color='#CCC'></AtIcon>
             <View className='add'>
