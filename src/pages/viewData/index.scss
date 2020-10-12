@@ -50,7 +50,42 @@
         }
     }
     .view-atlist{
-        margin-top:90px;
+        margin-top:100px;
+        .notice {
+            height: 400px;
+            line-height: 400px;
+            text-align: center;
+            background: #fff;
+        }
+        .item-content {
+            width: 96%;
+            height: 80px;
+            line-height: 80px;
+            margin-left: 2%;
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+            padding: 0 20px;
+            .left {
+                text-align: left;
+            }
+            .right {
+                text-align: right;
+                color: #999;
+                font-size: 28px;
+                .r-btn {
+                    background: #fff;
+                    color: #999;
+                    padding: 0;
+                    line-height: 80px;
+                    font-size: 28px;
+                }
+                button::after {
+                    border: 0;
+                }
+            }
+        }
     }
     .view-radius{
         position: absolute;

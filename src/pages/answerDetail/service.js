@@ -9,3 +9,7 @@ export const getPeriods = (url) => Request.syncAction({
   url,
   method: 'GET',
 });
+export const getResList = (url) => Request.syncAction({
+  url,
+  method: 'GET',
+});

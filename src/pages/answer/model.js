@@ -7,7 +7,8 @@ export default {
     "info": {},
     "questionnaire":{},
     "anw":{},
-    "res": {} // 进入填报的返回结果
+    "res": {}, // 进入填报的返回结果
+    "namelist": []
   },
 
   effects: {
@@ -47,6 +48,15 @@ export default {
         type: 'save',
         payload: {
           res: data
+        }
+      });
+    },
+    * getNamelist({ payload: values, url }, { call, put }) {
+      const { data } = yield call(answerApi.getNamelist, url);
+      yield put({
+        type: 'save',
+        payload: {
+          namelist: data
         }
       });
     },

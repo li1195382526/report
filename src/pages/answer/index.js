@@ -23,7 +23,6 @@ class Answer extends Component {
       selector: ['小名', '小花', '小亮', '甜甜'],
       selectorChecked: '小名',
       mobile:15526080904,
-      reportId:57,
       periodCount:1,//周期数
       passWord:'',
       isPassWord:false,
@@ -35,6 +34,7 @@ class Answer extends Component {
     this.handlePassword = this.handlePassword.bind(this)
     this.handleNum = this.handleNum.bind(this)
     this.join = this.join.bind(this)
+    this.getNamelist = this.getNamelist.bind(this)
   }
 
   componentWillMount() {
@@ -50,20 +50,28 @@ class Answer extends Component {
 
   //获取问卷
   getQuestionner(){
+    const id = this.$router.params.listId
     Taro.getSystemInfo({
       success: (res) => {
         this.setState({userAgent: JSON.stringify(res)})
       }
     })
-    //const {reportId} = this.$router.params
     this.props.dispatch({
       type: 'answer/getQuestionner',
       token: this.props.token,
-      url:`/v3/report/${57}`
+      url:`/v3/report/${id}`
     }).then(() => {
       if(!this.$router.params.from) {
         this.join()
       }
+    })
+  }
+
+  // 获取名单
+  getNamelist() {
+    this.props.dispatch({
+      type: 'answer/getNamelist',
+      url:`/v3/report/${this.$router.params.listId}/namelist`
     })
   }
 
@@ -73,12 +81,9 @@ class Answer extends Component {
   }
 
   submit(){
-    const {mobile,reportId,periodCount} = this.state
+    const {mobile, periodCount} = this.state
     const {res, anw, wxInfo} = this.props
-    // let obj = {}
-    // for(let i in anw) {
-    //   obj[i] = JSON.stringify(anw[i])
-    // }
+    const id = this.$router.params.listId
     let params = {
       nickname: wxInfo.nickName,
       ctl: res.data.ctl,
@@ -87,7 +92,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/subMitAnswer',
       token: this.props.token,
-      url:`/v3/report/${reportId}/participant/${mobile}/submit`,
+      url:`/v3/report/${id}/participant/${mobile}/submit`,
       payload: params
     })
     
@@ -125,12 +130,13 @@ class Answer extends Component {
   }
   // 进入填报
   join() {
-    const {reportId, passWord, userAgent} = this.state
+    const {passWord, userAgent} = this.state
+    const id = this.$router.params.listId
     var mobile = Taro.getStorageSync('mobile')
     let params = {
       mobile,
       pwd: passWord,
-      listIndex: 1,
+      listIndex: '',
       userAgent
     }
     Taro.showLoading({
@@ -141,7 +147,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/joinReport',
       token: this.props.token,
-      url:`/v3/report/${reportId}/join`,
+      url:`/v3/report/${id}/join`,
       payload: params
     }).then(() => {
       Taro.hideLoading()
@@ -150,7 +156,7 @@ class Answer extends Component {
         Taro.showToast({
           title: res.message,
           icon: 'none',
-          duration: 2000,
+          duration: 1000,
           mask: true
         })
         this.setState({isPassWord: true})
@@ -158,9 +164,10 @@ class Answer extends Component {
         Taro.showToast({
           title: res.message,
           icon: 'none',
-          duration: 2000,
+          duration: 1000,
           mask: true
         })
+        this.getNamelist()
         this.setState({isHavename: true})
       } else if(res.status == 203) {
         Taro.showToast({
@@ -178,8 +185,10 @@ class Answer extends Component {
 
   render() {
     const {isPassWord,isHavename, passWord} = this.state
-    const {questionnaire,info} = this.props
+    const {questionnaire,info, namelist} = this.props
     const from = this.$router.params.from
+    const indexed = namelist.findIndex(item => item.status == 29)
+    const index = namelist.findIndex(item => item.status == 0)
     return (
       <View className='answer'>
           <View className='change-name'>
@@ -210,41 +219,31 @@ class Answer extends Component {
               <View className='answer-namelist'>
                 <View className='tip'>请对号入座，选择正确的名单进行填报</View>
                 <View className='content-name'>
-                  <View className='name' onClick={this.join}>
-                    <View className='name-key'>1</View>
-                    <View className='name-text'>小名</View>
-                  </View>
-                  <View className='name'>
-                    <View className='name-key'>1</View>
-                    <View className='name-text'>小名</View>
-                  </View>
-                  <View className='name'>
-                    <View className='name-key'>1</View>
-                    <View className='name-text'>小名</View>
-                  </View>
-                  <View className='name'>
-                    <View className='name-key'>1</View>
-                    <View className='name-text'>小名</View>
-                  </View>
+                  {namelist.map((item, key) => (
+                    item.status == 0 && (
+                      <View className='name' onClick={this.join} key={key}>
+                        <View className='name-key'>{key+1}</View>
+                        <View className='name-text'>{item.name}</View>
+                      </View>
+                    )
+                  ))}
+                  {index == -1 && <View className='name-text'>暂无可选名单，请联系管理员</View>}
                 </View>
                 <View>
                   <View className='finish'>已填报</View>
                   <View className='finish-namelist'>
-                    <View className='finish-name'>
-                      <View className='finish-key'>1</View>
-                      <View className='name'>小小</View>
-                    </View>
-                    <View className='finish-name'>
-                      <View className='finish-key'>1</View>
-                      <View className='name'>小小</View>
-                    </View>
-                    <View className='finish-name'>
-                      <View className='finish-key'>1</View>
-                      <View className='name'>小小</View>
-                    </View>
+                    {namelist.map((i,key1) => (
+                      i.status == 29 && (
+                        <View className='finish-name' key={key1}>
+                          <View className='finish-key'>{key1+1}</View>
+                          <View className='name'>{item.name}</View>
+                        </View>
+                      )
+                    ))}
+                    {indexed == -1 && <View className='name'>暂无回答完成人员</View>}
                   </View>
                 </View>
-                </View>
+              </View>
             </AtModalContent>
           </AtModal>
         )}
