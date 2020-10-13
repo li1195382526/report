@@ -118,14 +118,15 @@ export default {
       });
     },
     * getOwnerlist({ payload: values, token }, { call, put, select }) {
-      console.log(values)
-      const { page, createList } = yield select(state => state.home);
+      var { page, createList } = yield select(state => state.home);
       const { data } = yield call(homeApi.getOwnerlist, values, token);
+      console.log('======createList====',createList)
+
 
       yield put({
         type: 'save',
         payload: {
-          createList:data.data,
+          createList:createList.concat(data.data),
         }
       });
     },

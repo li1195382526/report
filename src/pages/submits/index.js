@@ -31,19 +31,6 @@ class Submits extends Component {
   
   };
 
-  //小程序分享
-  onShareAppMessage(res) {
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-      console.log(res.target)
-    }
-    return {
-      title:  '云调查',
-      path: '/pages/answer/index?',
-      imageUrl: 'https://www.epanel.cn/images/answer.jpg'
-    }
-  }
-
   handleBack(){
     Taro.redirectTo({
       url: '/pages/home/index'
@@ -51,7 +38,7 @@ class Submits extends Component {
   }
   // 查看结果
   handleResult() {
-    Taro.navigateTo({url: '../answerDetail/index'})
+    Taro.navigateTo({url: `../answerDetail/index?reportId=${this.$router.params.reportId}`})
   }
   render() {
     return (
@@ -68,7 +55,6 @@ class Submits extends Component {
         <View className='release-btn'>
           <View>
             <AtButton type='primary' className='btn' onClick={this.handleBack}>我要创建</AtButton>
-            {/* <AtButton type='primary' className='btn' openType='share'>我要创建</AtButton> */}
           </View>
           <View>
             <AtButton type='secondary'>修改填报</AtButton>

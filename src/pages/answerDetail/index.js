@@ -37,7 +37,7 @@ class answerDetail extends Component {
     // 查看单个样本答题数据
     lookAnswerResultById() {
         const mobile = Taro.getStorageSync('mobile')
-        const reportId = 52
+        const reportId = this.$router.params.reportId
         this.props.dispatch({
             type: 'answerDetail/getDetail',
             payload: {},
@@ -49,7 +49,7 @@ class answerDetail extends Component {
     }
     // 修改填报
     handleEdit() {
-        Taro.navigateTo({url: `../answer/index?from=answerDetail?listId=${this.state.reportId}`})
+        Taro.navigateTo({url: `../answer/index?from=answerDetail&listId=${this.$router.params.reportId}`})
     }
 
     componentWillMount() {

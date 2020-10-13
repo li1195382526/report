@@ -193,7 +193,7 @@ onTimeChange = e => {
       token: this.props.token,
       payload: params,
     }).then(()=>{
-      const {response} = this.props
+      var {response} = this.props
       this.props.dispatch({
         type: 'edit/publish',
         token: this.props.token,
@@ -203,7 +203,7 @@ onTimeChange = e => {
         const {qtnStatus,message} = this.props
         if(qtnStatus === 200){
           Taro.navigateTo({
-            url: '/pages/release/index'
+            url: `/pages/release/index?listId=${response.data.id}`
            })
         }else{
           this.handleTips('error',message)

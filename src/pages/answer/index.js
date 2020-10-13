@@ -93,7 +93,8 @@ class Answer extends Component {
       type: 'answer/subMitAnswer',
       token: this.props.token,
       url:`/v3/report/${id}/participant/${mobile}/submit`,
-      payload: params
+      payload: params,
+      reportId: this.$router.params.listId
     })
     
   }
@@ -129,14 +130,15 @@ class Answer extends Component {
     return
   }
   // 进入填报
-  join() {
+  join(item) {
     const {passWord, userAgent} = this.state
     const id = this.$router.params.listId
+    const listIndex = item ? item.listIndex : ''
     var mobile = Taro.getStorageSync('mobile')
     let params = {
       mobile,
       pwd: passWord,
-      listIndex: '',
+      listIndex,
       userAgent
     }
     Taro.showLoading({
@@ -221,7 +223,7 @@ class Answer extends Component {
                 <View className='content-name'>
                   {namelist.map((item, key) => (
                     item.status == 0 && (
-                      <View className='name' onClick={this.join} key={key}>
+                      <View className='name' onClick={() => this.join(item)} key={key}>
                         <View className='name-key'>{key+1}</View>
                         <View className='name-text'>{item.name}</View>
                       </View>

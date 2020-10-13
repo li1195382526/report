@@ -35,8 +35,7 @@ class Participates extends Component {
   }
   // 获取我参与的列表
   getParticipantlist() {
-    const { mobile } = this.props
-    console.log(this.props)
+    const mobile = Taro.getStorageSync('mobile')
     this.props.dispatch({
       type: 'home/getParticipantlist',
       token: this.props.token,

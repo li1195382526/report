@@ -61,7 +61,7 @@ class Home extends Component {
         isLogin: false
       })
     } else {
-      this.getOwnerlist()
+      // this.getOwnerlist()
       //获取周期
       //this.getCycle()
       this.setState({

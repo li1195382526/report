@@ -34,7 +34,7 @@ class List extends Component {
     return (
       <View className='page'>
         {createList && createList.map((item,key)=>(
-          <View className='create-qt'>
+          <View className='create-qt' key={key}>
           <AtCard
             note={`${item.creatorName || wxInfo.nickName} | ${item.updateTime || item.createTime} | 参与${item.pnlCount}/${item.totalCount}`}
             extra={item.status == 0 ? '编辑中':item.status == 2 ? '收集中' :'已结束'}

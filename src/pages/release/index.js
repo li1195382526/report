@@ -24,6 +24,7 @@ class Release extends Component {
       
     }
     this.handleBack = this.handleBack.bind(this)
+    this.edit = this.edit.bind(this)
   }
 
   componentWillMount() {
@@ -36,9 +37,10 @@ class Release extends Component {
       // 来自页面内转发按钮
       console.log(res.target)
     }
+    const id = this.$router.params.listId
     return {
       title:  '云调查',
-      path: '/pages/answer/index?',
+      path: `/pages/answer/index?listId=${id}`,
       imageUrl: 'https://www.epanel.cn/images/answer.jpg'
     }
   }
@@ -47,6 +49,10 @@ class Release extends Component {
     Taro.navigateTo({
       url: '/pages/home/index'
      })
+  }
+  edit() {
+    const id = this.$router.params.listId
+    Taro.navigateTo({url: `/pages/edit/index?reportId=${id}&isInit=2`})
   }
 
 
@@ -70,7 +76,7 @@ class Release extends Component {
             <AtButton type='secondary'>生成二维码</AtButton>
           </View>
           <View>
-            <AtButton type='primary'>修改填报内容</AtButton> 
+            <AtButton type='primary' onClick={this.edit}>修改填报内容</AtButton> 
           </View>
         </View>
         <View className='release-bottom'>

@@ -24,15 +24,14 @@ export default {
         }
       });
     },
-    * subMitAnswer({ payload: values,token,url }, { call, put, select }) {
-      const { page, createList } = yield select(state => state.home);
+    * subMitAnswer({ payload: values,token,url, reportId }, { call, put }) {
       const { data } = yield call(answerApi.subMitAnswer, values,token, url);
       yield put({
         type: 'save',
       });
       if(data.status == 200) {
         Taro.navigateTo({
-          url: '/pages/submits/index'
+          url: `/pages/submits/index?reportId=${reportId}`
         })
       } else {
         Taro.showToast({
