@@ -5,7 +5,6 @@ import { AtIcon,AtList,AtListItem }  from 'taro-ui'
 import './index.scss'
 // eslint-disable-next-line import/first
 import { connect } from '@tarojs/redux';
-import {choiceOpt,openOpt} from '../../config'
 
 @connect(({edit,home, common }) => ({
     ...edit,
@@ -28,6 +27,51 @@ class NewQuestion extends Component {
     let questionnaire = this.props.questionnaire
     const index = questionnaire.pageList[0].qtList.length
     let optlist = []
+    const choiceOpt = [{
+      "fixSeq":"A1",
+      "position":0,
+      "val":1,
+      "mySeq":"A1",
+      "input":false,
+      "fmt":"text",
+      "seq":1,
+      "img":"",
+      "label":"",
+      "conf":{},
+      "required":true,
+      "optQuote":false
+    },
+    {
+      "fixSeq":"A2",
+      "position":0,
+      "val":1,
+      "mySeq":"A2",
+      "input":false,
+      "fmt":"text",
+      "seq":1,
+      "img":"",
+      "label":"",
+      "conf":{},
+      "required":true,
+      "optQuote":false
+    }
+    ]
+    
+    const openOpt = [{
+      "fixSeq":"A1",
+      "position":0,
+      "val":1,
+      "mySeq":"A1",
+      "input":false,
+      "fmt":"text",
+      "seq":1,
+      "img":"",
+      "label":"",
+      "conf":{},
+      "required":true,
+      "optQuote":false
+    }
+    ]
     if(value == 0 || value == 1){
       optlist = choiceOpt
     }else{
