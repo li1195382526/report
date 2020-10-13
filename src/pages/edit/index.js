@@ -49,6 +49,7 @@ class Edit extends Component {
 
   componentWillMount(){
     const init = this.$router.params.isInit
+    console.log(init)
     //第一次编辑填报前端数据，编辑中问卷获取问卷信息
     if(init == 1 || init == 2){
       this.getQuestionner()

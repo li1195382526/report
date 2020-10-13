@@ -46,7 +46,7 @@ class Participates extends Component {
     this.setState({ status: item.status }, () => {
       if (item.status == 0) {
         Taro.navigateTo({
-          url: `/pages/answer/index?listId=${item.id}`
+          url: `/pages/answer/index?listId=${item.id}&period=${item.currentPeriod}`
         })
       } else {
         this.props.handlePart(item)

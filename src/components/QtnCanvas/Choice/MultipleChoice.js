@@ -45,7 +45,7 @@ class MultipleChoice extends Component {
   }
 
   render() {
-    const {opts,anw} = this.props
+    const {opts,anw,noModify} = this.props
     
     return (
       <View className='single-choice'>
@@ -57,7 +57,12 @@ class MultipleChoice extends Component {
             <View className='single-opts'>
               <View>{val.label}</View>
               <View>
-              <Checkbox value='选中' checked={isSelected} onClick={()=>this.handleChange(val,isSelected)}></Checkbox>
+              <Checkbox 
+                disabled={noModify} 
+                value='选中' 
+                checked={isSelected} 
+                onClick={()=>this.handleChange(val,isSelected)}
+              ></Checkbox>
               </View>
             </View>
           )

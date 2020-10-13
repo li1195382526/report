@@ -25,7 +25,10 @@ class ViewData extends Component {
       current: 0,
       isFinished: false, // 默认先展示已填报的
       isMenge: false,
-      itemInfo: {}
+      itemInfo: {},
+      currentReportId:'',
+      currentMobile:'',
+      currentPeriod:''
     }
     this.handelToggle = this.handelToggle.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -78,7 +81,13 @@ class ViewData extends Component {
   }
   // 列表点击
   handleClick(item) {
+    console.log(item)
     const {isFinished} = this.state
+    this.setState({
+      currentReportId:item.reportId,
+      currentMobile:item.mobile,
+      currentPeriod:item.period
+    })
     if(isFinished) {
       this.setState({isMenge: true, itemInfo: item})
     } else {
@@ -104,10 +113,18 @@ class ViewData extends Component {
   // 查看记录
   handleView() {
     this.cancel()
-    Taro.navigateTo({url: `../answer/index?from=viewData&listId=${this.$router.params.reportId}`})
+    const {currentPeriod} = this.state
+    Taro.navigateTo({url: `../answer/index?from=viewData&listId=${this.$router.params.reportId}&period=${currentPeriod}`})
   }
+
   // 删除记录
   delItem() {
+    const {currentPeriod,currentMobile,currentReportId} = this.state
+    this.props.dispatch({
+			type: 'dataList/delList',
+			token: this.props.token,
+			url: `/v3/report/${currentReportId}/period/${currentPeriod}/participant/${currentMobile}/result`
+		})
     this.cancel()
   }
   cancel() {

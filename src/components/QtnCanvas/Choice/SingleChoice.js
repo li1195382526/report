@@ -36,7 +36,7 @@ class SingleChoice extends Component {
   }
 
   render() {
-    const {opts,anw} = this.props
+    const {opts,anw,noModify} = this.props
     return (
       <View className='single-choice'>
         {opts.optlist.map((val)=> {
@@ -47,7 +47,12 @@ class SingleChoice extends Component {
             <View className='single-opts'>
               <View>{val.label}</View>
               <View>
-                <Radio value='选中' checked={isSelected} onClick={()=>this.handleChange(val)}></Radio>
+                <Radio value='选中'
+                  disabled={noModify} 
+                  checked={isSelected} 
+                  onClick={()=>this.handleChange(val)}
+                >
+                </Radio>
               </View>
             </View>
           )

@@ -8,7 +8,8 @@ export default {
     "questionnaire":{},
     "anw":{},
     "res": {}, // 进入填报的返回结果
-    "namelist": []
+    "namelist": [],
+    "noModify":false
   },
 
   effects: {
@@ -64,7 +65,7 @@ export default {
       yield put({
         type: 'save',
         payload: {
-          namelist: data
+          anw: data
         }
       });
     },

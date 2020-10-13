@@ -32,7 +32,8 @@ class Home extends Component {
       ispartOpened: false,
       isDel: false,
       opened: false,
-      reportId: ''
+      reportId: '',
+      currentPeriod:''
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -318,7 +319,8 @@ class Home extends Component {
       this.setState({
         ispartOpened: true,
         status: val.status,
-        reportId: val.id
+        reportId: val.id,
+        currentPeriod:val.currentPeriod
       })
     }
   }
@@ -345,7 +347,7 @@ class Home extends Component {
   // 修改填报
   editAns() {
     this.close()
-    Taro.navigateTo({url: `../answer/index?from=home&listId=${this.state.reportId}`})
+    Taro.navigateTo({url: `../answer/index?from=home&listId=${this.state.reportId}&period=${this.state.currentPeriod}`})
   }
 
   render() {

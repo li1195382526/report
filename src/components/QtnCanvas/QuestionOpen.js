@@ -35,7 +35,7 @@ class QuestionOpen extends Component {
   }
   
   render() {
-    const {opts,anw} = this.props
+    const {opts,anw,noModify} = this.props
     return (
       <View className='open'>
         <View className='open-text'>
@@ -44,9 +44,10 @@ class QuestionOpen extends Component {
           const value = inputValue && inputValue.split('_')[1]
           return(
             <Input type='text'
-            value={value}
-            className='open-input' 
-            onChange={(val)=>this.handleChange(val,item)} 
+              disabled={noModify} 
+              value={value}
+              className='open-input' 
+              onChange={(val)=>this.handleChange(val,item)} 
             />
          )
         })}

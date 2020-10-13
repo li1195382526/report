@@ -47,7 +47,17 @@ class Answer extends Component {
 
   componentDidMount(){
     this.getQuestionner()
-    this.getAnswer()
+    const from = this.$router.params.from
+    if( from === 'answerDetail' || from === 'home' || from === 'viewData'){
+      this.getAnswer()
+    }
+    this.props.dispatch({
+      type: 'answer/save',
+      payload: {
+        noModify:from === 'viewData' ? true :false
+      }
+    })
+    
   }
 
   //获取问卷
@@ -72,16 +82,10 @@ class Answer extends Component {
   //获取指定填报结果数据
   getAnswer(){
     const {mobile} = this.state
-    const reportId = 72
-    const period = 2
-    const params = {
-      reportId,
-      period,
-      mobile
-    }
+    const reportId = this.$router.params.listId
+    const period = this.$router.params.period
     this.props.dispatch({
       type: 'answer/getAnswer',
-      //payload: params,
       token: this.props.token,
       url:`/v3/report/${reportId}/period/${period}/participant/${mobile}/answer`
     })

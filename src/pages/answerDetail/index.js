@@ -38,6 +38,7 @@ class answerDetail extends Component {
     lookAnswerResultById() {
         const mobile = Taro.getStorageSync('mobile')
         const reportId = this.$router.params.reportId
+        console.log(this.props.periods)
         this.props.dispatch({
             type: 'answerDetail/getDetail',
             payload: {},
@@ -48,8 +49,8 @@ class answerDetail extends Component {
 
     }
     // 修改填报
-    handleEdit() {
-        Taro.navigateTo({url: `../answer/index?from=answerDetail&listId=${this.$router.params.reportId}`})
+    handleEdit(index) {
+        Taro.navigateTo({url: `../answer/index?from=answerDetail&listId=${this.$router.params.reportId}&period=${index+1}`})
     }
 
     componentWillMount() {
@@ -81,7 +82,7 @@ class answerDetail extends Component {
                     </View>
                     <View className='handle'>
                         <View>2020-8-25填答</View>
-                        <View className="edit" onClick={this.handleEdit}>修改填报</View>
+                        <View className="edit" onClick={(val)=>this.handleEdit(index)}>修改填报</View>
                     </View>
                     <View className="answer__info">
                         {detail.map((doc, key) => (
