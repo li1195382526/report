@@ -25,3 +25,10 @@ export const getNamelist = ( url) => syncAction({
   method: "Get",
   url,
 });
+
+export const getAnswer = ( data,token,url) => syncAction({
+  data,
+  method: "GET",
+  token,
+  url,
+});
