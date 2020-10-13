@@ -59,6 +59,15 @@ export default {
         }
       });
     },
+    * getAnswer({ payload: values,token, url }, { call, put }) {
+      const { data } = yield call(answerApi.getAnswer,values,token, url);
+      yield put({
+        type: 'save',
+        payload: {
+          namelist: data
+        }
+      });
+    },
   },
 
   reducers: {

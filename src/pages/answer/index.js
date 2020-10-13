@@ -35,6 +35,7 @@ class Answer extends Component {
     this.handleNum = this.handleNum.bind(this)
     this.join = this.join.bind(this)
     this.getNamelist = this.getNamelist.bind(this)
+    this.getAnswer = this.getAnswer.bind(this)
   }
 
   componentWillMount() {
@@ -46,6 +47,7 @@ class Answer extends Component {
 
   componentDidMount(){
     this.getQuestionner()
+    this.getAnswer()
   }
 
   //获取问卷
@@ -64,6 +66,24 @@ class Answer extends Component {
       if(!this.$router.params.from) {
         this.join()
       }
+    })
+  }
+
+  //获取指定填报结果数据
+  getAnswer(){
+    const {mobile} = this.state
+    const reportId = 72
+    const period = 2
+    const params = {
+      reportId,
+      period,
+      mobile
+    }
+    this.props.dispatch({
+      type: 'answer/getAnswer',
+      //payload: params,
+      token: this.props.token,
+      url:`/v3/report/${reportId}/period/${period}/participant/${mobile}/answer`
     })
   }
 
@@ -179,7 +199,7 @@ class Answer extends Component {
           mask: true
         })
         setTimeout(() => {
-          Taro.redirectTo({url: '../home/index'})
+          //Taro.redirectTo({url: '../home/index'})
         }, (2000));
       }
     })
