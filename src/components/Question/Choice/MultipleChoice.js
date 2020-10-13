@@ -84,7 +84,7 @@ class MultipleChoice extends Component {
   }
   
   render() {
-    const {opts} = this.props
+    const {opts,isModify} = this.props
     return (
       <View className='multi-choice'>
         <View className='multi-width'>
@@ -111,9 +111,16 @@ class MultipleChoice extends Component {
                   onChange={(val)=>this.handleChange(val,item)}
                 />
               </View>
-                <View className='multi-icon' onClick={(val)=>this.handleDeleteOpt(item,key)}>
+              {isModify && (
+                 <View className='multi-icon' onClick={(val)=>this.handleDeleteOpt(item,key)}>
                   <AtIcon value='subtract-circle' size='20' color='red'></AtIcon>
-                </View> 
+                </View>
+              )}
+                 {!isModify && (
+                 <View className='multi-icon'>
+                  <AtIcon value='subtract-circle' size='20' color='gray'></AtIcon>
+                </View>
+              )}
             </View>
           ))}
         </View>

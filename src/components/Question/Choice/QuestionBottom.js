@@ -21,40 +21,43 @@ class QuestionBottom extends Component {
   }
 
   handleChange () {
-    const {opts,isChange} = this.props
+    const {opts,isChange,isModify} = this.props
     const index = opts.optlist.length
+    if(isModify){
     let questionnaire = this.props.questionnaire
-    //Object.assign(newObj,user,page)
-    const isHaveFixsew = opts.optlist[opts.optlist.length-1]
-    const fixSeq = isHaveFixsew  ? isHaveFixsew.fixSeq .replace(/[^0-9]/ig,"") : 0
-    const opt = [{
-      "fixSeq":`A${parseInt(fixSeq)+1 }`,
-      "position":0,
-      "val":1,
-      "mySeq":`A${index+1 }`,
-      "input":false,
-      "fmt":"text",
-      "seq":1,
-      "img":"",
-      "label":'',
-      "conf":{},
-      "required":true,
-      "optQuote":false
-    }]
-    const newOptList = opts.optlist.concat(opt)
-    questionnaire.pageList[0].qtList.map((item,key)=>{
-      if(item.disSeq === opts.disSeq){
-         item.optlist = newOptList
-      } 
-    })
+        //Object.assign(newObj,user,page)
+        const isHaveFixsew = opts.optlist[opts.optlist.length-1]
+        const fixSeq = isHaveFixsew  ? isHaveFixsew.fixSeq .replace(/[^0-9]/ig,"") : 0
+        const opt = [{
+          "fixSeq":`A${parseInt(fixSeq)+1 }`,
+          "position":0,
+          "val":1,
+          "mySeq":`A${index+1 }`,
+          "input":false,
+          "fmt":"text",
+          "seq":1,
+          "img":"",
+          "label":'',
+          "conf":{},
+          "required":true,
+          "optQuote":false
+        }]
+        const newOptList = opts.optlist.concat(opt)
+        questionnaire.pageList[0].qtList.map((item,key)=>{
+          if(item.disSeq === opts.disSeq){
+            item.optlist = newOptList
+          } 
+        })
+        
+        this.props.dispatch({
+            type: 'edit/save',
+            payload: {
+              questionnaire,
+              isChange:!isChange
+            }
+          })
+    }
     
-    this.props.dispatch({
-        type: 'edit/save',
-        payload: {
-          questionnaire,
-          isChange:!isChange
-        }
-      })
   }
   
   render() {
