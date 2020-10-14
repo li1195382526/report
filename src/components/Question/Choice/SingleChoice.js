@@ -99,7 +99,7 @@ class SingleChoice extends Component {
           onChange={this.handleText}
         />
           {opts.optlist.map((item,key)=>(
-            <View className='multi-opt'>
+            <View className='multi-opt' key={key}>
               <View className='multi-input'>
                 <AtInput
                   border={false}
