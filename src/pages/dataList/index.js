@@ -97,11 +97,10 @@ class DataList extends Component {
 			payload: params,
 			token: this.props.token,
 			url: `/v3/reportuser/${userinfo.id}/namelist/create`
+		}).then(() => {
+			this.setState({isOpen: false})
+			this.getDataList()
 		})
-		this.setState({
-			isOpen: false
-		})
-		this.getDataList()
 	}
 
 	handleManage(item) {
