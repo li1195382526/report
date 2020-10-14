@@ -85,20 +85,31 @@ class NameList extends Component {
   // 批量弹框确定
   onConfirm() {
     const { multipleInfo } = this.state
-    const { nameData } = this.props
+    let nameData = JSON.parse(JSON.stringify(this.props.nameData))
     let list = multipleInfo.split(/\s/g) // 回车符
     list = [...new Set(list)]
-    list.forEach((item, index) => {
-      if(item) {
+    let newlist = list.filter(i => i)
+    for(let item of newlist){
+      let limit = item.split(/[,，]/g).slice(1).filter(m => m)
+      if(limit.length) {
+        for(let i of limit) {
+          if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
+            Taro.atMessage({
+              message: `'${i}'号码格式有误，请仔细核对您的输入`,
+              type: 'error'
+            })
+            return
+          }
+        }
         let obj = {
           listIndex: nameData.length ? nameData[nameData.length - 1].listIndex + 1 : 1,
           name: item.split(/[,，]/g)[0],
-          limit: item.split(/[,，]/g).slice(1),
+          limit,
           status: 1
         }
         nameData.push(obj)
       }
-    })
+    }
     this.props.dispatch({
       type: 'dataList/uploadData',
       payload: nameData,
@@ -137,6 +148,16 @@ class NameList extends Component {
     const { nameData } = this.props
     let list = multipleInfo.split(/[,，]/g)
     list = [...new Set(nameData[bindKey].limit.concat(list))]
+    let newlist = list.filter(item => item)
+    for(let i of newlist) {
+      if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
+        Taro.atMessage({
+          message: `'${i}'号码格式有误，请仔细核对您的输入`,
+          type: 'error'
+        })
+        return
+      }
+    }
     nameData[bindKey].limit = list
     this.props.dispatch({
       type: 'dataList/uploadData',
@@ -166,11 +187,10 @@ class NameList extends Component {
       return
     }
     for (let item of nameData) { // 名字和电话非空
-      if(!item.name || !item.limit) {
+      if(!item.name || !item.limit.length) {
         Taro.atMessage({
-          'message': '详细人员列表的名字和联系方式为必填项，请检查您的输入',
-          'type': 'warning',
-          'duration': 2500
+          'message': '请您补齐所有预设名字与关联号码',
+          'type': 'error',
         })
         return
       }

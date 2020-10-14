@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtList, AtListItem, AtSteps, AtActionSheet, AtActionSheetItem } from 'taro-ui'
+import { AtList, AtListItem, AtSteps, AtActionSheet, AtActionSheetItem, AtMessage } from 'taro-ui'
 import { BeginToCollect } from '../../components/beginToCollect'
 import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
@@ -124,7 +124,9 @@ class ViewData extends Component {
 			type: 'dataList/delList',
 			token: this.props.token,
 			url: `/v3/report/${currentReportId}/period/${currentPeriod}/participant/${currentMobile}/result`
-		})
+		}).then(() => {
+      this.getResList()
+    })
     this.cancel()
   }
   cancel() {
@@ -142,6 +144,7 @@ class ViewData extends Component {
     const isnone = list.findIndex(item => item.id)
     return (
       <View className='view'>
+        <AtMessage/>
         <View className='view-data'>
            <AtSteps
             className='data-step'

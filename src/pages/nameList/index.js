@@ -100,20 +100,31 @@ class NameList extends Component {
   // 导入名单弹框确定按钮
   onConfirm() {
     const { multipleInfo } = this.state
-    let { tableList } = this.props
+    let tableList = JSON.parse(JSON.stringify(this.props.tableList))
     let list = multipleInfo.split(/\s/g) // 回车符
     list = [...new Set(list)]
-    list.forEach((item, index) => {
-      if(item) {
+    let newlist = list.filter(i => i)
+    for(let item of newlist){
+      let limit = item.split(/[,，]/g).slice(1).filter(m => m)
+      if(limit.length) {
+        for(let i of limit) {
+          if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
+            Taro.atMessage({
+              message: `'${i}'号码格式有误，请仔细核对您的输入`,
+              type: 'error'
+            })
+            return
+          }
+        }
         let obj = {
           listIndex: tableList.length ? tableList[tableList.length - 1].listIndex + 1 : 1,
           name: item.split(/[,，]/g)[0],
-          limit: item.split(/[,，]/g).slice(1),
+          limit,
           status: 1
         }
         tableList.push(obj)
       }
-    })
+    }
     this.props.dispatch({
       type: 'nameList/uploadData',
       payload: tableList,
@@ -171,6 +182,16 @@ class NameList extends Component {
     this.setState({poolTitle: value})
   }
   handleAddNameList() {
+    let { tableList } = this.props
+    for (let i of tableList) {
+      if(!i.name || !i.limit.length) {
+        Taro.atMessage({
+          message: `请您补齐所有预设名字与关联号码`,
+          type: 'error'
+        })
+        return
+      }
+    }
     this.setState({isPool: true})
   }
   // 保存名单库
@@ -205,7 +226,17 @@ class NameList extends Component {
     let { tableList } = this.props
     let list = multipleInfo.split(/[,，]/g)
     list = [...new Set(tableList[bindKey].limit.concat(list))]
-    tableList[bindKey].limit = list
+    let newlist = list.filter(item => item)
+    for(let i of newlist) {
+      if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
+        Taro.atMessage({
+          message: `'${i}'号码格式有误，请仔细核对您的输入`,
+          type: 'error'
+        })
+        return
+      }
+    }
+    tableList[bindKey].limit = newlist
     this.props.dispatch({
       type: 'nameList/uploadData',
       payload: tableList,
@@ -234,7 +265,16 @@ class NameList extends Component {
   // 完成
   finish() {
     const { tableList,info,isChange } = this.props
-    info.namelist = tableList
+    for (let i of tableList) {
+      if(!i.name || !i.limit.length) {
+        Taro.atMessage({
+          message: `请您补齐所有预设名字与关联号码`,
+          type: 'error'
+        })
+        return
+      }
+    }
+    info.namelist = JSON.parse(JSON.stringify(tableList))
     this.props.dispatch({
       type: 'edit/save',
       payload: {
@@ -242,17 +282,16 @@ class NameList extends Component {
         isChange:!isChange
       }
     })
-
     const from = this.$router.params.from
     if(from == 'dataList') { 
-    Taro.navigateBack({
-      delta: 2
-    })
-  }else{
-    Taro.navigateBack({
-      delta: 1
-    })
-  }
+      Taro.navigateBack({
+        delta: 2
+      })
+    }else{
+      Taro.navigateBack({
+        delta: 1
+      })
+    }
   }
 
   render() {
