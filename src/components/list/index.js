@@ -30,7 +30,8 @@ class List extends Component {
 }
 
   render() {
-    const {createList,wxInfo} = this.props
+    const {createList} = this.props
+    const wxInfo = Taro.getStorageSync('wxInfo')
     return (
       <View className='page'>
         {createList && createList.map((item,key)=>(

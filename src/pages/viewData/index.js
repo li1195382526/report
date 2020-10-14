@@ -139,6 +139,7 @@ class ViewData extends Component {
     const {periods, resList} = this.props
     const index = periods.findIndex((item) => item.isCurrent == 1)
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
+    const isnone = list.findIndex(item => item.id)
     return (
       <View className='view'>
         <View className='view-data'>
@@ -166,17 +167,20 @@ class ViewData extends Component {
         <View className='view-atlist'>
           {list.length && list.map((item, key) => (
             // <AtListItem key={key} title={`${key+1}. 李琴`} onClick={() => this.handleClick(item)} extraText={isFinished?'2020-08-24 10:35填报':'督促填报'} arrow='right'  />
-            <View className='item-content' onClick={() => this.handleClick(item)}>
-              <View className="left">{key+1+'.'+item.resultName}</View>
-              {isFinished && (<View className="right">{item.finishTime+'填报'}&gt;</View>)}
-              {!isFinished && (
-                <View className="right">
-                  <Button openType='share' className='r-btn'>督促填报&gt;</Button>
-                </View>
-              )}
-            </View>
+            item.id && (
+              <View className='item-content' onClick={() => this.handleClick(item)} key={key}>
+                <View className="left">{key+1+'.'+item.resultName}</View>
+                {isFinished && (<View className="right">{item.finishTime+'填报'}&gt;</View>)}
+                {!isFinished && (
+                  <View className="right">
+                    <Button openType='share' className='r-btn'>督促填报&gt;</Button>
+                  </View>
+                )}
+              </View>
+
+            )
           ))}
-          {list.length == 0 && <View className='notice'>暂无数据</View>}
+          {(list.length == 0 || isnone == -1) && <View className='notice'>暂无信息</View>}
         </View>
         {!isFinished && <Button className='view-radius' openType='share' onClick={this.share}>全部督促</Button>}
         <AtActionSheet isOpened={isMenge} onClose={this.cancel}>

@@ -102,17 +102,13 @@ export default {
       });
     },
     * copyReport({ payload: values, token,url }, { call, put, select }) {
-      const { page, createList } = yield select(state => state.home);
       const { data } = yield call(homeApi.copyReport, values, token, url);
-
       yield put({
         type: 'save',
       });
     },
     * deleteReport({ payload: values, token,url }, { call, put, select }) {
-      const { page, createList } = yield select(state => state.home);
       const { data } = yield call(homeApi.deleteReport, values, token, url);
-
       yield put({
         type: 'save',
       });
@@ -120,9 +116,6 @@ export default {
     * getOwnerlist({ payload: values, token }, { call, put, select }) {
       var { page, createList } = yield select(state => state.home);
       const { data } = yield call(homeApi.getOwnerlist, values, token);
-      console.log('======createList====',createList)
-
-
       yield put({
         type: 'save',
         payload: {

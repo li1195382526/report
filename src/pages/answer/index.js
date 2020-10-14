@@ -27,7 +27,9 @@ class Answer extends Component {
       passWord:'',
       isPassWord:false,
       isHavename:false,
-      userAgent: ''
+      userAgent: '',
+      checkNamelist: false,
+      togglelist: []
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
@@ -96,22 +98,33 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/getNamelist',
       url:`/v3/report/${this.$router.params.listId}/namelist`
+    }).then(() => {
+      let list = []
+      const {namelist} = this.props
+      for (let i of namelist) {
+        if(i.status == 0) {
+          list.push(i)
+        }
+      }
+      this.setState({togglelist: list})
     })
   }
 
   //切换人员名单
    onChange (e)  {
     console.log(e.detail.value)
+    const {togglelist} = this.state
+    this.join(togglelist[e.detail.value])
   }
 
   submit(){
     const {mobile, periodCount} = this.state
-    const {res, anw, wxInfo} = this.props
+    const {res, anw} = this.props
     const id = this.$router.params.listId
     let params = {
-      nickname: wxInfo.nickName,
       ctl: res.data.ctl,
-      anw
+      anw,
+      rep: res.data.rep
     }
     this.props.dispatch({
       type: 'answer/subMitAnswer',
@@ -194,7 +207,7 @@ class Answer extends Component {
           mask: true
         })
         this.getNamelist()
-        this.setState({isHavename: true})
+        this.setState({isHavename: true, checkNamelist: true})
       } else if(res.status == 203) {
         Taro.showToast({
           title: res.message,
@@ -210,21 +223,23 @@ class Answer extends Component {
   }
 
   render() {
-    const {isPassWord,isHavename, passWord} = this.state
-    const {questionnaire,info, namelist} = this.props
+    const {isPassWord,isHavename, passWord, checkNamelist, togglelist} = this.state
+    const {questionnaire,info, namelist, res} = this.props
     const from = this.$router.params.from
     const indexed = namelist.findIndex(item => item.status == 29)
     const index = namelist.findIndex(item => item.status == 0)
     return (
       <View className='answer'>
+        {info.useNamelist == 1 && (
           <View className='change-name'>
-            <View>小名</View>
-            {!from && (
-              <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-                  <View>切换名单</View>
+            <View>{res.status == 200 ? res.data.rep.name : '未知'}</View>
+            {checkNamelist && (
+              <Picker mode='selector' range={togglelist} rangeKey='name' onChange={this.onChange}>
+                <View>切换名单</View>
               </Picker>
             )}
           </View>
+        )}
         <View className='answer-title'>
           <View className='title'>{info.title}</View>
           <View className='memo'>{info.memo}</View>
@@ -262,7 +277,7 @@ class Answer extends Component {
                       i.status == 29 && (
                         <View className='finish-name' key={key1}>
                           <View className='finish-key'>{key1+1}</View>
-                          <View className='name'>{item.name}</View>
+                          <View className='name'>{i.name}</View>
                         </View>
                       )
                     ))}

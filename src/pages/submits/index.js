@@ -50,7 +50,7 @@ class Submits extends Component {
           填报成功
         </View>
         <View className='release-mes'>
-          填报提交成功，感谢您对速报的支持
+          填报提交成功，感谢您对准报的支持
         </View>
         <View className='release-btn'>
           <View>

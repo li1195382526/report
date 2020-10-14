@@ -57,8 +57,8 @@ class Edit extends Component {
       this.props.dispatch({
         type: 'edit/save',
         payload: {
-          info,
-          questionnaire
+          info: JSON.parse(JSON.stringify(info)),
+          questionnaire: JSON.parse(JSON.stringify(questionnaire))
         }
       })
     }

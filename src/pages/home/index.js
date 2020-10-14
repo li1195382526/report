@@ -62,7 +62,6 @@ class Home extends Component {
         isLogin: false
       })
     } else {
-      // this.getOwnerlist()
       //获取周期
       //this.getCycle()
       this.setState({
@@ -72,6 +71,13 @@ class Home extends Component {
   };
 
   componentDidShow = () => {
+    this.props.dispatch({
+      type: 'home/save',
+      payload: {
+        createList: [],
+        page: 1
+      },
+    })
     this.getOwnerlist()
   }
 
@@ -124,7 +130,8 @@ class Home extends Component {
       type: 'home/save',
       payload: {
         page: 1,
-        qtnList: []
+        qtnList: [],
+        createList: []
       },
     });
   }
@@ -253,11 +260,16 @@ class Home extends Component {
       payload: params,
       token: this.props.token,
       url: `/v3/report/${reportId}/copy`
-    }).then(
-      () => {
-        this.getOwnerlist()
-      }
-    )
+    }).then(() => {
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          createList: [],
+          page: 1
+        },
+      })
+      this.getOwnerlist()
+    })
   }
 
   //删除填报
@@ -272,6 +284,13 @@ class Home extends Component {
       token: this.props.token,
       url: `/v3/report/${reportId}`
     }).then(() => {
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          createList: [],
+          page: 1
+        },
+      })
       this.getOwnerlist()
     })
     this.delCancel()
@@ -341,6 +360,13 @@ class Home extends Component {
       token: this.props.token,
       url: `/v3/report/${reportId}/close`
     }).then(() => {
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          createList: [],
+          page: 1
+        },
+      })
       this.getOwnerlist()
     })
   }
