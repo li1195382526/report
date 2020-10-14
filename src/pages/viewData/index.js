@@ -124,7 +124,9 @@ class ViewData extends Component {
 			type: 'dataList/delList',
 			token: this.props.token,
 			url: `/v3/report/${currentReportId}/period/${currentPeriod}/participant/${currentMobile}/result`
-		})
+		}).then(()=>{
+      this.getResList()
+    })
     this.cancel()
   }
   cancel() {

@@ -25,14 +25,14 @@ export default {
         }
       });
     },
-    * subMitAnswer({ payload: values,token,url, reportId }, { call, put }) {
+    * subMitAnswer({ payload: values,token,url, reportId,period }, { call, put }) {
       const { data } = yield call(answerApi.subMitAnswer, values,token, url);
       yield put({
         type: 'save',
       });
       if(data.status == 200) {
         Taro.navigateTo({
-          url: `/pages/submits/index?reportId=${reportId}`
+          url: `/pages/submits/index?reportId=${reportId}&period=${period}`
         })
       } else {
         Taro.showToast({

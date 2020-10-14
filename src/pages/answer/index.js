@@ -1,10 +1,12 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Picker} from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction,AtButton } from 'taro-ui'
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction,AtButton,AtMessage } from 'taro-ui'
 import './index.scss';
 import {QtnCanvas} from '../../components/QtnCanvas'
+import {fromJS} from 'immutable'
 import { info } from '../../config';
+import * as validates from "../../utils/validate";
 
 @connect(({ answer, home, common }) => ({
   ...answer,
@@ -119,19 +121,33 @@ class Answer extends Component {
 
   submit(){
     const {mobile, periodCount} = this.state
-    const {res, anw} = this.props
+    const {res, anw,questionnaire} = this.props
     const id = this.$router.params.listId
     let params = {
       ctl: res.data.ctl,
       anw,
       rep: res.data.rep
     }
+
+    //必答验证
+    //questionnaire.pageList[0] 是以为现在没有分页
+    const { pass, message } = validates.validate(fromJS(questionnaire.pageList[0].qtList), fromJS(anw));
+    if (!pass) {
+      Taro.atMessage({
+        'message': message,
+        'type': 'error',
+        'duration': 1000
+      })
+      return;
+    }
+
     this.props.dispatch({
       type: 'answer/subMitAnswer',
       token: this.props.token,
       url:`/v3/report/${id}/participant/${mobile}/submit`,
       payload: params,
-      reportId: this.$router.params.listId
+      reportId: this.$router.params.listId,
+      period:periodCount
     })
     
   }
@@ -230,6 +246,7 @@ class Answer extends Component {
     const index = namelist.findIndex(item => item.status == 0)
     return (
       <View className='answer'>
+        <AtMessage />
         {info.useNamelist == 1 && (
           <View className='change-name'>
             <View>{res.status == 200 ? res.data.rep.name : '未知'}</View>
