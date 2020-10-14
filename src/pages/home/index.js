@@ -107,8 +107,6 @@ class Home extends Component {
       current: page,
       pageSize
     }
-    console.log(this.props.token)
-    console.log(Taro.getStorageSync('token'))
     if(!!this.props.token && !!Taro.getStorageSync('token')){
       this.props.dispatch({
         type: 'home/getOwnerlist',

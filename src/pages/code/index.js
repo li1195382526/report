@@ -4,7 +4,12 @@ import Taro, { Component} from '@tarojs/taro'
 import './index.scss'
 import imageUrl from '../../assets/images/u3232.png';
 import qrcode from '../../assets/images/code.jpg';
+import { connect } from '@tarojs/redux';
  
+@connect(({ home, common }) => ({
+  ...home,
+  ...common
+}))
 export default class Detail extends Component {
   config = {
     navigationBarTitleText: '二维码'
@@ -15,30 +20,47 @@ export default class Detail extends Component {
    */
   constructor() {
     this.state = {
-      //用户信息
-      userInfo: {},
-      // 是否展示canvas
-      isShowCanvas: false,
+
     }
   }
  
-  /**
-   * 获取用户信息
-   */
-  getUserInfo (e) {
-    if(!e.detail.userInfo) {
-      Taro.showToast({
-        title: '获取用户信息失败，请授权',
-        icon: 'none'
+
+  componentWillMount(){
+    this.generateCode()
+    this.drawImage()
+  }
+
+  //动态二维码获取
+  generateCode(){
+    //GET https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
+    Taro.request({
+      url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=	wxc860d9612140ebd3&secret=3c0dc295779e688da881665f93239923',
+      data: {
+        scene: `c=xxx&p=2&g=123`,
+        width: 280,
+        page:'page/code/index'
+      },
+      header: {
+        'content-type': 'application/json'
+      }
+    }).then(res1 => {
+      const access_token = res1.data.access_token
+      console.log(access_token)
+      Taro.request({
+        url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`,
+        data: {
+          scene: `c=xxx&p=2&g=123`,
+          width: 280,
+          page:'page/home/index'
+        },
+        method:"POST",
+        header: {
+          'content-type': 'application/json'
+        }
+      }).then(res => {
+          console.log(res.data)
+        })
       })
-      return
-    }
-    this.setState({
-      isShowCanvas: true,
-      userInfo: e.detail.userInfo
-    }, () => {
-      this.drawImage()
-    })
   }
  
   /**
@@ -55,10 +77,10 @@ export default class Detail extends Component {
     ctx.fillRect(0,0,400,500);
  
     //绘制圆形用户头像
-    let { userInfo } = this.state;
-    // console.warn("userInfo", userInfo)
+    let { wxInfo } = this.props;
+    // console.warn("wxInfo", wxInfo)
     // let res = await Taro.downloadFile({
-    //   url: userInfo.avatarUrl
+    //   url: wxInfo.avatarUrl
     // });
     // let imageUrl = await Taro.downloadFile({
     //   url: 'https://tva1.sinaimg.cn/large/00831rSTgy1gczok56tkzj30m80m8qe4.jpg'
@@ -78,7 +100,7 @@ export default class Detail extends Component {
     ctx.save()
     ctx.setFontSize(16)
     ctx.setFillStyle('#FFF')
-    // ctx.fillText(userInfo.nickName, 100, 200)
+    // ctx.fillText(wxInfo.nickName, 100, 200)
     ctx.setFontSize(12)
     ctx.setFillStyle('black')
     ctx.fillText('准报小程序', 20, 280)
@@ -135,14 +157,9 @@ export default class Detail extends Component {
   }
  
   render () {
-    let { isShowCanvas } = this.state;
     return (
       <View className='index'>
-        <Button onGetUserInfo={this.getUserInfo} openType="getUserInfo" type="primary" size="mini" className="btn-share">分享图片</Button>
- 
-        {
-          isShowCanvas &&
-          <View className='canvas-wrap'>
+       <View className='canvas-wrap'>
             <Canvas 
               id='card-canvas'
               className='card-canvas'
@@ -150,9 +167,8 @@ export default class Detail extends Component {
               canvasId='cardCanvas'
             >
             </Canvas>
-            <Button onClick={this.saveCard} className="btn-save" type="primary" size="mini">保存到相册</Button>
+            <Button onClick={this.saveCard} className='btn-save' type='primary' size='mini'>保存到相册</Button>
           </View>
-        }
       </View>
     )
   }

@@ -25,6 +25,7 @@ class Release extends Component {
     }
     this.handleBack = this.handleBack.bind(this)
     this.edit = this.edit.bind(this)
+    this.handleCode = this.handleCode.bind(this)
   }
 
   componentWillMount() {
@@ -50,6 +51,14 @@ class Release extends Component {
       url: '/pages/home/index'
      })
   }
+
+  //生成二维码
+  handleCode(){
+    Taro.navigateTo({
+      url: '/pages/code/index'
+     })
+  }
+
   edit() {
     const id = this.$router.params.listId
     Taro.navigateTo({url: `/pages/edit/index?reportId=${id}&isInit=2`})
@@ -73,7 +82,7 @@ class Release extends Component {
             <AtButton type='primary' className='btn' openType='share'>分享微信群</AtButton>
           </View>
           <View>
-            <AtButton type='secondary'>生成二维码</AtButton>
+            <AtButton type='secondary' onClick={this.handleCode}>生成二维码</AtButton>
           </View>
           <View>
             <AtButton type='primary' onClick={this.edit}>修改填报内容</AtButton> 
