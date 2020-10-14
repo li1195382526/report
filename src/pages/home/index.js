@@ -107,11 +107,15 @@ class Home extends Component {
       current: page,
       pageSize
     }
-    this.props.dispatch({
-      type: 'home/getOwnerlist',
-      payload: params,
-      token: this.props.token,
-    })
+    console.log(this.props.token)
+    console.log(Taro.getStorageSync('token'))
+    if(!!this.props.token && !!Taro.getStorageSync('token')){
+      this.props.dispatch({
+        type: 'home/getOwnerlist',
+        payload: params,
+        token: this.props.token,
+      })
+    }
   }
 
   // 小程序上拉加载

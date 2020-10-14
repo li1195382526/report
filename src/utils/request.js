@@ -15,8 +15,6 @@ export function syncAction(options) {
   console.log('======')
   token = options.token || token
   let currentUrl = options.url ? options.url : defaultUrl
-  console.log(token)
-  console.log(MAINHOST + currentUrl)
   return Taro.request({
     url: MAINHOST + currentUrl,
     data:  options.data,
@@ -38,9 +36,9 @@ export function syncAction(options) {
         }
       } else if (data.status == HTTP_STATUS.AUTHENTICATE) {
         Taro.removeStorageSync('token')
-        // Taro.redirectTo({
-        //   url: '/pages/home/index',
-        // })
+        Taro.redirectTo({
+          url: '/pages/home/index',
+        })
       }
     },
     fail: function () {

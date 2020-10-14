@@ -130,7 +130,7 @@ class Answer extends Component {
     }
 
     //必答验证
-    //questionnaire.pageList[0] 是以为现在没有分页
+    //questionnaire.pageList[0] 是因为现在没有分页
     const { pass, message } = validates.validate(fromJS(questionnaire.pageList[0].qtList), fromJS(anw));
     if (!pass) {
       Taro.atMessage({
