@@ -122,19 +122,16 @@ class DataList extends Component {
 	}
 	// 删除名单库
 	delItem() {
-		let params = {
-			userId: this.state.userId,
-			listId: this.state.listId,
-		}
 		this.cancel()
 		Taro.showLoading({
 			title: '正在删除...',
 		})
 		this.props.dispatch({
 			type: 'dataList/delList',
-			payload: params,
 			token: this.props.token,
 			url: `/v3/reportuser/${this.state.userId}/namelist/${this.state.listId}`
+		}).then(()=>{
+			this.getDataList()
 		})
 	}
 	// 取消

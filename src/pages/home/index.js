@@ -277,12 +277,8 @@ class Home extends Component {
   //删除填报
   handleDelete() {
     const { reportId } = this.state
-    const params = {
-      reportId
-    }
     this.props.dispatch({
       type: 'home/deleteReport',
-      payload: params,
       token: this.props.token,
       url: `/v3/report/${reportId}`
     }).then(() => {

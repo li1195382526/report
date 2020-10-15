@@ -42,8 +42,7 @@ export const copyReport = (data,token,url) => syncAction({
 });
 
 //删除填报deleteReport
-export const deleteReport = (data,token,url) => syncAction({
-  data,
+export const deleteReport = (token,url) => syncAction({
   method: "DELETE",
   token,
   url

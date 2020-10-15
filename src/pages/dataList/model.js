@@ -49,8 +49,8 @@ export default {
         }
       });
     },
-    * delList({ payload: value,token,url }, { call, put }) {
-      const { data } = yield call(dataListApi.delList, value, token, url);
+    * delList({ payload: token,url }, { call, put }) {
+      const { data } = yield call(dataListApi.delList, token, url);
       yield put({
         type: 'save',
       });

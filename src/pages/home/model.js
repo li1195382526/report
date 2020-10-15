@@ -107,8 +107,8 @@ export default {
         type: 'save',
       });
     },
-    * deleteReport({ payload: values, token,url }, { call, put, select }) {
-      const { data } = yield call(homeApi.deleteReport, values, token, url);
+    * deleteReport({ payload: token,url }, { call, put, select }) {
+      const { data } = yield call(homeApi.deleteReport, token, url);
       yield put({
         type: 'save',
       });
