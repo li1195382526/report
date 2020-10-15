@@ -69,6 +69,13 @@ export default {
         }
       });
     },
+    * wxMobilelogin({ payload: values }, { call, put }) {
+      const { data } = yield call(answerApi.wxMobilelogin, values);
+      Taro.setStorage({
+        key: "wxMobile",
+        data: data.data.mobile
+      })
+    },
   },
 
   reducers: {

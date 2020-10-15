@@ -32,3 +32,10 @@ export const getAnswer = ( data,token,url) => syncAction({
   token,
   url,
 });
+
+//获取微信手机号wxMobilelogin
+export const wxMobilelogin = (data) => syncAction({
+  data,
+  method: "POST",
+  url:'/v3/login/wxMobilelogin'
+});

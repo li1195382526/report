@@ -40,17 +40,21 @@ class Answer extends Component {
     this.join = this.join.bind(this)
     this.getNamelist = this.getNamelist.bind(this)
     this.getAnswer = this.getAnswer.bind(this)
+    this.wxMobilelogin = this.wxMobilelogin.bind(this)
+    this.getQuestionner = this.getQuestionner.bind(this)
   }
 
   componentWillMount() {
-    this.setState({
     
-    });
-    this.getQuestionner = this.getQuestionner.bind(this)
   };
 
   componentDidMount(){
-    this.getQuestionner()
+    if(!Taro.getStorageSync('mobile')){
+      this.wxMobilelogin()
+    }else{
+      this.getQuestionner()
+    }
+    
     const from = this.$router.params.from
     if( from === 'answerDetail' || from === 'home' || from === 'viewData'){
       this.getAnswer()
@@ -83,15 +87,52 @@ class Answer extends Component {
     })
   }
 
+  wxMobilelogin(){
+    let encryptedData = ''
+    let iv = ''
+    Taro.login()
+      .then(r => {
+        var code = r.code // 登录凭证
+        if (code) {
+          // 调用获取用户信息接口
+          Taro.getUserInfo({
+            success: function (res) {
+              Taro.setStorage({
+                key: "wxInfo",
+                data: res.userInfo
+              })
+              encryptedData = res.encryptedData
+              iv = res.iv
+            }
+          }).then(() => {
+            let params = { encryptedData: encryptedData, iv: iv, code: code, oid: 'gh_13a2c24667b4',"userId": '0'}
+            if (!!encryptedData && !!iv) {
+              this.props.dispatch({
+                type: 'answer/wxMobilelogin',
+                payload: params
+              }).then(()=>{
+                this.getQuestionner()
+              })
+            } else {
+              this.errorMessage('微信获取用户信息失败')
+            }
+          })
+        } else {
+          this.errorMessage('微信授权登录失败')
+        }
+      })
+  }
+
   //获取指定填报结果数据
   getAnswer(){
-    const {mobile} = this.state
+    const {mobile} = Taro.getStorageSync('mobile')
+    const wxMobile = Taro.getStorageSync('wxMobile')
     const reportId = this.$router.params.listId
     const period = this.$router.params.period
     this.props.dispatch({
       type: 'answer/getAnswer',
       token: this.props.token,
-      url:`/v3/report/${reportId}/period/${period}/participant/${mobile}/answer`
+      url:`/v3/report/${reportId}/period/${period}/participant/${!!mobile ? mobile :wxMobile}/answer`
     })
   }
 
@@ -120,7 +161,9 @@ class Answer extends Component {
   }
 
   submit(){
-    const {mobile, periodCount} = this.state
+    const {periodCount} = this.state
+    const {mobile} = Taro.getStorageSync('mobile')
+    const wxMobile = Taro.getStorageSync('wxMobile')
     const {res, anw,questionnaire} = this.props
     const id = this.$router.params.listId
     let params = {
@@ -144,7 +187,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/subMitAnswer',
       token: this.props.token,
-      url:`/v3/report/${id}/participant/${mobile}/submit`,
+      url:`/v3/report/${id}/participant/${!!mobile ? mobile :wxMobile}/submit`,
       payload: params,
       reportId: this.$router.params.listId,
       period:periodCount
@@ -188,8 +231,9 @@ class Answer extends Component {
     const id = this.$router.params.listId
     const listIndex = item ? item.listIndex : ''
     var mobile = Taro.getStorageSync('mobile')
+    const wxMobile = Taro.getStorageSync('wxMobile')
     let params = {
-      mobile,
+      mobile:!!mobile ? mobile :wxMobile,
       pwd: passWord,
       listIndex,
       userAgent
