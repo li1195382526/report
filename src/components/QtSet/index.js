@@ -40,11 +40,11 @@ class QtSet extends Component {
   handleChange(val,type){
     let {info,isChange} = this.props
     if(val.target.value && type === 'useCount'){
-      info.useNamelist = 0
+      info.useNamelist = ''
       info.namelist = []
     }
     if(val.target.value && type === 'useNamelist'){
-      info.useCount = 0
+      info.useCount = ''
       info.pnlCount = ''
     }
     if(!val.target.value && type === 'useTimelimit') {
