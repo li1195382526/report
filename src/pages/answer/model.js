@@ -41,14 +41,14 @@ export default {
         })
       }
     },
-    * modifySubmit({ payload: values,token,url, reportId,period }, { call, put }) {
+    * modifySubmit({ payload: values,token,url, reportId, period, canEdit }, { call, put }) {
       const { data } = yield call(answerApi.modifySubmit, values,token, url);
       yield put({
         type: 'save',
       });
       if(data.status == 200) {
         Taro.navigateTo({
-          url: `/pages/submits/index?reportId=${reportId}&period=${period}`
+          url: `/pages/submits/index?reportId=${reportId}&period=${period}&canEdit=${canEdit}`
         })
       } else {
         Taro.showToast({

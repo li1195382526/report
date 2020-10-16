@@ -30,7 +30,6 @@ class Answer extends Component {
       userAgent: '',
       checkNamelist: false,
       togglelist: [],
-      needphone: false
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
@@ -45,16 +44,14 @@ class Answer extends Component {
   }
 
   componentWillMount() {
-    
-  };
-
-  componentDidMount(){
-    if(!Taro.getStorageSync('mobile')){
-      this.wxMobilelogin()
-    }else{
-      this.getQuestionner()
+    if(!Taro.getStorageSync('mobile') && !Taro.getStorageSync('wxMobile')){
+      Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId}`})
     }
-    
+  };
+  
+  componentDidMount(){
+    this.getQuestionner()
+
     const from = this.$router.params.from
     if( from === 'answerDetail' || from === 'home' || from === 'viewData'){
       this.getAnswer()
@@ -88,6 +85,7 @@ class Answer extends Component {
   }
 
   wxMobilelogin(){
+    return
     let encryptedData = ''
     let iv = ''
     Taro.login()
@@ -162,7 +160,7 @@ class Answer extends Component {
   submit(){
     const mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
-    const {res, anw,questionnaire} = this.props
+    const {res, anw,questionnaire, info} = this.props
     const id = this.$router.params.listId
     const periodCount = res.data.rep.period
     let params = {
@@ -189,7 +187,8 @@ class Answer extends Component {
       url:`/v3/report/${id}/participant/${!!mobile ? mobile :wxMobile}/submit`,
       payload: params,
       reportId: this.$router.params.listId,
-      period:periodCount
+      period:periodCount,
+      canEdit: info.canEdit
     })
     
   }
@@ -278,7 +277,6 @@ class Answer extends Component {
         })
         Taro.redirectTo({url: '../home/index'})
       }
-      this.setState({needphone: false})
     })
   }
 
@@ -332,7 +330,7 @@ class Answer extends Component {
           duration: 1000,
           mask: true
         })
-        this.setState({needphone: true})
+        Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId}`})
       } else if(res.status == 203) {
         Taro.showToast({
           title: res.message,
@@ -348,7 +346,7 @@ class Answer extends Component {
   }
 
   render() {
-    const {isPassWord,isHavename, passWord, checkNamelist, togglelist, needphone} = this.state
+    const {isPassWord,isHavename, passWord, checkNamelist, togglelist} = this.state
     const {questionnaire,info, namelist, res} = this.props
     const from = this.$router.params.from
     const indexed = namelist.findIndex(item => item.status == 29)
@@ -383,14 +381,6 @@ class Answer extends Component {
             <AtButton type='primary' onClick={this.modifySubmit}>提交填报</AtButton> 
           </View>
         )}
-
-        <AtModal isOpened={needphone}>
-          {/* <AtModalHeader>标题</AtModalHeader> */}
-          <AtModalContent>
-            需要获取手机号
-          </AtModalContent>
-          <AtModalAction> <Button openType='getPhoneNumber'onGetPhoneNumber={this.getPhoneNumber}>确定</Button> </AtModalAction>
-        </AtModal>
         
         {isHavename && (
           <AtModal isOpened={isHavename} closeOnClickOverlay={false}>

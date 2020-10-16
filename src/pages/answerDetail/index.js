@@ -65,6 +65,7 @@ class answerDetail extends Component {
         const { detail, periods } = this.props
         const qtnId = 52
         const index = periods.findIndex((item) => item.isCurrent == 1)
+        const canEdit = this.$router.params.canEdit
         return (
             <View className="content">
                 <View className="main">
@@ -82,7 +83,9 @@ class answerDetail extends Component {
                     </View>
                     <View className='handle'>
                         <View>2020-8-25填答</View>
-                        <View className="edit" onClick={(val)=>this.handleEdit(index)}>修改填报</View>
+                        {canEdit == 1 && (
+                            <View className="edit" onClick={(val)=>this.handleEdit(index)}>修改填报</View>
+                        )}
                     </View>
                     <View className="answer__info">
                         {detail.map((doc, key) => (

@@ -39,7 +39,7 @@ class Submits extends Component {
   }
   // 查看结果
   handleResult() {
-    Taro.navigateTo({url: `../answerDetail/index?reportId=${this.$router.params.reportId}`})
+    Taro.navigateTo({url: `../answerDetail/index?reportId=${this.$router.params.reportId}&canEdit=${this.$router.params.canEdit}`})
   }
 
    // 修改填报
@@ -48,6 +48,7 @@ class Submits extends Component {
     }
 
   render() {
+    const canEdit = this.$router.params.canEdit
     return (
       <View className='release'>
         <View className='release-check'>
@@ -63,9 +64,11 @@ class Submits extends Component {
           <View>
             <AtButton type='primary' className='btn' onClick={this.handleBack}>我要创建</AtButton>
           </View>
-          <View>
-            <AtButton type='secondary' onClick={this.handleEdit}>修改填报</AtButton>
-          </View>
+          {canEdit == 1 && (
+            <View>
+              <AtButton type='secondary' onClick={this.handleEdit}>修改填报</AtButton>
+            </View>
+          )}
           <View>
             <AtButton type='primary' className='view-data' onClick={this.handleResult}>查看结果</AtButton> 
           </View>
