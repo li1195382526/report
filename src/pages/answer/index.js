@@ -29,7 +29,8 @@ class Answer extends Component {
       isHavename:false,
       userAgent: '',
       checkNamelist: false,
-      togglelist: []
+      togglelist: [],
+      needphone: false
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
@@ -255,6 +256,32 @@ class Answer extends Component {
     })
     return
   }
+  getPhoneNumber(e) {
+    Taro.login().then(r => {
+      var code = r.code
+      console.log(r)
+      if(code && e.detail.errMsg.split(':')[1] == 'ok') {
+        console.log('手机号信息',e)
+        let params = {
+          iv: e.detail.iv,
+          encryptedData: e.detail.encryptedData,
+          code,
+          userId: '0',
+          oid: 'gh_13a2c24667b4'
+        }
+      } else {
+        Taro.showToast({
+          title: '获取用户信息失败',
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        Taro.redirectTo({url: '../home/index'})
+      }
+      this.setState({needphone: false})
+    })
+  }
+
   // 进入填报
   join(item) {
     const {passWord, userAgent} = this.state
@@ -298,6 +325,14 @@ class Answer extends Component {
         })
         this.getNamelist()
         this.setState({isHavename: true, checkNamelist: true})
+      } else if(res.status == -1002) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        this.setState({needphone: true})
       } else if(res.status == 203) {
         Taro.showToast({
           title: res.message,
@@ -313,7 +348,7 @@ class Answer extends Component {
   }
 
   render() {
-    const {isPassWord,isHavename, passWord, checkNamelist, togglelist} = this.state
+    const {isPassWord,isHavename, passWord, checkNamelist, togglelist, needphone} = this.state
     const {questionnaire,info, namelist, res} = this.props
     const from = this.$router.params.from
     const indexed = namelist.findIndex(item => item.status == 29)
@@ -348,6 +383,15 @@ class Answer extends Component {
             <AtButton type='primary' onClick={this.modifySubmit}>提交填报</AtButton> 
           </View>
         )}
+
+        <AtModal isOpened={needphone}>
+          {/* <AtModalHeader>标题</AtModalHeader> */}
+          <AtModalContent>
+            需要获取手机号
+          </AtModalContent>
+          <AtModalAction> <Button openType='getPhoneNumber'onGetPhoneNumber={this.getPhoneNumber}>确定</Button> </AtModalAction>
+        </AtModal>
+        
         {isHavename && (
           <AtModal isOpened={isHavename} closeOnClickOverlay={false}>
             <AtModalHeader>选择填答名单</AtModalHeader>
