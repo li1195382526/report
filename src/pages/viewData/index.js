@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtList, AtListItem, AtSteps, AtActionSheet, AtActionSheetItem, AtMessage } from 'taro-ui'
+import { AtList, AtIcon, AtSteps, AtActionSheet, AtActionSheetItem, AtMessage } from 'taro-ui'
 import { BeginToCollect } from '../../components/beginToCollect'
 import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
@@ -28,7 +28,8 @@ class ViewData extends Component {
       itemInfo: {},
       currentReportId:'',
       currentMobile:'',
-      currentPeriod:''
+      currentPeriod:'',
+      indexPeriods:0
     }
     this.handelToggle = this.handelToggle.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -39,6 +40,8 @@ class ViewData extends Component {
     this.share = this.share.bind(this)
     this.getPeriods = this.getPeriods.bind(this)
     this.getResList = this.getResList.bind(this)
+    this.handleRight = this.handleRight.bind(this)
+    this.handleleft = this.handleleft.bind(this)
   }
 
   componentWillMount() {
@@ -64,7 +67,7 @@ class ViewData extends Component {
     }).then(() => {
       const {periods} = this.props
       const index = periods.findIndex((item) => item.isCurrent == 1)
-      this.setState({current: index})
+      this.setState({current: index+1})
       this.getResList()
     })
   }
@@ -81,7 +84,6 @@ class ViewData extends Component {
   }
   // 列表点击
   handleClick(item) {
-    console.log(item)
     const {isFinished} = this.state
     this.setState({
       currentReportId:item.reportId,
@@ -136,22 +138,74 @@ class ViewData extends Component {
     
   }
 
+  handleRight(){
+    const {indexPeriods,current} = this.state
+    this.setState({
+      indexPeriods:indexPeriods+1,
+      current:current+1
+    })
+  }
+
+  handleleft(){
+    const {indexPeriods,current} = this.state
+    console.log(indexPeriods)
+    this.setState({
+      indexPeriods:indexPeriods-1,
+      current:current-1
+    })
+  }
+
   render() {
-    const {isFinished, isMenge} = this.state
+    const {isFinished, isMenge,indexPeriods} = this.state
     const {periods, resList} = this.props
     const index = periods.findIndex((item) => item.isCurrent == 1)
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
     const isnone = list.findIndex(item => item.id)
+    const newPeriods = periods.slice(indexPeriods,5+indexPeriods)
+    console.log(this.state.current)
     return (
       <View className='view'>
         <AtMessage/>
         <View className='view-data'>
-           <AtSteps
-            className='data-step'
-            items={periods}
-            current={this.state.current}
-            onChange={this.onChange}
-           />
+           {/* <AtSteps
+             className='data-step'
+             items={newPeriods}
+             current={this.state.current}
+             onChange={this.onChange}
+           /> */}
+           {periods.length > 5 && newPeriods[0].num !== 1 &&(
+                <View className='view-left'>
+                  <AtIcon value='chevron-left' size='30' color='#427be6' onClick={this.handleleft}></AtIcon>
+                </View>
+              )}
+             <View className='view-step'>
+               <View className='step-line'></View>
+               {newPeriods.map((val)=>(
+               <View style={{marginTop: this.state.current === val.num ?'-10px' : '0',zIndex:'100'}} >
+                 {this.state.current === val.num && (
+                   <View className='step-light'>
+                   <View className='step-lightleft'></View>
+                   <View className='step-lightmid'></View>
+                   <View className='step-lightright'></View>
+                 </View>
+                 )}
+                  <View className='step' style={{
+                    width:this.state.current === val.num ?'30px' : '25px',
+                    height: this.state.current === val.num ?'30px' : '25px',
+                    lineHeight: this.state.current === val.num ?'30px' : '25px',
+                   }}
+                     onClick={()=>this.onChange(val.num)}
+                   >                    
+                     {val.num}
+                    </View>
+               </View>
+               ))}
+              </View>
+              {periods.length > 5 && (
+                <View className='view-right'>
+                  <AtIcon value='chevron-right' size='30' color='#427be6' onClick={this.handleRight}></AtIcon>
+                </View>
+              )}
            <View className="view-plain">
               <View className='view-text'>当前进行至第 {index + 1} 周期</View>
               <View className='view-text'>截止时间 {periods[index].endTime}</View>

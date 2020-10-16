@@ -26,15 +26,20 @@ export default {
       });
     },
     * saveQtn({ payload: values,token }, { call, put, select }) {
-      const { page, createList } = yield select(state => state.home);
+      let { info } = yield select(state => state.edit);
       const { data } = yield call(editApi.saveQtn, values,token);
       // console.log(data)
+      const id = data.data.id
+      if(data.status == 200) {
+        info.id = id
+      }
       yield put({
         type: 'save',
         payload: {
           status:data.status,
           message:data.message,
-          response: data
+          response: data,
+          info
           //questionnaire:data.questionnaire,
           //info:data.info
         }

@@ -9,6 +9,65 @@
             position:absolute;
             bottom: 160px;
         }
+        .view-right{
+            position: absolute;
+            right:0px;
+            top:40px;
+        }
+        .view-left{
+            position: absolute;
+            left:0px;
+            top:40px; 
+            z-index: 100;
+        }
+        .view-step{
+            display: flex;
+            justify-content: space-around;
+            position: absolute;
+            width: 100%;
+            top: 40px; 
+            .step-line{
+                width: 80%;
+                position: absolute;
+                height: 6px;
+                background-color: rgba(66, 123, 230, 0.682353);
+                top: 30px;
+            } 
+            .step-light{
+                display: flex;
+                .step-lightleft{
+                height: 20px;
+                width: 8px;
+                background-color: rgba(66, 123, 230, 0.682353);
+                transform:rotate(-36deg);
+                border-radius: 2px;
+                }
+                .step-lightmid{
+                    height: 20px;
+                    width: 8px;
+                    background-color: rgba(66, 123, 230, 0.682353);
+                    border-radius: 2px; 
+                    margin: 0px 28px 0px 28px;
+                    margin-top: -7px;
+                }
+                .step-lightright{
+                    height: 20px;
+                    width: 8px;
+                    background-color: rgba(66, 123, 230, 0.682353);
+                    transform:rotate(36deg);
+                    border-radius: 2px;
+                }
+            }      
+            .step{
+                width:50px;
+                height: 50px;
+                line-height: 50px;
+                text-align: center;
+                border-radius: 50px;
+                color: #fff;
+                background-color: rgba(66, 123, 230, 0.682353);
+            }
+        }
     }
     .view-plain {
         padding-top:110px;
