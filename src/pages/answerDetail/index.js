@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtSteps } from 'taro-ui'
+import { AtToast } from 'taro-ui'
 import AnswerOptList from './AnswerOptList'
 import AnswerOpenList from './AnswerOpenList'
 import AnswerSubList from './AnswerSubList'
@@ -20,7 +20,8 @@ class answerDetail extends Component {
         super(props)
         this.state = {
             current: 1,
-            indexPeriods:0
+            indexPeriods:0,
+            text:''
         }
         this.lookAnswerResultById = this.lookAnswerResultById.bind(this)
         this.onChange = this.onChange.bind(this)
@@ -49,11 +50,18 @@ class answerDetail extends Component {
     }
 
     // 步骤条change事件
-    onChange (current) {
-        this.setState({ current }, () => {
+    onChange (current,isCurrent) {
+        if(isCurrent > current){
+            this.setState({ current }, () => {
             this.getPeriods()
             this.lookAnswerResultById()
         })
+        }else{
+            this.setState({
+                text:'暂无数据！还未进行到当前周期2020-10-22开启'
+            })
+        }
+        
     }
 
     // 修改填报
@@ -93,12 +101,15 @@ class answerDetail extends Component {
 
     render() {
         const { detail, periods, } = this.props
-        const {indexPeriods} = this.state
+        const {indexPeriods,text} = this.state
         const qtnId = 52
         const index = periods.findIndex((item) => item.isCurrent == 1)
         const newPeriods = periods.slice(indexPeriods,5+indexPeriods)
         return (
             <View className="content">
+                {text.length > 0 && (
+                   <AtToast isOpened text={text}></AtToast> 
+                )}
                 <View className="main">
                     <View className='view-data'>
                     {periods.length > 5 && newPeriods[0].num !== 1 &&(
@@ -124,7 +135,7 @@ class answerDetail extends Component {
                     height: this.state.current === val.num ?'30px' : '25px',
                     lineHeight: this.state.current === val.num ?'30px' : '25px',
                    }}
-                     onClick={()=>this.onChange(val.num)}
+                     onClick={()=>this.onChange(val.num,index+1)}
                    >                    
                      {val.num}
                     </View>

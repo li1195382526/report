@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtList, AtIcon, AtSteps, AtActionSheet, AtActionSheetItem, AtMessage } from 'taro-ui'
+import { AtToast, AtIcon, AtSteps, AtActionSheet, AtActionSheetItem, AtMessage } from 'taro-ui'
 import { BeginToCollect } from '../../components/beginToCollect'
 import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
@@ -29,7 +29,8 @@ class ViewData extends Component {
       currentReportId: '',
       currentMobile: '',
       currentPeriod: '',
-      indexPeriods: 0
+      indexPeriods: 0,
+      text:''
     }
     this.handelToggle = this.handelToggle.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -67,7 +68,7 @@ class ViewData extends Component {
     }).then(() => {
       const { periods } = this.props
       const index = periods.findIndex((item) => item.isCurrent == 1)
-      this.setState({ current: index == -1 ? periods.length - 1 : index }, () => {
+      this.setState({ current: index == -1 ? periods.length - 1 : index+1 }, () => {
         this.getResList()
       })
     })
@@ -96,12 +97,20 @@ class ViewData extends Component {
       this.setState({ isMenge: true, itemInfo: item })
     }
   }
-  // 步骤条change事件
-  onChange(current) {
-    this.setState({ current }, () => {
-      this.getResList()
-    })
-  }
+ 
+   // 步骤条change事件
+   onChange (current,isCurrent) {
+    if(isCurrent > current){
+      this.setState({ current }, () => {
+        this.getResList()
+      })
+    }else{
+        this.setState({
+            text:'暂无数据！还未进行到当前周期2020-10-22开启'
+        })
+    }
+    
+}
   // 已填报/未填报点击
   handelToggle() {
     let { isFinished } = this.state
@@ -171,7 +180,7 @@ class ViewData extends Component {
   }
 
   render() {
-    const { isFinished, isMenge, indexPeriods } = this.state
+    const { isFinished, isMenge, indexPeriods,text } = this.state
     const { periods, resList } = this.props
     const index = periods.findIndex((item) => item.isCurrent == 1)
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
@@ -186,6 +195,9 @@ class ViewData extends Component {
     return (
       <View className='view'>
         <AtMessage />
+        {text.length > 0 && (
+                   <AtToast isOpened text={text}></AtToast> 
+                )}
         {usePeriod == 1 && (
           <View className='view-data'>
             {/* <AtSteps
@@ -217,7 +229,7 @@ class ViewData extends Component {
                     height: this.state.current === val.num ? '30px' : '25px',
                     lineHeight: this.state.current === val.num ? '30px' : '25px',
                   }}
-                    onClick={() => this.onChange(val.num)}
+                    onClick={() => this.onChange(val.num,index+1)}
                   >
                     {val.num}
                   </View>
