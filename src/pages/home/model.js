@@ -126,7 +126,6 @@ export default {
 
     * bindPhone({ payload: values }, { call, put }) {
       const { data } = yield call(homeApi.bindPhoneNum, values);
-      console.log(data)
       yield put({
         type: 'wechatLogin',
         payload: data
