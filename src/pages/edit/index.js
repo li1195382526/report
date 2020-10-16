@@ -241,7 +241,7 @@ onTimeChange = e => {
     this.handleTips('error','填报说明不能超过200个字符')
     return
     }
-    if(info.creatorName === ''){
+    if(info.creatorName.length === 0){
       info.creatorName = this.props.wxInfo.nickName
     }
     const params = {
