@@ -24,8 +24,6 @@ class Answer extends Component {
     this.state = {
       selector: ['小名', '小花', '小亮', '甜甜'],
       selectorChecked: '小名',
-      mobile:15526080904,
-      periodCount:1,//周期数
       passWord:'',
       isPassWord:false,
       isHavename:false,
@@ -42,6 +40,7 @@ class Answer extends Component {
     this.getAnswer = this.getAnswer.bind(this)
     this.wxMobilelogin = this.wxMobilelogin.bind(this)
     this.getQuestionner = this.getQuestionner.bind(this)
+    this.modifySubmit = this.modifySubmit.bind(this)
   }
 
   componentWillMount() {
@@ -125,7 +124,7 @@ class Answer extends Component {
 
   //获取指定填报结果数据
   getAnswer(){
-    const {mobile} = Taro.getStorageSync('mobile')
+    const mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
     const reportId = this.$router.params.listId
     const period = this.$router.params.period
@@ -155,17 +154,16 @@ class Answer extends Component {
 
   //切换人员名单
    onChange (e)  {
-    console.log(e.detail.value)
     const {togglelist} = this.state
     this.join(togglelist[e.detail.value])
   }
 
   submit(){
-    const {periodCount} = this.state
-    const {mobile} = Taro.getStorageSync('mobile')
+    const mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
     const {res, anw,questionnaire} = this.props
     const id = this.$router.params.listId
+    const periodCount = res.data.rep.period
     let params = {
       ctl: res.data.ctl,
       anw,
@@ -193,6 +191,38 @@ class Answer extends Component {
       period:periodCount
     })
     
+  }
+
+  //修改填报
+  modifySubmit(){
+    const mobile = Taro.getStorageSync('mobile')
+    const wxMobile = Taro.getStorageSync('wxMobile')
+    const {anw,questionnaire,res} = this.props
+    //const periodCount = res.data.rep.period
+    const periodCount = this.$router.params.period
+    const id = this.$router.params.listId
+    let params = {
+      anw,
+    }
+    //必答验证
+    //questionnaire.pageList[0] 是因为现在没有分页
+    const { pass, message } = validates.validate(fromJS(questionnaire.pageList[0].qtList), fromJS(anw));
+    if (!pass) {
+      Taro.atMessage({
+        'message': message,
+        'type': 'error',
+        'duration': 1000
+      })
+      return;
+    }
+    this.props.dispatch({
+      type: 'answer/modifySubmit',
+      token: this.props.token,
+      url:`/v3/report/${id}/period/${periodCount}/participant/${!!mobile ? mobile :wxMobile}/answer`,
+      payload: params,
+      reportId: this.$router.params.listId,
+      period:periodCount
+    })
   }
 
   //确认填报密码
@@ -308,12 +338,16 @@ class Answer extends Component {
         <View className='answer-list'>
           <QtnCanvas questionnaire={questionnaire} />
         </View>
-        {from != 'viewData' && (
+        {from != 'viewData' && from != 'answerDetail' && from != 'home'&&  (
           <View className='answer-footer'>
             <AtButton type='primary' onClick={this.submit}>提交填报</AtButton> 
           </View>
         )}
-        
+        {(from == 'answerDetail' || from == 'home') &&  (
+          <View className='answer-footer'>
+            <AtButton type='primary' onClick={this.modifySubmit}>提交填报</AtButton> 
+          </View>
+        )}
         {isHavename && (
           <AtModal isOpened={isHavename} closeOnClickOverlay={false}>
             <AtModalHeader>选择填答名单</AtModalHeader>

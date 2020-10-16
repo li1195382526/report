@@ -21,12 +21,28 @@ export default {
         payload: {
           questionnaire:data.questionnaire,
           info:data.info,
-          res: {}
         }
       });
     },
     * subMitAnswer({ payload: values,token,url, reportId,period }, { call, put }) {
       const { data } = yield call(answerApi.subMitAnswer, values,token, url);
+      yield put({
+        type: 'save',
+      });
+      if(data.status == 200) {
+        Taro.navigateTo({
+          url: `/pages/submits/index?reportId=${reportId}&period=${period}`
+        })
+      } else {
+        Taro.showToast({
+          title: '提交失败',
+          icon: 'none',
+          duration: 1500
+        })
+      }
+    },
+    * modifySubmit({ payload: values,token,url, reportId,period }, { call, put }) {
+      const { data } = yield call(answerApi.modifySubmit, values,token, url);
       yield put({
         type: 'save',
       });

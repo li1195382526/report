@@ -14,6 +14,14 @@ export const subMitAnswer = ( data,token,url) => syncAction({
   url,
 });
 
+//修改填报
+export const modifySubmit = ( data,token,url) => syncAction({
+  data,
+  method: "PUT",
+  token,
+  url,
+});
+
 export const joinReport = ( data,token,url) => syncAction({
   data,
   method: "POST",
