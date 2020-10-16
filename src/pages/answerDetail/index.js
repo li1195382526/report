@@ -19,12 +19,15 @@ class answerDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            current: 0
+            current: 1,
+            indexPeriods:0
         }
         this.lookAnswerResultById = this.lookAnswerResultById.bind(this)
         this.onChange = this.onChange.bind(this)
         this.handleEdit = this.handleEdit.bind(this)
         this.getPeriods = this.getPeriods.bind(this)
+        this.handleRight = this.handleRight.bind(this)
+        this.handleleft = this.handleleft.bind(this)
     }
     // 获取周期
     getPeriods() {
@@ -38,16 +41,21 @@ class answerDetail extends Component {
     lookAnswerResultById() {
         const mobile = Taro.getStorageSync('mobile')
         const reportId = this.$router.params.reportId
-        console.log(this.props.periods)
+        const {current} = this.state
         this.props.dispatch({
             type: 'answerDetail/getDetail',
-            payload: {},
-            url: `/v3/report/${reportId}/period/periodCount/participant/${mobile}/result`
+            url: `/v3/report/${reportId}/period/${current}/participant/${mobile}/result`
         })
     }
-    onChange() {
 
+    // 步骤条change事件
+    onChange (current) {
+        this.setState({ current }, () => {
+            this.getPeriods()
+            this.lookAnswerResultById()
+        })
     }
+
     // 修改填报
     handleEdit(index) {
         Taro.navigateTo({url: `../answer/index?from=answerDetail&listId=${this.$router.params.reportId}&period=${index+1}`})
@@ -55,26 +63,79 @@ class answerDetail extends Component {
 
     componentWillMount() {
         this.getPeriods()
+        this.lookAnswerResultById()
     }
 
     componentDidMount() {
-        // this.lookAnswerResultById()
+        // 
     }
 
+    handleRight(){
+        const {indexPeriods,current} = this.state
+        this.setState({
+          indexPeriods:indexPeriods+1,
+          current:current+1
+        },()=>{
+          this.getPeriods()
+        })
+      }
+    
+      handleleft(){
+        const {indexPeriods,current} = this.state
+        console.log(indexPeriods)
+        this.setState({
+          indexPeriods:indexPeriods-1,
+          current:current-1
+        },()=>{
+          this.getPeriods()
+        })
+      }
+
     render() {
-        const { detail, periods } = this.props
+        const { detail, periods, } = this.props
+        const {indexPeriods} = this.state
         const qtnId = 52
         const index = periods.findIndex((item) => item.isCurrent == 1)
+        const newPeriods = periods.slice(indexPeriods,5+indexPeriods)
         return (
             <View className="content">
                 <View className="main">
                     <View className='view-data'>
-                        <AtSteps
-                            className='data-step'
-                            items={periods}
-                            current={this.state.current}
-                            onChange={this.onChange}
-                        />
+                    {periods.length > 5 && newPeriods[0].num !== 1 &&(
+                <View className='view-left'>
+                  <AtIcon value='chevron-left' size='30' color='#427be6' onClick={this.handleleft}></AtIcon>
+                </View>
+              )}
+             <View className='view-step'>
+               {periods.length > 1 && (
+                 <View className='step-line'></View>
+               )}
+               {newPeriods.map((val)=>(
+               <View style={{marginTop: this.state.current === val.num ?'-10px' : '0',zIndex:'100'}} >
+                 {this.state.current === val.num && (
+                   <View className='step-light'>
+                   <View className='step-lightleft'></View>
+                   <View className='step-lightmid'></View>
+                   <View className='step-lightright'></View>
+                 </View>
+                 )}
+                  <View className='step' style={{
+                    width:this.state.current === val.num ?'30px' : '25px',
+                    height: this.state.current === val.num ?'30px' : '25px',
+                    lineHeight: this.state.current === val.num ?'30px' : '25px',
+                   }}
+                     onClick={()=>this.onChange(val.num)}
+                   >                    
+                     {val.num}
+                    </View>
+               </View>
+               ))}
+              </View>
+              {periods.length > 5 && (
+                <View className='view-right'>
+                  <AtIcon value='chevron-right' size='30' color='#427be6' onClick={this.handleRight}></AtIcon>
+                </View>
+              )}
                         <View className="view-plain">
                             <View className='view-text'>当前进行至第 {index + 1} 周期</View>
                             <View className='view-text'>截止时间 {periods[index].endTime}</View>

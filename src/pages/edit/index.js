@@ -184,6 +184,9 @@ onTimeChange = e => {
       return
     }
     
+    if(info.creatorName === ''){
+      info.creatorName = this.props.wxInfo.nickName
+    }
 
     const params = {
       info,
@@ -203,7 +206,7 @@ onTimeChange = e => {
       }).then(()=>{
         const {qtnStatus,message} = this.props
         if(qtnStatus === 200){
-          Taro.navigateTo({
+          Taro.redirectTo({
             url: `/pages/release/index?listId=${response.data.id}`
            })
         }else{
@@ -237,6 +240,9 @@ onTimeChange = e => {
     if(info.memo.length >= 200){
     this.handleTips('error','填报说明不能超过200个字符')
     return
+    }
+    if(info.creatorName === ''){
+      info.creatorName = this.props.wxInfo.nickName
     }
     const params = {
       info,
