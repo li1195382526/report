@@ -64,8 +64,9 @@ class ViewData extends Component {
     }).then(() => {
       const {periods} = this.props
       const index = periods.findIndex((item) => item.isCurrent == 1)
-      this.setState({current: index})
-      this.getResList()
+      this.setState({current: index == -1 ? periods.length - 1 : index}, () => {
+        this.getResList()
+      })
     })
   }
   // 获取结果列表
@@ -81,7 +82,6 @@ class ViewData extends Component {
   }
   // 列表点击
   handleClick(item) {
-    console.log(item)
     const {isFinished} = this.state
     this.setState({
       currentReportId:item.reportId,
@@ -90,13 +90,6 @@ class ViewData extends Component {
     })
     if(isFinished) {
       this.setState({isMenge: true, itemInfo: item})
-    } else {
-      Taro.updateShareMenu({
-        withShareTicket: true,
-        success () {
-          console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa')
-        }
-      })
     }
   }
   // 步骤条change事件
@@ -133,7 +126,23 @@ class ViewData extends Component {
     this.setState({isMenge: false})
   }
   share() {
-    
+    const {resList} = this.props
+    const list = resList.unfinished || []
+    let data = ''
+    for(let i of list) {
+      if(i.id) {
+        data = data + `${i.listIndex}. ${i.resultName} \n`
+      }
+    }
+    setTimeout(() => {
+      console.log(data)
+      Taro.setClipboardData({
+        data,
+        success: function (res) {
+          console.log(res)
+        }
+      })
+    }, 0);
   }
 
   render() {
@@ -142,28 +151,40 @@ class ViewData extends Component {
     const index = periods.findIndex((item) => item.isCurrent == 1)
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
     const isnone = list.findIndex(item => item.id)
+    const status = this.$router.params.status
+    const usePeriod = this.$router.params.usePeriod
+    const useNamelist = this.$router.params.useNamelist
+    const useCount = this.$router.params.useCount
     return (
       <View className='view'>
         <AtMessage/>
-        <View className='view-data'>
-           <AtSteps
-            className='data-step'
-            items={periods}
-            current={this.state.current}
-            onChange={this.onChange}
-           />
-           <View className="view-plain">
-              <View className='view-text'>当前进行至第 {index + 1} 周期</View>
-              <View className='view-text'>截止时间 {periods[index].endTime}</View>
-           </View>
-        </View>
+        {usePeriod == 1 && (
+          <View className='view-data'>
+            <AtSteps
+              className='data-step'
+              items={periods}
+              current={this.state.current}
+              onChange={this.onChange}
+            />
+            <View className="view-plain">
+                <View className='view-text'>{index == -1 ? '填报已结束' : `当前进行至第 ${index + 1} 周期`}</View>
+                <View className='view-text'>{index== -1 ? `结束时间 ${periods[periods.length-1].endTime}` : `截止时间 ${periods[index].endTime}`}</View>
+            </View>
+          </View>
+        )}
+        {usePeriod != 1 && (
+          <View className='view-data'>
+            <View className="view-record">填报统计记录</View>
+          </View>
+        )}
         <View className='view-statistics'>
           <View className={isFinished?'view-num view-num-checked':'view-num'} onClick={this.handelToggle}>
             <View className='num'>{resList.finished?resList.finished.length:0}</View>
             <View>已填报人数</View>
           </View>
           <View className={isFinished?'view-num':'view-num view-num-checked'} onClick={this.handelToggle}>
-            <View className='num'>{resList.unfinished?resList.unfinished.length:0}</View>
+            {useCount == 0 && useNamelist == 0 && <View className='num'>不限</View>}
+            {useCount != 0 || useNamelist != 0 && <View className='num'>{resList.unfinished?resList.unfinished.length:0}</View>}
             <View>未填报人数</View>
           </View>
         </View>
@@ -172,20 +193,22 @@ class ViewData extends Component {
             // <AtListItem key={key} title={`${key+1}. 李琴`} onClick={() => this.handleClick(item)} extraText={isFinished?'2020-08-24 10:35填报':'督促填报'} arrow='right'  />
             item.id && (
               <View className='item-content' onClick={() => this.handleClick(item)} key={key}>
-                <View className="left">{key+1+'.'+item.resultName}</View>
+                <View className="left">{item.listIndex+'. '+item.resultName}</View>
                 {isFinished && (<View className="right">{item.finishTime+'填报'}&gt;</View>)}
-                {!isFinished && (
+                {!isFinished && status != 5 && (
                   <View className="right">
                     <Button openType='share' className='r-btn'>督促填报&gt;</Button>
                   </View>
                 )}
               </View>
-
             )
           ))}
           {(list.length == 0 || isnone == -1) && <View className='notice'>暂无信息</View>}
         </View>
-        {!isFinished && <Button className='view-radius' openType='share' onClick={this.share}>全部督促</Button>}
+        {!isFinished && status != 5 && isnone != -1 && <View className='view-radius' onClick={this.share}>
+          <View>全部</View>
+          <View>督促</View>
+        </View>}
         <AtActionSheet isOpened={isMenge} onClose={this.cancel}>
           <AtActionSheetItem onClick={this.handleView}>
             查看记录

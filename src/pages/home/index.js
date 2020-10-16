@@ -33,7 +33,8 @@ class Home extends Component {
       isDel: false,
       opened: false,
       reportId: '',
-      currentPeriod:''
+      currentPeriod:'',
+      itemdata: {}
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -85,7 +86,8 @@ class Home extends Component {
     this.setState({
       isOpened: true,
       reportId: item.id,
-      status: item.status
+      status: item.status,
+      itemdata: item
     })
   }
 
@@ -149,7 +151,7 @@ class Home extends Component {
   handleData() {
     this.close()
     Taro.navigateTo({
-      url: `/pages/viewData/index?reportId=${this.state.reportId}`
+      url: `/pages/viewData/index?reportId=${this.state.reportId}&status=${this.state.status}&usePeriod=${this.state.itemdata.usePeriod}&useCount=${this.state.itemdata.useCount}&useNamelist=${this.state.itemdata.useNamelist}`
     })
   }
   partHandleData() {
