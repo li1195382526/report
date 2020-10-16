@@ -22,7 +22,7 @@ class ViewData extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      current: 0,
+      current: 1,
       isFinished: false, // 默认先展示已填报的
       isMenge: false,
       itemInfo: {},
@@ -75,11 +75,12 @@ class ViewData extends Component {
   getResList() {
     const {periods} = this.props
     const {current} = this.state
+    console.log(current)
     const reportId = this.$router.params.reportId
     const period = periods[current].num
     this.props.dispatch({
       type: 'answerDetail/getResList',
-      url: `/v3/report/${reportId}/period/${period}/results`
+      url: `/v3/report/${reportId}/period/${current}/results`
     })
   }
   // 列表点击
@@ -143,6 +144,8 @@ class ViewData extends Component {
     this.setState({
       indexPeriods:indexPeriods+1,
       current:current+1
+    },()=>{
+      this.getResList()
     })
   }
 
@@ -152,6 +155,8 @@ class ViewData extends Component {
     this.setState({
       indexPeriods:indexPeriods-1,
       current:current-1
+    },()=>{
+      this.getResList()
     })
   }
 
@@ -179,7 +184,9 @@ class ViewData extends Component {
                 </View>
               )}
              <View className='view-step'>
-               <View className='step-line'></View>
+               {periods.length > 1 && (
+                 <View className='step-line'></View>
+               )}
                {newPeriods.map((val)=>(
                <View style={{marginTop: this.state.current === val.num ?'-10px' : '0',zIndex:'100'}} >
                  {this.state.current === val.num && (
