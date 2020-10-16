@@ -30,7 +30,7 @@ export default {
         type: 'save',
       });
       if(data.status == 200) {
-        Taro.navigateTo({
+        Taro.redirectTo({
           url: `/pages/submits/index?reportId=${reportId}&period=${period}`
         })
       } else {
@@ -47,7 +47,7 @@ export default {
         type: 'save',
       });
       if(data.status == 200) {
-        Taro.navigateTo({
+        Taro.redirectTo({
           url: `/pages/submits/index?reportId=${reportId}&period=${period}`
         })
       } else {
