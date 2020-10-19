@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtToast } from 'taro-ui'
+import { AtToast,AtIcon } from 'taro-ui'
 import AnswerOptList from './AnswerOptList'
 import AnswerOpenList from './AnswerOpenList'
 import AnswerSubList from './AnswerSubList'

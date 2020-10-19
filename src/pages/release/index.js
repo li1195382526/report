@@ -47,7 +47,7 @@ class Release extends Component {
   }
 
   handleBack(){
-    Taro.navigateTo({
+    Taro.redirectTo({
       url: '/pages/home/index'
      })
   }
@@ -81,9 +81,9 @@ class Release extends Component {
           <View>
             <AtButton type='primary' className='btn' openType='share'>分享微信群</AtButton>
           </View>
-          <View>
+          {/* <View>
             <AtButton type='secondary' onClick={this.handleCode}>生成二维码</AtButton>
-          </View>
+          </View> */}
           <View>
             <AtButton type='primary' onClick={this.edit}>修改填报内容</AtButton> 
           </View>

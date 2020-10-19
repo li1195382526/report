@@ -186,12 +186,10 @@ class ViewData extends Component {
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
     const isnone = list.findIndex(item => item.id)
     const newPeriods = periods.slice(indexPeriods, 5 + indexPeriods)
-    console.log(this.state.current)
     const status = this.$router.params.status
     const usePeriod = this.$router.params.usePeriod
     const useNamelist = this.$router.params.useNamelist
     const useCount = this.$router.params.useCount
-    console.log('resList.unfinished', resList.unfinished?'1':'2',useNamelist,useCount)
     return (
       <View className='view'>
         <AtMessage />
