@@ -77,12 +77,11 @@ class ViewData extends Component {
   getResList() {
     const { periods } = this.props
     const { current } = this.state
-    console.log(current)
     const reportId = this.$router.params.reportId
-    const period = periods[current].num
+    const period = periods.length ? periods[current].num : 1
     this.props.dispatch({
       type: 'answerDetail/getResList',
-      url: `/v3/report/${reportId}/period/${current}/results`
+      url: `/v3/report/${reportId}/period/${period}/results`
     })
   }
   // 列表点击
@@ -160,6 +159,10 @@ class ViewData extends Component {
 
   handleRight() {
     const { indexPeriods, current } = this.state
+    const { periods } = this.props
+    if(periods[periods.length - 1].num == current) {
+      return
+    }
     this.setState({
       indexPeriods: indexPeriods + 1
     })
