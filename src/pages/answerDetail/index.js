@@ -82,9 +82,7 @@ class answerDetail extends Component {
         const {indexPeriods,current} = this.state
         this.setState({
           indexPeriods:indexPeriods+1,
-          current:current+1
-        },()=>{
-          this.getPeriods()
+          //current:current+1
         })
       }
     
@@ -93,9 +91,7 @@ class answerDetail extends Component {
         console.log(indexPeriods)
         this.setState({
           indexPeriods:indexPeriods-1,
-          current:current-1
-        },()=>{
-          this.getPeriods()
+          //current:current-1
         })
       }
 
@@ -148,10 +144,17 @@ class answerDetail extends Component {
                   <AtIcon value='chevron-right' size='30' color='#427be6' onClick={this.handleRight}></AtIcon>
                 </View>
               )}
-                        <View className="view-plain">
-                            <View className='view-text'>当前进行至第 {index + 1} 周期</View>
-                            <View className='view-text'>截止时间 {periods[index].endTime}</View>
-                        </View>
+              {periods.length > 0 && (
+                  <View className="view-plain">
+                        <View className='view-text'>当前进行至第 {index + 1} 周期</View>
+                       <View className='view-text'>截止时间 {periods[index].endTime}</View>
+                   </View>
+              )}
+                 {periods.length === 0 && (
+                  <View className="view-plain" style={{textAlign:"center"}}>
+                        详细答案记录
+                   </View>
+              )}       
                     </View>
                     <View className='handle'>
                         <View>{finishTime}填答</View>

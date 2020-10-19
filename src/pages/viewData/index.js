@@ -161,21 +161,14 @@ class ViewData extends Component {
   handleRight() {
     const { indexPeriods, current } = this.state
     this.setState({
-      indexPeriods: indexPeriods + 1,
-      current: current + 1
-    }, () => {
-      this.getResList()
+      indexPeriods: indexPeriods + 1
     })
   }
 
   handleleft() {
     const { indexPeriods, current } = this.state
-    console.log(indexPeriods)
     this.setState({
       indexPeriods: indexPeriods - 1,
-      current: current - 1
-    }, () => {
-      this.getResList()
     })
   }
 
