@@ -6,7 +6,9 @@ export default {
   state: {
     detail: [],
     periods: [],
-    resList: {}
+    resList: {},
+    canEdit:false,
+    finishTime:''
   },
 
   effects: {
@@ -15,7 +17,9 @@ export default {
       yield put({
         type: 'save',
         payload: {
-          detail: data.anw
+          detail: data.anw,
+          canEdit:data.canEdit,
+          finishTime:data.finishTime
         }
       });
     },

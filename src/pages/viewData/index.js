@@ -100,7 +100,7 @@ class ViewData extends Component {
  
    // 步骤条change事件
    onChange (current,isCurrent) {
-    if(isCurrent > current){
+    if(isCurrent >= current){
       this.setState({ current }, () => {
         this.getResList()
       })

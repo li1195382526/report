@@ -51,7 +51,7 @@ class answerDetail extends Component {
 
     // 步骤条change事件
     onChange (current,isCurrent) {
-        if(isCurrent > current){
+        if(isCurrent >= current){
             this.setState({ current }, () => {
             this.getPeriods()
             this.lookAnswerResultById()
@@ -100,12 +100,12 @@ class answerDetail extends Component {
       }
 
     render() {
-        const { detail, periods, } = this.props
+        const { detail, periods,canEdit,finishTime } = this.props
         const {indexPeriods,text} = this.state
         const qtnId = 52
         const index = periods.findIndex((item) => item.isCurrent == 1)
         const newPeriods = periods.slice(indexPeriods,5+indexPeriods)
-        const canEdit = this.$router.params.canEdit
+        //const canEdit = this.$router.params.canEdit
         return (
             <View className="content">
                 {text.length > 0 && (
@@ -154,7 +154,7 @@ class answerDetail extends Component {
                         </View>
                     </View>
                     <View className='handle'>
-                        <View>2020-8-25填答</View>
+                        <View>{finishTime}填答</View>
                         {canEdit == 1 && (
                             <View className="edit" onClick={(val)=>this.handleEdit(index)}>修改填报</View>
                         )}
