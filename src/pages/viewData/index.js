@@ -77,12 +77,11 @@ class ViewData extends Component {
   getResList() {
     const { periods } = this.props
     const { current } = this.state
-    console.log(current)
     const reportId = this.$router.params.reportId
-    const period = periods[current].num
+    const period = periods.length ? periods[current].num : 1
     this.props.dispatch({
       type: 'answerDetail/getResList',
-      url: `/v3/report/${reportId}/period/${current}/results`
+      url: `/v3/report/${reportId}/period/${period}/results`
     })
   }
   // 列表点击
@@ -160,6 +159,10 @@ class ViewData extends Component {
 
   handleRight() {
     const { indexPeriods, current } = this.state
+    const { periods } = this.props
+    if(periods[periods.length - 1].num == current) {
+      return
+    }
     this.setState({
       indexPeriods: indexPeriods + 1,
       current: current + 1
@@ -186,12 +189,10 @@ class ViewData extends Component {
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
     const isnone = list.findIndex(item => item.id)
     const newPeriods = periods.slice(indexPeriods, 5 + indexPeriods)
-    console.log(this.state.current)
     const status = this.$router.params.status
     const usePeriod = this.$router.params.usePeriod
     const useNamelist = this.$router.params.useNamelist
     const useCount = this.$router.params.useCount
-    console.log('resList.unfinished', resList.unfinished?'1':'2',useNamelist,useCount)
     return (
       <View className='view'>
         <AtMessage />

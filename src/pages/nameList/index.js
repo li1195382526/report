@@ -54,6 +54,7 @@ class NameList extends Component {
     this.delItem = this.delItem.bind(this)
     this.finish = this.finish.bind(this)
     this.initialization = this.initialization.bind(this)
+    this.formatName = this.formatName.bind(this)
   }
 
   componentWillMount() {
@@ -101,11 +102,33 @@ class NameList extends Component {
   onConfirm() {
     const { multipleInfo } = this.state
     let tableList = JSON.parse(JSON.stringify(this.props.tableList))
-    let list = multipleInfo.split(/\s/g) // 回车符
+    let list = multipleInfo.split(/\n/g) // 回车符
     list = [...new Set(list)]
     let newlist = list.filter(i => i)
     for(let item of newlist){
+      let name = item.split(/[,，]/g)[0]
+      if(!name) {
+        Taro.atMessage({
+          message: `人员名称不能为空，请仔细核对您的输入`,
+          type: 'error'
+        })
+        return
+      }
+      if(name.length > 10) {
+        Taro.atMessage({
+          message: `人员名称限输入10个字符，请仔细核对您的输入`,
+          type: 'error'
+        })
+        return
+      }
       let limit = item.split(/[,，]/g).slice(1).filter(m => m)
+      if(limit.length > 5) {
+        Taro.atMessage({
+          message: `单人最多关联5个号码`,
+          type: 'error'
+        })
+        return
+      }
       if(limit.length) {
         for(let i of limit) {
           if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
@@ -168,7 +191,18 @@ class NameList extends Component {
   nameChange(value) {
     let { tableList } = this.props
     let { bindKey } = this.state
-    tableList[bindKey].name = value
+    tableList[bindKey].name = value.replace(/(^\s*)|(\s*$)/g, "")
+    this.props.dispatch({
+      type: 'nameList/uploadData',
+      payload: tableList,
+    })
+  }
+  formatName(value) {
+    console.log('value',value)
+    console.log('firnc', value.replace(/(^\s*)|(\s*$)/g, ""))
+    let { tableList } = this.props
+    let { bindKey } = this.state
+    tableList[bindKey].name = value.replace(/(^\s*)|(\s*$)/g, "")
     this.props.dispatch({
       type: 'nameList/uploadData',
       payload: tableList,
@@ -179,7 +213,7 @@ class NameList extends Component {
   }
   // 名单标题change
   poolTitleChange(value) {
-    this.setState({poolTitle: value})
+    this.setState({poolTitle: value.replace(/(^\s*)|(\s*$)/g, "")})
   }
   handleAddNameList() {
     let { tableList } = this.props
@@ -198,6 +232,13 @@ class NameList extends Component {
   onSave() {
     let { tableList, userinfo } = this.props
     let { poolTitle } = this.state
+    if(!poolTitle) {
+      Taro.atMessage({
+        message: `标题不能为空`,
+        type: 'error'
+      })
+      return
+    }
     let list = []
     for (let i of tableList) {
       let data = i.name + ',' + i.limit.join(',')
@@ -227,6 +268,13 @@ class NameList extends Component {
     let list = multipleInfo.split(/[,，]/g)
     list = [...new Set(tableList[bindKey].limit.concat(list))]
     let newlist = list.filter(item => item)
+    if(newlist.length > 5) {
+      Taro.atMessage({
+        message: `一人最多关联5个号码`,
+        type: 'error'
+      })
+      return
+    }
     for(let i of newlist) {
       if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
         Taro.atMessage({
@@ -245,7 +293,7 @@ class NameList extends Component {
   }
   // 关联change
   handleBind(event) {
-    const username = event.target.value.replace(/\s/g, ',')
+    const username = event.target.value.replace(/\n/g, ',')
     this.setState({
       multipleInfo: username,
       devalue: event.target.value
@@ -331,8 +379,11 @@ class NameList extends Component {
                     type='text'
                     placeholder='名字'
                     value={item.name}
+                    maxLength={10}
+                    textOverflowForbidden={true}
                     onChange={this.nameChange}
                     onFocus={() => this.nameFocus(key)}
+                    onBlur={this.formatName}
                   />
                 </View>
                 <View  className='fix3 bind'>
@@ -385,6 +436,8 @@ class NameList extends Component {
                 type='text'
                 placeholder='请输入名单分组名称'
                 value={poolTitle}
+                maxLength={20}
+                textOverflowForbidden={true}
                 onChange={this.poolTitleChange}
               />
             </AtModalContent>

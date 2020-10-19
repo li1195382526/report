@@ -339,7 +339,7 @@ class Answer extends Component {
           mask: true
         })
         setTimeout(() => {
-          //Taro.redirectTo({url: '../home/index'})
+          Taro.redirectTo({url: '../home/index'})
         }, (2000));
       }
     })

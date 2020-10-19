@@ -37,6 +37,8 @@ class DataList extends Component {
 		this.delItem = this.delItem.bind(this)
 		this.cancel = this.cancel.bind(this)
 		this.checkedChange = this.checkedChange.bind(this)
+		this.formatName = this.formatName.bind(this)
+		this.formatList = this.formatList.bind(this)
 	}
 
 	componentWillMount() {
@@ -73,21 +75,45 @@ class DataList extends Component {
 
 	handleChange(value) {
 		this.setState({
-			// eslint-disable-next-line react/no-unused-state
-			nameList: value.target.value
+			nameList: value.detail.value.replace(/(^\s*)|(\s*$)/g, "")
+		})
+	}
+	formatName(value) {
+		this.setState({
+			name: value.detail.value.replace(/(^\s*)|(\s*$)/g, ""),
 		})
 	}
 
+	formatList(value) {
+		this.setState({
+			nameList: value.detail.value.replace(/(^\s*)|(\s*$)/g, "")
+		})
+	}
 	handleChangeName(value) {
 		this.setState({
-			// eslint-disable-next-line react/no-unused-state
-			name: value.target.value,
+			name: value.detail.value.replace(/(^\s*)|(\s*$)/g, ""),
 		})
 	}
 
 	handleConfirm() {
 		const { name, nameList } = this.state
 		const { userinfo } = this.props
+		if(!name) {
+			Taro.atMessage({
+				'message': '标题不能为空',
+				'type': 'error',
+				'duration': 1500
+			})
+			return
+		}
+		if(!nameList) {
+			Taro.atMessage({
+				'message': '名单不能为空',
+				'type': 'error',
+				'duration': 1500
+			})
+			return
+		}
 		const params = {
 			title: name,
 			data: nameList
@@ -98,7 +124,7 @@ class DataList extends Component {
 			token: this.props.token,
 			url: `/v3/reportuser/${userinfo.id}/namelist/create`
 		}).then(() => {
-			this.setState({isOpen: false})
+			this.cancel()
 			this.getDataList()
 		})
 	}
@@ -213,8 +239,10 @@ class DataList extends Component {
 									value={name}
 									onChange={this.handleChangeName}
 									height={50}
-									maxLength={200}
-									placeholder='请输入名单的便签名称'
+									maxLength={20}
+									textOverflowForbidden={true}
+									placeholder='请输入名单的标签名称'
+									onBlur={this.formatName}
 								/>
 							</View>
 							<View className='daa-data'>
@@ -226,6 +254,7 @@ class DataList extends Component {
 									height={200}
 									maxLength={200}
 									placeholder={`请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：\n小明，13545678921\n小芳,15893839373`}
+									onBlur={this.formatList}
 								/>
 							</View>
 							<View style={{textAlign:'center'}}>可将名单信息快捷粘贴至文本框</View>

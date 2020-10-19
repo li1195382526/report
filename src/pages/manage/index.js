@@ -44,6 +44,7 @@ class NameList extends Component {
     this.handleAddSingle = this.handleAddSingle.bind(this)
     this.nameChange = this.nameChange.bind(this)
     this.nameFocus = this.nameFocus.bind(this)
+    this.formatTitle = this.formatTitle.bind(this)
   }
 
   componentWillMount() {
@@ -52,7 +53,10 @@ class NameList extends Component {
 
   // 库名称change
   titleChange (event) {
-    this.setState({newtitle: event.target.value})
+    this.setState({newtitle: event.target.value.replace(/(^\s*)|(\s*$)/g, "")})
+  }
+  formatTitle(event) {
+    this.setState({newtitle: event.target.value.replace(/(^\s*)|(\s*$)/g, "")})
   }
   componentDidMount() {
 
@@ -86,11 +90,33 @@ class NameList extends Component {
   onConfirm() {
     const { multipleInfo } = this.state
     let nameData = JSON.parse(JSON.stringify(this.props.nameData))
-    let list = multipleInfo.split(/\s/g) // 回车符
+    let list = multipleInfo.split(/\n/g) // 回车符
     list = [...new Set(list)]
     let newlist = list.filter(i => i)
     for(let item of newlist){
+      let name = item.split(/[,，]/g)[0]
+      if(!name) {
+        Taro.atMessage({
+          message: `人员名称不能为空，请仔细核对您的输入`,
+          type: 'error'
+        })
+        return
+      }
+      if(name.length > 10) {
+        Taro.atMessage({
+          message: `人员名称限输入10个字符，请仔细核对您的输入`,
+          type: 'error'
+        })
+        return
+      }
       let limit = item.split(/[,，]/g).slice(1).filter(m => m)
+      if(limit.length > 5) {
+        Taro.atMessage({
+          message: `单人最多关联5个号码`,
+          type: 'error'
+        })
+        return
+      }
       if(limit.length) {
         for(let i of limit) {
           if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
@@ -149,6 +175,13 @@ class NameList extends Component {
     let list = multipleInfo.split(/[,，]/g)
     list = [...new Set(nameData[bindKey].limit.concat(list))]
     let newlist = list.filter(item => item)
+    if(newlist.length > 5) {
+      Taro.atMessage({
+        message: `一人最多可以关联5个号码`,
+        type: 'error'
+      })
+      return
+    }
     for(let i of newlist) {
       if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
         Taro.atMessage({
@@ -158,7 +191,7 @@ class NameList extends Component {
         return
       }
     }
-    nameData[bindKey].limit = list
+    nameData[bindKey].limit = newlist
     this.props.dispatch({
       type: 'dataList/uploadData',
       payload: nameData,
@@ -167,7 +200,7 @@ class NameList extends Component {
   }
   // 关联change
   handleBind(event) {
-    const username = event.target.value.replace(/\s/g, ',')
+    const username = event.target.value.replace(/\n/g, ',')
     this.setState({
       multipleInfo: username,
       devalue: event.target.value
@@ -180,7 +213,7 @@ class NameList extends Component {
     newtitle = newtitle ? newtitle.replace(/(^\s*)|(\s*$)/g, "") : title
     if(!newtitle) { // 标题非空
       Taro.atMessage({
-        'message': '标签名称为必填项，请检查您的输入',
+        'message': '标签名称不能为空，请检查您的输入',
         'type': 'warning',
         'duration': 2500
       })
@@ -223,7 +256,7 @@ class NameList extends Component {
   nameChange(value) {
     let { nameData } = this.props
     let { bindKey } = this.state
-    nameData[bindKey].name = value
+    nameData[bindKey].name = value.replace(/(^\s*)|(\s*$)/g, "")
     this.props.dispatch({
       type: 'dataList/uploadData',
       payload: nameData,
@@ -250,8 +283,10 @@ class NameList extends Component {
                 value={title}
                 height={50}
                 onChange={this.titleChange}
-                maxLength={200}
+                maxLength={20}
+                textOverflowForbidden={true}
                 placeholder='库名称'
+                onBlur={this.formatTitle}
               />
             </View>
           </View>
@@ -272,8 +307,8 @@ class NameList extends Component {
             </View>
           </View>
           {nameData.map((item, key) => (
-            <View className='header-color'>
-              <View className='table' key={key}>
+            <View className='header-color'  key={key}>
+              <View className='table'>
                 <View className='fix1'>{`${key + 1}.`}</View>
                 <View className='fix2'>
                   {/* <input type="text" placeholder='名字' value={item.name} onChange={() => this.nameChange(key)} /> */}
@@ -281,6 +316,8 @@ class NameList extends Component {
                     type='text'
                     placeholder='名字'
                     value={item.name}
+                    maxLength={10}
+                    textOverflowForbidden={true}
                     onChange={this.nameChange}
                     onFocus={() => this.nameFocus(key)}
                   />
