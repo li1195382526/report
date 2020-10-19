@@ -180,6 +180,7 @@ class Home extends Component {
   handleWxLogin() {
     let encryptedData = ''
     let iv = ''
+    const _this = this
     Taro.login()
       .then(r => {
         var code = r.code // 登录凭证
@@ -190,6 +191,12 @@ class Home extends Component {
               Taro.setStorage({
                 key: "wxInfo",
                 data: res.userInfo
+              })
+              _this.props.dispatch({
+                type: 'common/save',
+                payload:{
+                  wxInfo:res.userInfo
+                }
               })
               encryptedData = res.encryptedData
               iv = res.iv
