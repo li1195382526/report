@@ -149,7 +149,16 @@ class Home extends Component {
   }
 
   handleData() {
+    const {itemdata} = this.state
     this.close()
+    if(itemdata.finishCount == 0) {
+      Taro.showToast({
+        title: '暂无回收数据',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
     Taro.navigateTo({
       url: `/pages/viewData/index?reportId=${this.state.reportId}&status=${this.state.status}&usePeriod=${this.state.itemdata.usePeriod}&useCount=${this.state.itemdata.useCount}&useNamelist=${this.state.itemdata.useNamelist}`
     })
@@ -162,7 +171,10 @@ class Home extends Component {
   }
 
   toEdit(value) {
-    const { isLogin, reportId } = this.state
+    let { isLogin, reportId } = this.state
+    if(value == 0) {
+      reportId = ''
+    }
     if (!!isLogin) {
       Taro.navigateTo({
         url: `/pages/edit/index?isInit=${value}&reportId=${reportId}`
@@ -386,7 +398,7 @@ class Home extends Component {
   render() {
     const { createList } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
-    const { isLogin, status, isDel, current, opened } = this.state
+    const { isLogin, status, isDel, current, opened, itemdata } = this.state
     return (
       <View className='page'>
         {/* 首页跑马灯及创建填报列表 */}
@@ -430,7 +442,7 @@ class Home extends Component {
 
           {/* 列表选择项 */}
           {this.state.current == 0 && (
-            <AtActionSheet isOpened={this.state.isOpened}>
+            <AtActionSheet isOpened={this.state.isOpened} onClose={this.close}>
               {status === 0 && (
                 <AtActionSheetItem onClick={() => this.toEdit(1)}>
                   编辑填报
@@ -470,7 +482,7 @@ class Home extends Component {
             </AtActionSheet>
           )}
           {this.state.current == 1 && (
-            <AtActionSheet isOpened={this.state.ispartOpened}>
+            <AtActionSheet isOpened={this.state.ispartOpened} onClose={this.close}>
               {status == 1 && (
                 <AtActionSheetItem>
                   <AtButton type='primary' plain='true' openType='share' className='share-btn'>分享填报</AtButton>
@@ -495,7 +507,7 @@ class Home extends Component {
             onClose={this.delCancel}
             onCancel={this.delCancel}
             onConfirm={this.handleDelete}
-            content={`确认删除<${createList[current].title}>填报?`}
+            content={`确认删除<${itemdata.title}>填报?`}
           />
         )}
 

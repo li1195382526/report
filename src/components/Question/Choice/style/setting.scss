@@ -6,3 +6,8 @@
     justify-content: space-between;
     padding: 0 10px 0 10px;
 }
+.qtset-con {
+    .at-modal__content {
+        min-height: 80rpx!important;
+    }
+}

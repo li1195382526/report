@@ -99,7 +99,7 @@ class answerDetail extends Component {
         const { detail, periods,canEdit,finishTime } = this.props
         const {indexPeriods,text} = this.state
         const qtnId = 52
-        const index = periods.findIndex((item) => item.isCurrent == 1)
+        const index = periods.length ? periods.findIndex((item) => item.isCurrent == 1) : 0
         const newPeriods = periods.slice(indexPeriods,5+indexPeriods)
         //const canEdit = this.$router.params.canEdit
         return (
@@ -158,7 +158,7 @@ class answerDetail extends Component {
                     </View>
                     <View className='handle'>
                         <View>{finishTime}填答</View>
-                        {canEdit == 1 && (
+                        {canEdit && (
                             <View className="edit" onClick={(val)=>this.handleEdit(index)}>修改填报</View>
                         )}
                     </View>

@@ -127,6 +127,10 @@ onTimeChange = e => {
       return
     }
 
+    if(info.memo.length == 0){
+      this.handleTips('error','填报说明不能为空')
+      return
+    }
     if(info.memo.length >= 200){
     this.handleTips('error','填报说明不能超过200个字符')
     return

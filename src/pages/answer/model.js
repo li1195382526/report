@@ -30,8 +30,19 @@ export default {
         type: 'save',
       });
       if(data.status == 200) {
+        yield put({
+          type: 'save',
+          payload: {
+            info: {},
+            questionnaire: {},
+            anw: {},
+            res: {}, // 进入填报的返回结果
+            namelist: [],
+            noModify: false
+          }
+        });
         Taro.redirectTo({
-          url: `/pages/submits/index?reportId=${reportId}&period=${period}canEdit=${canEdit}`
+          url: `/pages/submits/index?reportId=${reportId}&period=${period}&canEdit=${canEdit}`
         })
       } else {
         Taro.showToast({
