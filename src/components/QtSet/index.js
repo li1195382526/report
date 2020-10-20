@@ -169,11 +169,17 @@ class QtSet extends Component {
         isChange:!isChange
       }
     })
-
+    if(value){
     this.setState({
-      isLimit:true,
-      hint:val === 1 ? "1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期 ":"开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报"
-    })
+          isLimit:true,
+          hint:val === 1 ? "1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期 2、关闭连续填报：不限制填写时间，可随时填写所有周期内的数据。":"开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报"
+        })
+    }else{
+      this.setState({
+        isLimit:false,
+      })
+    }
+    
   }
 
   //关闭限制人员提示弹框
@@ -299,7 +305,9 @@ class QtSet extends Component {
                     <AtList>
                       <AtListItem
                         title='周期类型'
-                        extraText={this.state.selector[info.periodType]}
+                        extraText={
+                          info.periodType.length > 0? this.state.selector[info.periodType]:'未设置'
+                        }
                       />
                     </AtList>
                   </Picker>

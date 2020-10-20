@@ -16,9 +16,8 @@ class Model extends Component {
     return (
         <View>
           <AtModal isOpened={isLimit}>
-            <AtModalHeader>标题</AtModalHeader>
             <AtModalContent>
-              {hint}
+              <View style={{lineHeight:'20px'}}>{hint}</View>
             </AtModalContent>
             <AtModalAction><Button onClick={handleClose}>知道了</Button></AtModalAction>
           </AtModal>
