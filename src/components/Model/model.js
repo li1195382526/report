@@ -15,7 +15,7 @@ class Model extends Component {
       const {isLimit,handleClose,hint} = this.props
     return (
         <View>
-          <AtModal isOpened={isLimit}>
+          <AtModal isOpened={isLimit} closeOnClickOverlay={false}>
             <AtModalContent>
               <View style={{lineHeight:'20px'}}>{hint}</View>
             </AtModalContent>

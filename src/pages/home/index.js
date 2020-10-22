@@ -120,6 +120,8 @@ class Home extends Component {
 
   // 小程序上拉加载
   onReachBottom() {
+    const { createList, createListTotal } = this.props
+    if(this.state.current == 0 && createList.length < createListTotal) {
       this.props.dispatch({
         type: 'home/save',
         payload: {
@@ -127,6 +129,13 @@ class Home extends Component {
         },
       });
       this.getOwnerlist()
+    } else {
+      Taro.showToast({
+        title: '暂无更多数据',
+        icon: 'none',
+        duration: 2000
+      })
+    }
   }
 
   componentWillUnmount = () => {
@@ -414,13 +423,13 @@ class Home extends Component {
             autoplay
           >
             <SwiperItem>
-              <View className='demo-text-1'>1</View>
+                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178408865.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
             <SwiperItem>
-              <View className='demo-text-2'>2</View>
+                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178528080.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
             <SwiperItem>
-              <View className='demo-text-3'>3</View>
+                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178633117.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
           </Swiper>
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
