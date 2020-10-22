@@ -8,7 +8,8 @@ export default {
     createList:[],
     page: 1,
     isPersonal:0,//0首页登录，1，个人中心等，2，获取名单库登录
-    Participantlist: []
+    Participantlist: [],
+    createListTotal: 0
   },
 
   effects: {
@@ -120,6 +121,7 @@ export default {
         type: 'save',
         payload: {
           createList:createList.concat(data.data),
+          createListTotal: data.total
         }
       });
     },

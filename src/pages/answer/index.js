@@ -163,12 +163,7 @@ class Answer extends Component {
     const {res, anw,questionnaire, info} = this.props
     const id = this.$router.params.listId
     const periodCount = res.data.rep.period
-    let params = {
-      ctl: res.data.ctl,
-      anw,
-      rep: res.data.rep
-    }
-
+    
     //必答验证
     //questionnaire.pageList[0] 是因为现在没有分页
     const { pass, message } = validates.validate(fromJS(questionnaire.pageList[0].qtList), fromJS(anw));
@@ -180,7 +175,12 @@ class Answer extends Component {
       })
       return;
     }
-
+    res.data.rep.name = res.data.rep.name ? res.data.rep.name : Taro.getStorageSync('wxInfo').nickName
+    let params = {
+      ctl: res.data.ctl,
+      anw,
+      rep: res.data.rep
+    }
     this.props.dispatch({
       type: 'answer/subMitAnswer',
       token: this.props.token,

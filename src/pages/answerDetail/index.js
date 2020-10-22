@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtToast,AtIcon } from 'taro-ui'
+import { AtIcon } from 'taro-ui'
 import AnswerOptList from './AnswerOptList'
 import AnswerOpenList from './AnswerOpenList'
 import AnswerSubList from './AnswerSubList'
@@ -21,7 +21,6 @@ class answerDetail extends Component {
         this.state = {
             current: 1,
             indexPeriods:0,
-            text:''
         }
         this.lookAnswerResultById = this.lookAnswerResultById.bind(this)
         this.onChange = this.onChange.bind(this)
@@ -50,15 +49,17 @@ class answerDetail extends Component {
     }
 
     // 步骤条change事件
-    onChange (current,isCurrent) {
+    onChange (current, isCurrent, item) {
         if(isCurrent >= current){
             this.setState({ current }, () => {
-            this.getPeriods()
-            this.lookAnswerResultById()
-        })
+                this.getPeriods()
+                this.lookAnswerResultById()
+            })
         }else{
-            this.setState({
-                text:'暂无数据！还未进行到当前周期2020-10-22开启'
+            Taro.showToast({
+                title: '暂无数据！还未进行到当前周期2020-10-22开启',
+                icon: 'none',
+                duration: 2000
             })
         }
         
@@ -97,16 +98,13 @@ class answerDetail extends Component {
 
     render() {
         const { detail, periods,canEdit,finishTime } = this.props
-        const {indexPeriods,text} = this.state
+        const {indexPeriods} = this.state
         const qtnId = 52
         const index = periods.length ? periods.findIndex((item) => item.isCurrent == 1) : 0
         const newPeriods = periods.slice(indexPeriods,5+indexPeriods)
         //const canEdit = this.$router.params.canEdit
         return (
             <View className="content">
-                {text.length > 0 && (
-                   <AtToast isOpened text={text}></AtToast> 
-                )}
                 <View className="main">
                     <View className='view-data'>
                     {periods.length > 5 && newPeriods[0].num !== 1 &&(
@@ -115,31 +113,31 @@ class answerDetail extends Component {
                 </View>
               )}
              <View className='view-step'>
-               {periods.length > 1 && (
-                 <View className='step-line'></View>
-               )}
-               {newPeriods.map((val)=>(
-               <View style={{marginTop: this.state.current === val.num ?'-10px' : '0',zIndex:'100'}} >
-                 {this.state.current === val.num && (
-                   <View className='step-light'>
-                   <View className='step-lightleft'></View>
-                   <View className='step-lightmid'></View>
-                   <View className='step-lightright'></View>
-                 </View>
-                 )}
-                  <View className='step' style={{
-                    width:this.state.current === val.num ?'30px' : '25px',
-                    height: this.state.current === val.num ?'30px' : '25px',
-                    lineHeight: this.state.current === val.num ?'30px' : '25px',
-                   }}
-                     onClick={()=>this.onChange(val.num,index+1)}
-                   >                    
-                     {val.num}
+                {periods.length > 1 && (
+                    <View className='step-line'></View>
+                )}
+                {newPeriods.map((val)=>(
+                    <View style={{ marginTop: this.state.current === val.num ? '-10px' : '0', zIndex: '100' }} >
+                        {this.state.current === val.num && (
+                            <View className='step-light'>
+                                <View className='step-lightleft'></View>
+                                <View className='step-lightmid'></View>
+                                <View className='step-lightright'></View>
+                            </View>
+                        )}
+                        <View className='step' style={{
+                            width: this.state.current === val.num ? '30px' : '25px',
+                            height: this.state.current === val.num ? '30px' : '25px',
+                            lineHeight: this.state.current === val.num ? '30px' : '25px',
+                        }}
+                            onClick={() => this.onChange(val.num, index + 1, val)}
+                        >
+                            {val.num}
+                        </View>
                     </View>
-               </View>
-               ))}
+                ))}
               </View>
-              {periods.length > 5 && (
+              {periods.length > 5 && newPeriods[newPeriods.length - 1].num != periods[periods.length - 1].num && (
                 <View className='view-right'>
                   <AtIcon value='chevron-right' size='30' color='#427be6' onClick={this.handleRight}></AtIcon>
                 </View>

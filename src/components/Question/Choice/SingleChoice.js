@@ -63,8 +63,27 @@ class SingleChoice extends Component {
 
   //删除选项
   handleDeleteOpt(item,key){
-    console.log(key)
-    const {opts,isChange} = this.props
+    const { opts, isChange } = this.props
+    if (opts.optlist.length == 1) {
+      const { opts, isChange } = this.props
+      let questionnaire = this.props.questionnaire
+      let newQtlist = questionnaire.pageList[0].qtList.filter((val) => val.disSeq != opts.disSeq)
+      newQtlist.map((item, key) => {
+        item.disSeq = `Q${key + 1}`
+        item.mySeq = `Q${key + 1}`
+      })
+      questionnaire.pageList.map((item) => {
+        item.qtList = newQtlist
+      })
+      this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          questionnaire,
+          isChange: !isChange
+        }
+      })
+      return
+    }
     let newOptList = opts.optlist.filter((val)=> val.mySeq !== item.mySeq)
     newOptList.map((val,key1)=>{
       val.mySeq = `A${key1+1}`

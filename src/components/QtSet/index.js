@@ -2,10 +2,10 @@ import Taro, { Component } from '@tarojs/taro'
 import { View,Picker,Text } from '@tarojs/components'
 import PropTypes from 'prop-types';
 import {AtList,AtListItem, AtFloatLayout, AtSwitch }  from 'taro-ui'
-import './index.scss'
 import { DateTimePicker } from '../../components/DateTimePicker'
 import Model from '../Model/model'
 import { connect } from '@tarojs/redux';
+import './index.scss'
 
 
 @connect(({ edit, home, common,nameList }) => ({
@@ -169,11 +169,12 @@ class QtSet extends Component {
         isChange:!isChange
       }
     })
-
-    this.setState({
-      isLimit:true,
-      hint:val === 1 ? "1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期 ":"开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报"
-    })
+    if(value) {
+      this.setState({
+        isLimit:true,
+        hint:val === 1 ? "1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期 ":"开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报"
+      })
+    }
   }
 
   //关闭限制人员提示弹框
@@ -212,22 +213,22 @@ class QtSet extends Component {
             switchIsCheck={info.useTimelimit == 1 ? true :false} 
             onSwitchChange={(val)=>this.handleChange(val,'useTimelimit')} 
           />
-              {info.useTimelimit == 1 && (
-                <View>
-                <AtListItem title='开始时间'
-                  disabled={!isModify}
-                  arrow='right'
-                  extraText={beginTimeList}
-                  onClick={()=>this.handleBeginTimeSetting(true)}
-                />
-                  <AtListItem title='结束时间'
-                    disabled={!isModify}
-                    arrow='right'
-                    extraText={expireTimeList}
-                    onClick={()=>this.handleExpireTimeSetting(true)}
-                  />
-              </View>
-              )}
+          {info.useTimelimit == 1 && (
+            <View>
+              <AtListItem title='开始时间'
+                disabled={!isModify}
+                arrow='right'
+                extraText={beginTimeList}
+                onClick={() => this.handleBeginTimeSetting(true)}
+              />
+              <AtListItem title='结束时间'
+                disabled={!isModify}
+                arrow='right'
+                extraText={expireTimeList}
+                onClick={() => this.handleExpireTimeSetting(true)}
+              />
+            </View>
+          )}
           </AtList>
           {this.state.isShowBeginTime && (
             <AtFloatLayout isOpened={this.state.isShowBeginTime} title='开始时间设置'

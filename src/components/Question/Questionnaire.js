@@ -73,7 +73,7 @@ class Questionnaire extends Component {
     return (
       <View>
         {data ? data.qtList.map((qt,key)=>(
-            <View className='change'>
+            <View className='change' key={key}>
                 <View className='change-qt'>
                   <View>{`题目${qt.disSeq}`}</View>
                   <Picker mode='selector' range={this.state.selector} onChange={(val)=>this.onChange(val,qt,key)} disabled={!isModify}>

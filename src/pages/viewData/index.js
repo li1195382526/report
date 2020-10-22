@@ -30,7 +30,6 @@ class ViewData extends Component {
       currentMobile: '',
       currentPeriod: '',
       indexPeriods: 0,
-      text:''
     }
     this.handelToggle = this.handelToggle.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -68,7 +67,7 @@ class ViewData extends Component {
     }).then(() => {
       const { periods } = this.props
       const index = periods.findIndex((item) => item.isCurrent == 1)
-      this.setState({ current: index == -1 ? periods.length - 1 : index+1 }, () => {
+      this.setState({ current: index == -1 ? periods.length - 1 : index }, () => {
         this.getResList()
       })
     })
@@ -98,15 +97,17 @@ class ViewData extends Component {
   }
  
    // 步骤条change事件
-   onChange (current,isCurrent) {
+   onChange (current, isCurrent, item) {
     if(isCurrent >= current){
       this.setState({ current }, () => {
         this.getResList()
       })
     }else{
-        this.setState({
-            text:'暂无数据！还未进行到当前周期2020-10-22开启'
-        })
+      Taro.showToast({
+        title: '暂无数据！还未进行到当前周期2020-10-22开启',
+        icon: 'none',
+        duration: 2000
+      })
     }
     
 }
@@ -176,7 +177,7 @@ class ViewData extends Component {
   }
 
   render() {
-    const { isFinished, isMenge, indexPeriods,text } = this.state
+    const { isFinished, isMenge, indexPeriods } = this.state
     const { periods, resList } = this.props
     const index = periods.findIndex((item) => item.isCurrent == 1)
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
@@ -189,9 +190,6 @@ class ViewData extends Component {
     return (
       <View className='view'>
         <AtMessage />
-        {text.length > 0 && (
-                   <AtToast isOpened text={text}></AtToast> 
-                )}
         {usePeriod == 1 && (
           <View className='view-data'>
             {/* <AtSteps
@@ -209,9 +207,9 @@ class ViewData extends Component {
               {periods.length > 1 && (
                 <View className='step-line'></View>
               )}
-              {newPeriods.map((val) => (
-                <View style={{ marginTop: this.state.current === val.num ? '-10px' : '0', zIndex: '100' }} >
-                  {this.state.current === val.num && (
+              {newPeriods.map((val, key) => (
+                <View style={{ marginTop: this.state.current + 1 === val.num ? '-10px' : '0', zIndex: '100' }} key={key}>
+                  {this.state.current + 1 === val.num && (
                     <View className='step-light'>
                       <View className='step-lightleft'></View>
                       <View className='step-lightmid'></View>
@@ -219,18 +217,18 @@ class ViewData extends Component {
                     </View>
                   )}
                   <View className='step' style={{
-                    width: this.state.current === val.num ? '30px' : '25px',
-                    height: this.state.current === val.num ? '30px' : '25px',
-                    lineHeight: this.state.current === val.num ? '30px' : '25px',
+                    width: this.state.current + 1 === val.num ? '30px' : '25px',
+                    height: this.state.current + 1 === val.num ? '30px' : '25px',
+                    lineHeight: this.state.current + 1 === val.num ? '30px' : '25px',
                   }}
-                    onClick={() => this.onChange(val.num,index+1)}
+                    onClick={() => this.onChange(val.num,index+1,val)}
                   >
                     {val.num}
                   </View>
                 </View>
               ))}
             </View>
-            {periods.length > 5 && (
+            {periods.length > 5 && newPeriods[newPeriods.length - 1].num != periods[periods.length - 1].num && (
               <View className='view-right'>
                 <AtIcon value='chevron-right' size='30' color='#427be6' onClick={this.handleRight}></AtIcon>
               </View>
@@ -263,7 +261,7 @@ class ViewData extends Component {
               // <AtListItem key={key} title={`${key+1}. 李琴`} onClick={() => this.handleClick(item)} extraText={isFinished?'2020-08-24 10:35填报':'督促填报'} arrow='right'  />
               item.id && (
                 <View className='item-content' onClick={() => this.handleClick(item)} key={key}>
-                  <View className="left">{item.listIndex + '. ' + item.resultName}</View>
+                  <View className="left">{item.listIndex ? item.listIndex + '. ' + item.resultName : key + 1 + '. ' + item.resultName}</View>
                   {isFinished && (<View className="right">{item.finishTime + '填报'}&gt;</View>)}
                   {!isFinished && status != 5 && (
                     <View className="right">
