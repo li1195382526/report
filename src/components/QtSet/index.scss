@@ -44,3 +44,8 @@
 .at-list__item {
     background: #000;
 }
+.time {
+    .at-list__item-extra {
+        max-width: 400rpx;
+    }
+}

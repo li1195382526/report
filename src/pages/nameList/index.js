@@ -58,11 +58,10 @@ class NameList extends Component {
   }
 
   componentWillMount() {
-
+    this.initialization()
   };
 
   componentDidMount() {
-    this.initialization()
   }
 
   // 初始数据

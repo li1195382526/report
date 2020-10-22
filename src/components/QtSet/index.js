@@ -38,7 +38,8 @@ class QtSet extends Component {
 
   //填报设置
   handleChange(val,type){
-    let {info,isChange} = this.props
+    let {isChange} = this.props
+    let info = JSON.parse(JSON.stringify(this.props.info))
     if(val.target.value && type === 'useCount'){
       info.useNamelist = 0
       info.namelist = []
@@ -214,7 +215,7 @@ class QtSet extends Component {
             onSwitchChange={(val)=>this.handleChange(val,'useTimelimit')} 
           />
           {info.useTimelimit == 1 && (
-            <View>
+            <View className='time'>
               <AtListItem title='开始时间'
                 disabled={!isModify}
                 arrow='right'
@@ -260,8 +261,8 @@ class QtSet extends Component {
                 {info.useCount == 1 && (
                   <AtList>
                   <View className='set-cycle'>
-                    <View>设置人数<Text>（不填为不限）</Text></View>
-                    <Input type='text' 
+                    <View>设置人数</View>
+                    <Input type='number' 
                       disabled={!isModify}
                       placeholder='请输入填报人数' 
                       onChange={(val)=>this.handleNum(val,'pnlCount')}
@@ -301,7 +302,7 @@ class QtSet extends Component {
                       <AtListItem
                         title='周期类型'
                         extraText={
-                          info.periodType.length > 0? this.state.selector[info.periodType]:'未设置'
+                          this.state.selector[info.periodType]
                         }
                       />
                     </AtList>
@@ -310,7 +311,7 @@ class QtSet extends Component {
                       <View className='set-cycle'>
                         <View>连续周期数</View>
                         <Input 
-                          type='text'
+                          type='number'
                           disabled={!isModify} 
                           placeholder='请输入周期数'
                           value={info.periodSize}
@@ -346,9 +347,10 @@ class QtSet extends Component {
                       <View>设置密码</View>
                       <Input 
                         disabled={!isModify}
-                        type='text' 
+                        type='number' 
                         placeholder='请输入填报密码'
                         value={info.pwd}
+                        maxLength={4}
                         onChange={(val)=>this.handleNum(val,'pwd')} 
                       />
                     </View>

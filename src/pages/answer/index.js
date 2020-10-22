@@ -197,7 +197,7 @@ class Answer extends Component {
   modifySubmit(){
     const mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
-    const {anw,questionnaire,res} = this.props
+    const {anw,questionnaire,res, info} = this.props
     //const periodCount = res.data.rep.period
     const periodCount = this.$router.params.period
     const id = this.$router.params.listId
@@ -221,7 +221,8 @@ class Answer extends Component {
       url:`/v3/report/${id}/period/${periodCount}/participant/${!!mobile ? mobile :wxMobile}/answer`,
       payload: params,
       reportId: this.$router.params.listId,
-      period:periodCount
+      period:periodCount,
+      canEdit: info.canEdit
     })
   }
 

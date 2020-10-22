@@ -34,7 +34,7 @@ class QtnCanvas extends Component {
     return (
       <View className=''>
         {!!questionnaire.pageList ? questionnaire.pageList.map((item, key) => (
-            !!questionnaire ? <Questionnaire  data={item} index={key} />: null
+            !!questionnaire ? <Questionnaire  data={item} index={key} key={key}/>: null
         )
         ):''}
       </View>

@@ -367,7 +367,8 @@ class Home extends Component {
         ispartOpened: true,
         status: val.status,
         reportId: val.id,
-        currentPeriod:val.currentPeriod
+        currentPeriod:val.currentPeriod,
+        itemdata: val
       })
     }
   }
@@ -497,7 +498,7 @@ class Home extends Component {
                   <AtButton type='primary' plain='true' openType='share' className='share-btn'>分享填报</AtButton>
                 </AtActionSheetItem>
               )}
-              {status == 1 && <AtActionSheetItem onClick={this.editAns}>修改填报</AtActionSheetItem>}
+              {status == 1 && itemdata.canEdit == 1 && <AtActionSheetItem onClick={this.editAns}>修改填报</AtActionSheetItem>}
               <AtActionSheetItem onClick={this.partHandleData}>
                 {status == 1 ? '查看答案' : '查看结果'}
               </AtActionSheetItem>

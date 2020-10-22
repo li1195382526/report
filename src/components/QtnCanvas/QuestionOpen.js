@@ -44,6 +44,7 @@ class QuestionOpen extends Component {
           const value = inputValue && inputValue.split('_')[1]
           return(
             <Input type='text'
+              key={key}
               disabled={noModify} 
               value={value}
               className='open-input' 

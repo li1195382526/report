@@ -164,7 +164,7 @@ onTimeChange = e => {
       this.handleTips('error','填报周期不能为空')
       return
     }
-    console.log(parseInt(info.periodSize))
+    // console.log(parseInt(info.periodSize))
     if(info.usePeriod == 1 && info.periodSize.length > 0 && parseInt(info.periodSize) < 0){
       this.handleTips('error','填报周期数必须为正整数')
       return
@@ -230,7 +230,6 @@ onTimeChange = e => {
 
   //保存
   handleSave(){
-    // eslint-disable-next-line no-shadow
     const {info,questionnaire} = this.props
     if(info.title.length === 0){
       this.handleTips('error','填报主题不能为空')
@@ -240,10 +239,17 @@ onTimeChange = e => {
       this.handleTips('error','填报主题不能超过20个字符')
       return
     }
-
     if(info.memo.length >= 200){
     this.handleTips('error','填报说明不能超过200个字符')
     return
+    }
+    if(info.usePeriod == 1 && info.periodType.length === 0){
+      this.handleTips('error','填报周期类别不能为空')
+      return
+    }
+    if(info.usePeriod == 1 && info.periodSize.length === 0){
+      this.handleTips('error','填报周期不能为空')
+      return
     }
     if(info.creatorName.length === 0){
       info.creatorName = this.props.wxInfo.nickName

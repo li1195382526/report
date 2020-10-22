@@ -32,6 +32,10 @@ class App extends Component {
    *  3.获取小程序的设备信息 globalData.systemInfo
    * @memberof App
    */
+  componentWillMount() {
+    const info = Taro.getLaunchOptionsSync()
+    console.log('场景值componentWillMount', info )
+  }
   async componentDidMount() {
     // 获取参数
     const referrerInfo = this.$router.params.referrerInfo;
@@ -52,7 +56,13 @@ class App extends Component {
     sys && (globalData.systemInfo = sys);
   }
 
-  componentDidShow () {}
+  componentDidShow () {
+    const info = Taro.getLaunchOptionsSync()
+    console.log('场景值componentDidShow', info)
+    if(info.scene == 1089 && info.query.listId) {
+      Taro.redirectTo({url: '/pages/home/index'})
+    }
+  }
 
   componentDidHide () {}
 

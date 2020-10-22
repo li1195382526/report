@@ -20,7 +20,7 @@ class Questionnaire extends Component {
     return (
       <View className='question'>
         {data ? data.qtList.map((qt,key)=>(
-            <View className='question-qt'>
+            <View className='question-qt' key={key}>
               <View className='all-title'>
                 <View className='open-title'>
                   <View>
