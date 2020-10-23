@@ -57,7 +57,7 @@ class answerDetail extends Component {
             })
         }else{
             Taro.showToast({
-                title: '暂无数据！还未进行到当前周期2020-10-22开启',
+                title: '暂无数据！还未进行到当前周期开启时间',
                 icon: 'none',
                 duration: 2000
             })

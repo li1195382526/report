@@ -67,7 +67,7 @@ class ViewData extends Component {
     }).then(() => {
       const { periods } = this.props
       const index = periods.findIndex((item) => item.isCurrent == 1)
-      this.setState({ current: index == -1 ? periods.length - 1 : index }, () => {
+      this.setState({ current: index == -1 ? periods.length - 1 : index+1 }, () => {
         this.getResList()
       })
     })
@@ -104,7 +104,7 @@ class ViewData extends Component {
       })
     }else{
       Taro.showToast({
-        title: '暂无数据！还未进行到当前周期2020-10-22开启',
+        title: '暂无数据！还未进行到当前周期开启时间',
         icon: 'none',
         duration: 2000
       })
@@ -208,8 +208,8 @@ class ViewData extends Component {
                 <View className='step-line'></View>
               )}
               {newPeriods.map((val, key) => (
-                <View style={{ marginTop: this.state.current + 1 === val.num ? '-10px' : '0', zIndex: '100' }} key={key}>
-                  {this.state.current + 1 === val.num && (
+                <View style={{ marginTop: this.state.current === val.num ? '-10px' : '0', zIndex: '100' }} key={key}>
+                  {this.state.current === val.num && (
                     <View className='step-light'>
                       <View className='step-lightleft'></View>
                       <View className='step-lightmid'></View>
@@ -217,9 +217,9 @@ class ViewData extends Component {
                     </View>
                   )}
                   <View className='step' style={{
-                    width: this.state.current + 1 === val.num ? '30px' : '25px',
-                    height: this.state.current + 1 === val.num ? '30px' : '25px',
-                    lineHeight: this.state.current + 1 === val.num ? '30px' : '25px',
+                    width: this.state.current === val.num ? '30px' : '25px',
+                    height: this.state.current === val.num ? '30px' : '25px',
+                    lineHeight: this.state.current === val.num ? '30px' : '25px',
                   }}
                     onClick={() => this.onChange(val.num,index+1,val)}
                   >
