@@ -7,11 +7,9 @@ const AnswerOpenList = ({selectType, optList}) => (
   <View className="optlist">
     
     {optList.map((opt, key) => (
-       <View>
-          <View qtn__opt>{opt.text}</View>
-        <View qtn__opt>{opt.label}</View>
+       <View key={key}>
+         <View qtn__opt>{opt.text || opt.label}</View>
       </View>
-     
     ))}
   </View>
 )
