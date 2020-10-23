@@ -45,27 +45,15 @@ class AnswerOptList extends Component {
       <View className="optlist">
         {optList.map((opt, key) => (
           <ul key={key || 0}>
-            {(type != 7 && doc.selectType != 11 && doc.selectType != 12) && (
               <li className="qtn__opt clear-fix" style={{ display: 'block' }}>
                 {!opt.img && <span>{opt.label}</span>}
                 <span>{opt.text ? '（ ' + opt.text + ' ）' : ''}</span>
                 {opt.img && <View style={{ background: `url(${opt.img}) 0 0 / cover no-repeat`, width: '49%', height: '162.5px', marginRight: '1%', marginTop: '6px', float: 'left' }}></View>}
               </li>
-            )}
-            {type == 7 && (
-              <li className="qtn__opt">
-                <View>
-            <a href={`/v2/files/upload/answer/${qtnId}/${opt.text}`} download={opt.text} style={{ display: 'block' }}>{opt.text}</a>
-                  <a href={`/v2/files/upload/answer/${qtnId}/${opt.text}`} download={opt.text}
-                    style={{ color: '#1296DB' }}
-                  >下载</a>
-                </View>
-              </li>
-            )}
           </ul>
         ))}
         {/* 热点题答案完整显示处理 */}
-        {(doc.selectType == 11 || doc.selectType == 12) && (
+        {/* {(doc.selectType == 11 || doc.selectType == 12) && (
           <View ref={element => (this._canvas = element)} style={{ marginTop: '2px' }}>
             <View className="hot-canvas" style={{ background: `url(${doc.img}) 0 center / contain no-repeat`, width: HOT_CANVAS_WIDTH * ratio, height: height, position: 'relative' }}>
               {optList.map((item, index) => {
@@ -81,7 +69,7 @@ class AnswerOptList extends Component {
               })}
             </View>
           </View>
-        )}
+        )} */}
       </View>
     )
   }
