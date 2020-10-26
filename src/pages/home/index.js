@@ -121,6 +121,7 @@ class Home extends Component {
   // 小程序上拉加载
   onReachBottom() {
     const { createList, createListTotal } = this.props
+    const { isLogin } = this.state
     if(this.state.current == 0 && createList.length < createListTotal) {
       this.props.dispatch({
         type: 'home/save',
@@ -129,7 +130,7 @@ class Home extends Component {
         },
       });
       this.getOwnerlist()
-    } else {
+    } else if (isLogin) {
       Taro.showToast({
         title: '暂无更多数据',
         icon: 'none',

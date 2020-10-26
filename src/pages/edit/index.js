@@ -174,17 +174,17 @@ onTimeChange = e => {
     }
 
     if(info.needPwd == 1 && info.pwd.length === 0){
-      this.handleTips('error','填报密码必须为四位正整数')
+      this.handleTips('error','开启密码时填报密码不能为空')
       return
     }
 
     if(info.needPwd == 1 && info.pwd.length > 4){
-      this.handleTips('error','填报密码必须为四位正整数')
+      this.handleTips('error','填报密码最多4位')
       return
     }
 
     if(info.needPwd == 1 &&  isNaN(parseInt(info.pwd))){
-      this.handleTips('error','填报密码必须为四位正整数')
+      this.handleTips('error','填报密码必须为4位正整数')
       return
     }
     
@@ -243,14 +243,69 @@ onTimeChange = e => {
     this.handleTips('error','填报说明不能超过200个字符')
     return
     }
-    if(info.usePeriod == 1 && info.periodType.length === 0){
-      this.handleTips('error','填报周期类别不能为空')
+    if (info.title.length === 0) {
+      this.handleTips('error', '填报主题不能为空')
       return
     }
-    if(info.usePeriod == 1 && info.periodSize.length === 0){
-      this.handleTips('error','填报周期不能为空')
+    if (info.title.length >= 20) {
+      this.handleTips('error', '填报主题不能超过20个字符')
       return
     }
+    if (info.memo.length == 0) {
+      this.handleTips('error', '填报说明不能为空')
+      return
+    }
+    if (info.memo.length >= 200) {
+      this.handleTips('error', '填报说明不能超过200个字符')
+      return
+    }
+    if (info.useTimelimit == 1 && !info.beginTime || info.useTimelimit == 1 && !info.endTime) {
+      this.handleTips('error', '开启时间限制时开始与结束时间为必填')
+      return
+    }
+    if (info.useCount == 1 && info.pnlCount.length === 0) {
+      this.handleTips('error', '填报人数不能为空')
+      return
+    } else if (info.useCount == 1 && parseInt(info.pnlCount) <= 0) {
+      this.handleTips('error', '填报人数必须大于零')
+      return
+    } else if (info.useCount == 1 && isNaN(parseInt(info.pnlCount))) {
+      this.handleTips('error', '填报人数必须是正整数')
+      return
+    }
+    if (info.useNamelist == 1 && info.namelist.length === 0) {
+      this.handleTips('error', '填报名单不能为空')
+      return
+    }
+    if (info.usePeriod == 1 && info.periodType.length === 0) {
+      this.handleTips('error', '填报周期类别不能为空')
+      return
+    }
+    if (info.usePeriod == 1 && info.periodSize.length === 0) {
+      this.handleTips('error', '填报周期不能为空')
+      return
+    }
+    // console.log(parseInt(info.periodSize))
+    if (info.usePeriod == 1 && info.periodSize.length > 0 && parseInt(info.periodSize) < 0) {
+      this.handleTips('error', '填报周期数必须为正整数')
+      return
+    } else if (info.usePeriod == 1 && isNaN(parseInt(info.periodSize))) {
+      this.handleTips('error', '填报周期数必须是正整数')
+      return
+    }
+    if (info.needPwd == 1 && info.pwd.length === 0) {
+      this.handleTips('error', '开启密码时填报密码不能为空')
+      return
+    }
+    if (info.needPwd == 1 && info.pwd.length > 4) {
+      this.handleTips('error', '填报密码最多4位')
+      return
+    }
+    if (info.needPwd == 1 && isNaN(parseInt(info.pwd))) {
+      this.handleTips('error', '填报密码必须为4位正整数')
+      return
+    }
+
     if(info.creatorName.length === 0){
       info.creatorName = this.props.wxInfo.nickName
     }

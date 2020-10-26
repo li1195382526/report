@@ -44,13 +44,13 @@ class AnswerOptList extends Component {
     return (
       <View className="optlist">
         {optList.map((opt, key) => (
-          <ul key={key || 0}>
-              <li className="qtn__opt clear-fix" style={{ display: 'block' }}>
+          <View key={key || 0}>
+              <View className="qtn__opt clear-fix" style={{ display: 'block' }}>
                 {!opt.img && <span>{opt.label}</span>}
-                <span>{opt.text ? '（ ' + opt.text + ' ）' : ''}</span>
-                {opt.img && <View style={{ background: `url(${opt.img}) 0 0 / cover no-repeat`, width: '49%', height: '162.5px', marginRight: '1%', marginTop: '6px', float: 'left' }}></View>}
-              </li>
-          </ul>
+                {/* <View>{opt.text ? '（ ' + opt.text + ' ）' : ''}</View> */}
+                {/* {opt.img && <View style={{ background: `url(${opt.img}) 0 0 / cover no-repeat`, width: '49%', height: '162.5px', marginRight: '1%', marginTop: '6px', float: 'left' }}></View>} */}
+              </View>
+          </View>
         ))}
         {/* 热点题答案完整显示处理 */}
         {/* {(doc.selectType == 11 || doc.selectType == 12) && (

@@ -149,7 +149,7 @@ class answerDetail extends Component {
                    </View>
               )}
                  {periods.length === 0 && (
-                  <View className="view-plain" style={{textAlign:"center"}}>
+                  <View className="view-plain" style={{textAlign:"center", color:'#fff'}}>
                         详细答案记录
                    </View>
               )}       
