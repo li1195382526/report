@@ -68,18 +68,31 @@ class NameList extends Component {
   initialization() {
     const from = this.$router.params.from
     if(from == 'dataList') { // 引用名单库的
+      let { releaseData } = this.props
+      let { tableList } = this.props
+      var list = tableList.concat(releaseData)
+      if (releaseData.length) {
+        var obj = {}
+        var arr = []
+        list.forEach((item) => {
+          if(obj[item.name] && obj[item.limit.sort().toString()]) {
+          } else {
+            obj[item.name] = 'a'
+            obj[item.limit.sort().toString()] = 'b'
+            arr.push(item)
+          }
+        }) // 去重
+        list = arr
+      }
       this.props.dispatch({
-        type: 'nameList/mergeData'
-      })
+        type: 'nameList/save',
+        payload: {
+          tableList: list
+        }
+      });
     } else if (from == 'edit') {
       this.props.dispatch({
         type: 'nameList/getData',
-        payload: [{
-          listIndex: 1,
-          name: '',
-          limit: [],
-          status: 1
-        }],
       })
     }
   }
@@ -216,6 +229,13 @@ class NameList extends Component {
   }
   handleAddNameList() {
     let { tableList } = this.props
+    if(tableList.length == 0) {
+      Taro.atMessage({
+        message: `请先添加人员名单`,
+        type: 'error'
+      })
+      return
+    }
     for (let i of tableList) {
       if(!i.name || !i.limit.length) {
         Taro.atMessage({

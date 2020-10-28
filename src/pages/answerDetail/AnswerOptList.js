@@ -40,7 +40,7 @@ class AnswerOptList extends Component {
 
   render() {
     const { height, ratio } = this.state
-    const { optList, qtnId, type, doc } = this.props
+    const { optList, type, doc } = this.props
     return (
       <View className="optlist">
         {optList.map((opt, key) => (

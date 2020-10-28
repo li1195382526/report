@@ -39,7 +39,7 @@ class Submits extends Component {
   }
   // 查看结果
   handleResult() {
-    Taro.navigateTo({url: `../answerDetail/index?reportId=${this.$router.params.reportId}&canEdit=${this.$router.params.canEdit}`})
+    Taro.navigateTo({url: `../answerDetail/index?reportId=${this.$router.params.reportId}&canEdit=${this.$router.params.canEdit}&currentPeriod=${this.$router.params.period}`})
   }
 
    // 修改填报

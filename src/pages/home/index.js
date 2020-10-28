@@ -176,7 +176,7 @@ class Home extends Component {
   partHandleData() {
     this.close()
     Taro.navigateTo({
-      url: `/pages/answerDetail/index?reportId=${this.state.reportId}`
+      url: `/pages/answerDetail/index?reportId=${this.state.reportId}&currentPeriod=${this.state.itemdata.currentPeriod}`
     })
   }
 
