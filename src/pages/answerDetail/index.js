@@ -35,6 +35,14 @@ class answerDetail extends Component {
         this.props.dispatch({
             type: 'answerDetail/getPeriods',
             url: `/v3/report/${reportId}/peroids`
+        }).then(() => {
+            const {periods} = this.props
+            let current = periods.length ? (periods.findIndex((item) => item.isCurrent == 1)) : 0
+            current = current == -1 ? 1 : current + 1
+            current = this.$router.params.currentPeriod ? this.$router.params.currentPeriod : current
+            this.setState({current}, () => {
+                this.lookAnswerResultById()
+            })
         })
     }
     // 查看单个样本答题数据
@@ -49,10 +57,9 @@ class answerDetail extends Component {
     }
 
     // 步骤条change事件
-    onChange (current, isCurrent, item) {
-        if(isCurrent >= current){
+    onChange (current, item) {
+        if(this.$router.params.currentPeriod >= current){
             this.setState({ current }, () => {
-                this.getPeriods()
                 this.lookAnswerResultById()
             })
         }else{
@@ -67,16 +74,15 @@ class answerDetail extends Component {
 
     // 修改填报
     handleEdit(index) {
-        Taro.navigateTo({url: `../answer/index?from=answerDetail&listId=${this.$router.params.reportId}&period=${index+1}`})
+        Taro.navigateTo({url: `../answer/index?from=answerDetail&listId=${this.$router.params.reportId}&period=${index}`})
     }
 
     componentWillMount() {
         this.getPeriods()
-        this.lookAnswerResultById()
+        // this.lookAnswerResultById()
     }
 
     componentDidMount() {
-        // 
     }
 
     handleRight(){
@@ -98,8 +104,7 @@ class answerDetail extends Component {
 
     render() {
         const { detail, periods,canEdit,finishTime } = this.props
-        const {indexPeriods} = this.state
-        const qtnId = 52
+        const {indexPeriods, current} = this.state
         const index = periods.length ? periods.findIndex((item) => item.isCurrent == 1) : 0
         const newPeriods = periods.slice(indexPeriods,5+indexPeriods)
         //const canEdit = this.$router.params.canEdit
@@ -108,56 +113,54 @@ class answerDetail extends Component {
                 <View className="main">
                     <View className='view-data'>
                     {periods.length > 5 && newPeriods[0].num !== 1 &&(
-                <View className='view-left'>
-                  <AtIcon value='chevron-left' size='30' color='#427be6' onClick={this.handleleft}></AtIcon>
-                </View>
-              )}
-             <View className='view-step'>
-                {periods.length > 1 && (
-                    <View className='step-line'></View>
-                )}
-                {newPeriods.map((val)=>(
-                    <View style={{ marginTop: this.state.current === val.num ? '-10px' : '0', zIndex: '100' }} >
-                        {this.state.current === val.num && (
-                            <View className='step-light'>
-                                <View className='step-lightleft'></View>
-                                <View className='step-lightmid'></View>
-                                <View className='step-lightright'></View>
-                            </View>
-                        )}
-                        <View className='step' style={{
-                            width: this.state.current === val.num ? '30px' : '25px',
-                            height: this.state.current === val.num ? '30px' : '25px',
-                            lineHeight: this.state.current === val.num ? '30px' : '25px',
-                        }}
-                            onClick={() => this.onChange(val.num, index + 1, val)}
-                        >
-                            {val.num}
+                        <View className='view-left'>
+                            <AtIcon value='chevron-left' size='30' color='#427be6' onClick={this.handleleft}></AtIcon>
                         </View>
+                    )}
+                    <View className='view-step'>
+                        {periods.length > 1 && (
+                            <View className='step-line'></View>
+                        )}
+                        {newPeriods.map((val)=>(
+                            <View style={{ marginTop: this.state.current == val.num ? '-10px' : '0', zIndex: '100' }} >
+                                {this.state.current == val.num && (
+                                    <View className='step-light'>
+                                        <View className='step-lightleft'></View>
+                                        <View className='step-lightmid'></View>
+                                        <View className='step-lightright'></View>
+                                    </View>
+                                )}
+                                <View className='step' style={{
+                                    width: this.state.current == val.num ? '30px' : '25px',
+                                    height: this.state.current == val.num ? '30px' : '25px',
+                                    lineHeight: this.state.current == val.num ? '30px' : '25px',
+                                }}
+                                    onClick={() => this.onChange(val.num, val)}
+                                >
+                                    {val.num}
+                                </View>
+                            </View>
+                        ))}
                     </View>
-                ))}
-              </View>
-              {periods.length > 5 && newPeriods[newPeriods.length - 1].num != periods[periods.length - 1].num && (
-                <View className='view-right'>
-                  <AtIcon value='chevron-right' size='30' color='#427be6' onClick={this.handleRight}></AtIcon>
-                </View>
-              )}
-              {periods.length > 0 && (
-                  <View className="view-plain">
-                        <View className='view-text'>当前进行至第 {index + 1} 周期</View>
-                       <View className='view-text'>截止时间 {periods[index].endTime}</View>
-                   </View>
-              )}
-                 {periods.length === 0 && (
-                  <View className="view-plain" style={{textAlign:"center"}}>
-                        详细答案记录
-                   </View>
-              )}       
+                    {periods.length > 5 && newPeriods[newPeriods.length - 1].num != periods[periods.length - 1].num && (
+                        <View className='view-right'>
+                            <AtIcon value='chevron-right' size='30' color='#427be6' onClick={this.handleRight}></AtIcon>
+                        </View>
+                    )}
+                    {periods.length > 0 && (
+                        <View className="view-plain">
+                            <View className='view-text'>当前进行至第 {current} 周期</View>
+                            <View className='view-text'>截止时间 {periods[current-1].endTime}</View>
+                        </View>
+                    )}
+                    {periods.length === 0 && (
+                        <View className="view-plain" style={{textAlign:"center", color:'#fff'}}>详细答案记录</View>
+                    )}       
                     </View>
                     <View className='handle'>
                         <View>{finishTime}填答</View>
                         {canEdit && (
-                            <View className="edit" onClick={(val)=>this.handleEdit(index)}>修改填报</View>
+                            <View className="edit" onClick={(val)=>this.handleEdit(current)}>修改填报</View>
                         )}
                     </View>
                     <View className="answer__info">
@@ -172,7 +175,7 @@ class answerDetail extends Component {
                                         optList={doc.optList || []}
                                     />
                                 ) : (
-                                    <AnswerOptList optList={doc.optList || []} qtnId={qtnId} type={doc.type} doc={doc} />
+                                    <AnswerOptList optList={doc.optList || []} type={doc.type} doc={doc} />
                                 )}
                             </View>
                         ))}

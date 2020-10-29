@@ -105,7 +105,7 @@ class QtSet extends Component {
     saveTime(val,type){
       let {info,isChange} = this.props
       const time = val ? val.current + ':00' : ''
-      if(time && info.beginTime) {
+      if(time && info.beginTime && type == 'endTime') {
         let end = time.match(/\d/g).join('') * 1
         let start = info.beginTime.match(/\d/g).join('') * 1
         if(start > end) {
@@ -117,7 +117,7 @@ class QtSet extends Component {
           return
         }
       }
-      if(time && info.endTime) {
+      if(time && info.endTime && type == 'beginTime') {
         let start = time.match(/\d/g).join('') * 1
         let end = info.endTime.match(/\d/g).join('') * 1
         console.log(start, end)
