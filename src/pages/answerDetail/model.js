@@ -13,15 +13,26 @@ export default {
 
   effects: {
     * getDetail({ payload: value, url }, { call, put }) {
-      const { data } = yield call(detailApi.getDetail, value, url);
-      yield put({
-        type: 'save',
-        payload: {
-          detail: data.anw,
-          canEdit:data.canEdit,
-          finishTime:data.finishTime
-        }
-      });
+      const data = yield call(detailApi.getDetail, value, url);
+      if(data.statusCode == 404) {
+        yield put({
+          type: 'save',
+          payload: {
+            detail: [],
+            canEdit: false,
+            finishTime: '此周期未'
+          }
+        });
+      } else {
+        yield put({
+          type: 'save',
+          payload: {
+            detail: data.data.anw,
+            canEdit: data.data.canEdit,
+            finishTime: data.data.finishTime
+          }
+        });
+      }
     },
     * getPeriods({ payload: value, url }, { call, put }) {
       const { data } = yield call(detailApi.getPeriods, url);

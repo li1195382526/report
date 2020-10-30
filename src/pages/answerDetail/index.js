@@ -164,6 +164,7 @@ class answerDetail extends Component {
                         )}
                     </View>
                     <View className="answer__info">
+                        {detail.length == 0 && <View>此周期未填答</View>}
                         {detail.map((doc, key) => (
                             <View className="answer__qtn" key={key}>
                                 <View className="qtn__title">{doc.qtDescn}</View>
