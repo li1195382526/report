@@ -53,8 +53,10 @@ function validateOpen(answers, opts, qtSeq, selectType,question) {
   opts.map(opt => {
     const premise = `${qtSeq}(${opt.get("mySeq")})`;
     const optAnw = answers.find(item => item.indexOf(premise) === 0);
-    const required = !!opt.get("required") || false;
-    if (required && optAnw === undefined && (selectType === 1 || selectType === 7)) {
+    var an = '答案' // 填空答案
+    if(optAnw) an = optAnw.split('_')[1]
+    const required = !!question.get("required") || false;
+    if (required && (optAnw === undefined || !an) && (selectType === 1 || selectType === 7)) {
       pass = false;
       message = `${qtSeq}必须填写`;
     } else if (pass && required && optAnw === undefined && selectType === 2) {
@@ -111,7 +113,7 @@ export function validate(questions, anw) {
       pass = false;
       message = `${question.get("mySeq")}必答`
     }
-  
+    
     //开放题选项为必填时，需要检测
     const isOpen = type === 2;
     if (pass && isOpen && !question.get("deleted")) {

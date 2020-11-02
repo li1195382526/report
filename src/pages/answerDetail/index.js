@@ -95,7 +95,7 @@ class answerDetail extends Component {
     
       handleleft(){
         const {indexPeriods,current} = this.state
-        console.log(indexPeriods)
+        // console.log(indexPeriods)
         this.setState({
           indexPeriods:indexPeriods-1,
           //current:current-1

@@ -27,9 +27,8 @@ class MultipleChoice extends Component {
     const premise = `${opts.disSeq}(${val.mySeq})`
     let payload = fromJS(anw)
     if (!isSelected) {
-      console.log(anw.QuestionMySeq)
+      // console.log(anw.QuestionMySeq)
       const newPremise = anw[QuestionMySeq] ? anw[QuestionMySeq].concat([premise]) :[premise]
-      // eslint-disable-next-line no-undef
       payload = payload.set(opts.mySeq, newPremise)
     } else {
       payload = payload.update(QuestionMySeq, item =>
@@ -49,12 +48,12 @@ class MultipleChoice extends Component {
     
     return (
       <View className='single-choice'>
-        {opts.optlist.map((val)=>{
+        {opts.optlist.map((val, i)=>{
           const premise = `${opts.disSeq}(${val.mySeq})`
           const answer = anw[opts.disSeq] && anw[opts.disSeq] .indexOf(premise) !== -1
           const isSelected = !!answer
           return (
-            <View className='single-opts'>
+            <View className='single-opts' key={i}>
               <View>{val.label}</View>
               <View>
               <Checkbox 
