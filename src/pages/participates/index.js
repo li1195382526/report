@@ -33,6 +33,11 @@ class Participates extends Component {
       this.getParticipantlist()
     }
   }
+
+  componentDidShow = () => {
+    this.getParticipantlist()
+  }
+
   // 获取我参与的列表
   getParticipantlist() {
     const mobile = Taro.getStorageSync('mobile')
