@@ -176,7 +176,7 @@ class Home extends Component {
   partHandleData() {
     this.close()
     const {itemdata} = this.state
-    const currentPeriod = itemdata.currentPeriod > itemdata.totalPeriod ? itemdata.totalPeriod : itemdata.currentPeriod
+    const currentPeriod = itemdata.currentPeriod == 0 ? itemdata.totalPeriod : itemdata.currentPeriod
     Taro.navigateTo({
       url: `/pages/answerDetail/index?reportId=${this.state.reportId}&currentPeriod=${currentPeriod}`
     })
