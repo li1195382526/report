@@ -260,6 +260,7 @@ class Home extends Component {
     this.setState({
       currentBar: value
     })
+    ///pages/templateText/index 模板库页面
     switch (value) {
       case 0:
         Taro.redirectTo({
@@ -267,11 +268,6 @@ class Home extends Component {
         })
         break;
       case 1:
-        Taro.redirectTo({
-          url: '/pages/templateText/index'
-        })
-        break;
-      case 2:
         Taro.redirectTo({
           url: '/pages/personalCenter/index'
         })
@@ -532,7 +528,6 @@ class Home extends Component {
           fixed
           tabList={[
             { title: '首页', iconType: 'home' },
-            { title: '模板库', iconType: 'list' },
             { title: '个人中心', iconType: 'user' }
           ]}
           onClick={this.handleClickBar}

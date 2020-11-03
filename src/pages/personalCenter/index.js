@@ -19,7 +19,7 @@ class PersonalCenter extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentBar:2
+      currentBar:1
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handelListDataBase = this.handelListDataBase.bind(this)
@@ -109,11 +109,6 @@ class PersonalCenter extends Component {
           break;
       case 1:
           Taro.redirectTo({
-              url: '/pages/templateText/index'
-          })
-          break;
-      case 2:
-          Taro.redirectTo({
               url: '/pages/personalCenter/index'
           })
           break;           
@@ -145,15 +140,14 @@ class PersonalCenter extends Component {
         </View>
         <View>
         <AtListItem title='发布名单库' arrow='right' note='名单库用于发布填报时直接引用名单中人员' onClick={this.handelListDataBase} />
-        <AtListItem title='推荐小程序' arrow='right' />
-        <AtListItem title='添加小程序' arrow='right' />
+        {/* <AtListItem title='推荐小程序' arrow='right' />
+        <AtListItem title='添加小程序' arrow='right' /> */}
         <AtListItem title='更新说明' arrow='right' />
         </View>
         <AtTabBar
             fixed
             tabList={[
               { title: '首页', iconType: 'home' },
-              { title: '模板库', iconType: 'list' },
               { title: '个人中心', iconType: 'user' }
             ]}
             onClick={this.handleClickBar.bind(this)}
