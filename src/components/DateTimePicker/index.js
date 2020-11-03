@@ -20,6 +20,7 @@ export default class DateTimePicker extends Component {
             day: '',
             hour: '',
             minute: '',
+            now: ''
         }
         this.setDefaultValue = this.setDefaultValue.bind(this)
         this.openModal = this.openModal.bind(this)
@@ -60,7 +61,7 @@ export default class DateTimePicker extends Component {
             hour,
             minute
         })
-        this.changeHandel({detail: {value: selectIndexList}})
+        this.changeHandel({detail: {value: selectIndexList}}, true)
     };
 
     // 清空
@@ -70,12 +71,12 @@ export default class DateTimePicker extends Component {
 
     // 确定
     okHandel() {
-        const { current } = this.state
-        this.props.onOk && this.props.onOk({ current })
+        const { current, now } = this.state
+        this.props.onOk && this.props.onOk({ current, now })
     };
 
     // 切换
-    changeHandel(e) {
+    changeHandel(e, flag) {
         const selectIndexList = e.detail.value
         const [yearIndex, monthIndex, dayIndex, hourIndex, minuteIndex] = selectIndexList
         const { yearList, monthLsit, dayList, hourList, minuteList } = this.state
@@ -101,6 +102,9 @@ export default class DateTimePicker extends Component {
             minute,
             current
         })
+        if (flag) {
+            this.setState({ now: current })
+        }
     }
 
     componentWillMount() {
