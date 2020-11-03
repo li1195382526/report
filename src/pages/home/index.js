@@ -427,13 +427,16 @@ class Home extends Component {
             autoplay
           >
             <SwiperItem>
-                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178408865.jpg' style='width: 100%; height: 100%'></Image>
+                <Image src='https://www.epanel.cn/images/zhunbao1.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
             <SwiperItem>
-                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178528080.jpg' style='width: 100%; height: 100%'></Image>
+                <Image src='https://www.epanel.cn/images/zhunbao2.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
             <SwiperItem>
-                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178633117.jpg' style='width: 100%; height: 100%'></Image>
+                <Image src='https://www.epanel.cn/images/zhunbao3.jpg' style='width: 100%; height: 100%'></Image>
+            </SwiperItem>
+            <SwiperItem>
+                <Image src='https://www.epanel.cn/images/zhunbao4.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
           </Swiper>
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
