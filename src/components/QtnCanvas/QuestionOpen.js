@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View,Input } from '@tarojs/components'
 import PropTypes from 'prop-types';
 import { AtRadio,AtInput }  from 'taro-ui'
 import './index.scss'
@@ -48,7 +48,7 @@ class QuestionOpen extends Component {
               disabled={noModify} 
               value={value}
               className='open-input' 
-              onChange={(val)=>this.handleChange(val,item)} 
+              onInput={(val)=>this.handleChange(val,item)} 
             />
          )
         })}
