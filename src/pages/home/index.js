@@ -343,9 +343,9 @@ class Home extends Component {
 
   handleColse() {
     //二维码页面
-    Taro.navigateTo({
-      url: '/pages/code/index'
-    })
+    // Taro.navigateTo({
+    //   url: '/pages/code/index'
+    // })
     this.setState({
       isOpened: false,
       ispartOpened: false
