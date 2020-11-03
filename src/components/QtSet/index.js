@@ -105,6 +105,18 @@ class QtSet extends Component {
     saveTime(val,type){
       let {info,isChange} = this.props
       const time = val ? val.current + ':00' : ''
+      if(time && type == 'beginTime') {
+        let start = time.match(/\d/g).join('') * 1
+        let now = (val.now + ':00').match(/\d/g).join('') * 1
+        if(now > start) {
+          Taro.showToast({
+            title: '开始时间不能早于当前时间',
+            icon: 'none',
+            duration: 2000
+          })
+          return
+        }
+      }
       if(time && info.beginTime && type == 'endTime') {
         let end = time.match(/\d/g).join('') * 1
         let start = info.beginTime.match(/\d/g).join('') * 1
@@ -120,7 +132,6 @@ class QtSet extends Component {
       if(time && info.endTime && type == 'beginTime') {
         let start = time.match(/\d/g).join('') * 1
         let end = info.endTime.match(/\d/g).join('') * 1
-        console.log(start, end)
         if(start > end) {
           Taro.showToast({
             title: '开始时间不应晚于结束时间',
