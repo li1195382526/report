@@ -313,7 +313,7 @@ class QtSet extends Component {
                       <AtListItem
                         title='周期类型'
                         extraText={
-                          this.state.selector[info.periodType]
+                          info.periodType.length === 0 ? "未设置" : this.state.selector[info.periodType]
                         }
                       />
                     </AtList>

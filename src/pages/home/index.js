@@ -260,6 +260,7 @@ class Home extends Component {
     this.setState({
       currentBar: value
     })
+    ///pages/templateText/index 模板库页面
     switch (value) {
       case 0:
         Taro.redirectTo({
@@ -267,11 +268,6 @@ class Home extends Component {
         })
         break;
       case 1:
-        Taro.redirectTo({
-          url: '/pages/templateText/index'
-        })
-        break;
-      case 2:
         Taro.redirectTo({
           url: '/pages/personalCenter/index'
         })
@@ -347,9 +343,9 @@ class Home extends Component {
 
   handleColse() {
     //二维码页面
-    Taro.navigateTo({
-      url: '/pages/code/index'
-    })
+    // Taro.navigateTo({
+    //   url: '/pages/code/index'
+    // })
     this.setState({
       isOpened: false,
       ispartOpened: false
@@ -427,13 +423,16 @@ class Home extends Component {
             autoplay
           >
             <SwiperItem>
-                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178408865.jpg' style='width: 100%; height: 100%'></Image>
+                <Image src='https://www.epanel.cn/images/zhunbao1.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
             <SwiperItem>
-                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178528080.jpg' style='width: 100%; height: 100%'></Image>
+                <Image src='https://www.epanel.cn/images/zhunbao2.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
             <SwiperItem>
-                <Image src='https://www.epanel.cn/v2/files/upload/qtn/103125_1601178633117.jpg' style='width: 100%; height: 100%'></Image>
+                <Image src='https://www.epanel.cn/images/zhunbao3.jpg' style='width: 100%; height: 100%'></Image>
+            </SwiperItem>
+            <SwiperItem>
+                <Image src='https://www.epanel.cn/images/zhunbao4.jpg' style='width: 100%; height: 100%'></Image>
             </SwiperItem>
           </Swiper>
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
@@ -529,7 +528,6 @@ class Home extends Component {
           fixed
           tabList={[
             { title: '首页', iconType: 'home' },
-            { title: '模板库', iconType: 'list' },
             { title: '个人中心', iconType: 'user' }
           ]}
           onClick={this.handleClickBar}
