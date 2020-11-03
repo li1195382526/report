@@ -65,6 +65,19 @@ class Answer extends Component {
     
   }
 
+  componentDidHide() {
+    this.props.dispatch({
+      type: 'answer/save',
+      payload: {
+        "info": {},
+        "questionnaire":{},
+        "anw":{},
+        "res": {}, // 进入填报的返回结果
+        "namelist": [],
+      }
+    })
+  }
+
   //获取问卷
   getQuestionner(){
     const id = this.$router.params.listId
