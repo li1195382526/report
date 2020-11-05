@@ -405,7 +405,7 @@ class Home extends Component {
   }
 
   render() {
-    const { createList } = this.props
+    const { createList, Participantlist } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
     const { isLogin, status, isDel, current, opened, itemdata } = this.state
     return (
@@ -437,12 +437,12 @@ class Home extends Component {
           </Swiper>
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
             <AtTabsPane current={this.state.current} index={0} >
-              {this.state.current == 0 && !!isLogin ? <List handleOpen={this.handleOpen} createList={createList} /> :
+              {this.state.current == 0 && !!isLogin && createList.length ? <List handleOpen={this.handleOpen} createList={createList} /> :
                 <Image src={image} className='list-img' />
               }
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
-            {this.state.current == 1 && !!isLogin ?  <Participate handlePart={this.handlePart} /> :
+              {this.state.current == 1 && !!isLogin && Participantlist.length ? <Participate handlePart={this.handlePart} /> :
                 <Image src={image} className='list-img' />
               }
             </AtTabsPane>
