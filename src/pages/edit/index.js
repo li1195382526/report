@@ -352,7 +352,7 @@ onTimeChange = e => {
 
   render() {
     // eslint-disable-next-line no-shadow
-    const {questionnaire,info} = this.props
+    const {questionnaire,info,isModify} = this.props
     return (
       <View className='edit'>
         <AtMessage />
@@ -383,14 +383,25 @@ onTimeChange = e => {
           <View className='edit-title'>填报设置</View>
           <QtSet />
         </View>
+        {isModify && (
+           <View className='edit-footer'>
+           <View className='edit-save' onClick={this.handleSave}>
+             保存
+           </View>
+           <View className='edit-send' onClick={this.handleRelease}>
+             发布填报
+           </View>
+         </View>
+    )}
+     {!isModify && (
       <View className='edit-footer'>
-        <View className='edit-save' onClick={this.handleSave}>
-          保存
-        </View>
-        <View className='edit-send' onClick={this.handleRelease}>
-          发布填报
-        </View>
-      </View>
+           <View className='edit-save1' onClick={this.handleSave}>
+             保存
+           </View>
+         </View>
+     )
+
+     }
       </View>
     )
   }
