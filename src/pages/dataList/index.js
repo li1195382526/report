@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem, AtMessage, AtCheckbox  } from 'taro-ui'
+import image from '../../assets/images/u128.png'
 import './index.scss';
 
 @connect(({ dataList, home, common }) => ({
@@ -199,6 +200,7 @@ class DataList extends Component {
 			<View>
 				<AtMessage />
 				<View className="content">
+					{dataList.length == 0 && <Image src={image} className='list-img' />}
 					{dataList.map((item, key) => (
 						<View key={key} className='list-item'>
 							{/* <View className='checkobox-data'><Checkbox value={key} onClick={this.checkedChange} dataItem={item} dataKey={key}></Checkbox></View> */}
