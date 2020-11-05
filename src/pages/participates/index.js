@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { AtCard } from 'taro-ui'
+import image from '../../assets/images/u128.png'
 import './index.scss';
 
 @connect(({ home, common }) => ({
@@ -64,6 +65,7 @@ class Participates extends Component {
     const { Participantlist, wxInfo } = this.props
     return (
       <View className='page'>
+        {Participantlist.length == 0 && <Image src={image} className='list-img' />}
         {Participantlist.map((item, key) => (
           <View className='participate-list' key={key} onClick={() => this.submit(item)}>
             <AtCard

@@ -202,22 +202,26 @@ onTimeChange = e => {
       payload: params,
     }).then(()=>{
       var {response} = this.props
-      this.props.dispatch({
-        type: 'edit/publish',
-        token: this.props.token,
-        payload: {reportId: response.data.id},
-        url:`/v3/report/${response.data.id}/publish`
-      }).then(()=>{
-        const {qtnStatus,message} = this.props
-        if(qtnStatus === 200){
-          Taro.redirectTo({
-            url: `/pages/release/index?listId=${response.data.id}`
-           })
-        }else{
-          this.handleTips('error',message)
-        }
-        
-      })
+      if(response.status == 200) {
+        this.props.dispatch({
+          type: 'edit/publish',
+          token: this.props.token,
+          payload: {reportId: response.data.id},
+          url:`/v3/report/${response.data.id}/publish`
+        }).then(()=>{
+          const {qtnStatus,message} = this.props
+          if(qtnStatus === 200){
+            Taro.redirectTo({
+              url: `/pages/release/index?listId=${response.data.id}`
+             })
+          }else{
+            this.handleTips('error',message)
+          }
+          
+        })
+      } else {
+        this.handleTips('error', response.message)
+      }
     })  
   }
 

@@ -63,7 +63,7 @@ function validateOpen(answers, opts, qtSeq, selectType,question) {
       pass = false;
       message = 'i18n.messageForPrompt.open_multiple_require_answers.format'
        
-    }else if(required && !!optAnw && selectType === 7){
+    }else if(!!optAnw && selectType === 7){
         const value = Number(optAnw.split("_")[1])
         if(!(typeof value === 'number' && !isNaN(value))){
             pass = false;

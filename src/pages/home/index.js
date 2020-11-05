@@ -442,7 +442,7 @@ class Home extends Component {
               }
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
-              {this.state.current == 1 && !!isLogin && Participantlist.length ? <Participate handlePart={this.handlePart} /> :
+              {this.state.current == 1 && !!isLogin ? <Participate handlePart={this.handlePart} /> :
                 <Image src={image} className='list-img' />
               }
             </AtTabsPane>
