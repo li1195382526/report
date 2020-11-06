@@ -45,6 +45,16 @@ class Answer extends Component {
   }
 
   componentWillMount() {
+    this.props.dispatch({
+      type: 'answer/save',
+      payload: {
+        "info": {},
+        "questionnaire":{},
+        "anw":{},
+        "res": {}, // 进入填报的返回结果
+        "namelist": [],
+      }
+    })
     if(!Taro.getStorageSync('mobile') && !Taro.getStorageSync('wxMobile')){
       Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId}`})
     }
@@ -63,7 +73,6 @@ class Answer extends Component {
 
   componentDidMount(){
     this.getQuestionner()
-
     const from = this.$router.params.from
     if( from === 'answerDetail' || from === 'home' || from === 'viewData'){
       this.getAnswer()
@@ -72,20 +81,6 @@ class Answer extends Component {
       type: 'answer/save',
       payload: {
         noModify:from === 'viewData' ? true :false
-      }
-    })
-    
-  }
-
-  componentDidHide() {
-    this.props.dispatch({
-      type: 'answer/save',
-      payload: {
-        "info": {},
-        "questionnaire":{},
-        "anw":{},
-        "res": {}, // 进入填报的返回结果
-        "namelist": [],
       }
     })
   }
