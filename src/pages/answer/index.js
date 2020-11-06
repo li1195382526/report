@@ -30,6 +30,7 @@ class Answer extends Component {
       userAgent: '',
       checkNamelist: false,
       togglelist: [],
+      id:''
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
@@ -49,6 +50,17 @@ class Answer extends Component {
     }
   };
   
+  onLoad (option) {
+    console.log(option)
+    if (option.scene) {
+      let qrId = decodeURIComponent(option.scene)
+      this.setState({
+        id:qrId.listId
+      })
+    }
+  }
+  
+
   componentDidMount(){
     this.getQuestionner()
 
@@ -80,7 +92,7 @@ class Answer extends Component {
 
   //获取问卷
   getQuestionner(){
-    const id = this.$router.params.listId
+    const id = this.$router.params.listId || this.state.id
     Taro.getSystemInfo({
       success: (res) => {
         this.setState({userAgent: JSON.stringify(res)})

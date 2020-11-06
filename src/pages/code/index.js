@@ -38,7 +38,7 @@ export default class Detail extends Component {
       data: {
         scene: `c=xxx&p=2&g=123`,
         width: 280,
-        page:'page/code/index'
+        page:'pages/code/index'
       },
       header: {
         'content-type': 'application/json'
@@ -49,9 +49,9 @@ export default class Detail extends Component {
       Taro.request({
         url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`,
         data: {
-          scene: `c=xxx&p=2&g=123`,
+          scene: `listId=9`,
           width: 280,
-          page:'page/home/index'
+          page:'pages/answer/index'
         },
         method:"POST",
         header: {
