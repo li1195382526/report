@@ -44,28 +44,6 @@ class Answer extends Component {
   }
 
   componentWillMount() {
-    if(!Taro.getStorageSync('mobile') && !Taro.getStorageSync('wxMobile')){
-      Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId}`})
-    }
-  };
-  
-  componentDidMount(){
-    this.getQuestionner()
-
-    const from = this.$router.params.from
-    if( from === 'answerDetail' || from === 'home' || from === 'viewData'){
-      this.getAnswer()
-    }
-    this.props.dispatch({
-      type: 'answer/save',
-      payload: {
-        noModify:from === 'viewData' ? true :false
-      }
-    })
-    
-  }
-
-  componentDidHide() {
     this.props.dispatch({
       type: 'answer/save',
       payload: {
@@ -74,6 +52,23 @@ class Answer extends Component {
         "anw":{},
         "res": {}, // 进入填报的返回结果
         "namelist": [],
+      }
+    })
+    if(!Taro.getStorageSync('mobile') && !Taro.getStorageSync('wxMobile')){
+      Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId}`})
+    }
+  };
+  
+  componentDidMount(){
+    this.getQuestionner()
+    const from = this.$router.params.from
+    if( from === 'answerDetail' || from === 'home' || from === 'viewData'){
+      this.getAnswer()
+    }
+    this.props.dispatch({
+      type: 'answer/save',
+      payload: {
+        noModify:from === 'viewData' ? true :false
       }
     })
   }
