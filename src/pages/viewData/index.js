@@ -30,6 +30,7 @@ class ViewData extends Component {
       currentMobile: '',
       currentPeriod: '',
       indexPeriods: 0,
+      mobile:''
     }
     this.handelToggle = this.handelToggle.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -86,10 +87,12 @@ class ViewData extends Component {
   // 列表点击
   handleClick(item) {
     const { isFinished } = this.state
+    console.log(item)
     this.setState({
       currentReportId: item.reportId,
       currentMobile: item.mobile,
-      currentPeriod: item.period
+      currentPeriod: item.period,
+      mobile:item.mobile
     })
     if (isFinished) {
       this.setState({ isMenge: true, itemInfo: item })
@@ -119,8 +122,8 @@ class ViewData extends Component {
   // 查看记录
   handleView() {
     this.cancel()
-    const { currentPeriod } = this.state
-    Taro.navigateTo({ url: `../answer/index?from=viewData&listId=${this.$router.params.reportId}&period=${currentPeriod}` })
+    const { currentPeriod ,currentReportId,mobile} = this.state
+    Taro.navigateTo({ url: `../answer/index?from=viewData&listId=${currentReportId}&period=${currentPeriod}&mobile=${mobile}` })
   }
 
   // 删除记录

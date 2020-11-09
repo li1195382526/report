@@ -143,14 +143,21 @@ class Answer extends Component {
 
   //获取指定填报结果数据
   getAnswer(){
-    const mobile = Taro.getStorageSync('mobile')
-    const wxMobile = Taro.getStorageSync('wxMobile')
+    //const mobile = Taro.getStorageSync('mobile')
+    //const wxMobile = Taro.getStorageSync('wxMobile')
     const reportId = this.$router.params.listId
     const period = this.$router.params.period
+    const from = this.$router.params.from
+    let mobile = ''
+    if(from === 'viewData'){
+      mobile = this.$router.params.mobile
+    }else{
+      mobile =  Taro.getStorageSync('mobile') || Taro.getStorageSync('wxMobile')
+    }
     this.props.dispatch({
       type: 'answer/getAnswer',
       token: this.props.token,
-      url:`/v3/report/${reportId}/period/${period}/participant/${!!mobile ? mobile :wxMobile}/answer`
+      url:`/v3/report/${reportId}/period/${period}/participant/${mobile}/answer`
     })
   }
 
