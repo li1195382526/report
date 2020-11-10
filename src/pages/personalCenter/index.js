@@ -139,7 +139,7 @@ class PersonalCenter extends Component {
             
         </View>
         <View>
-        <AtListItem title='发布名单库' arrow='right' note='名单库用于发布填报时直接引用名单中人员' onClick={this.handelListDataBase} />
+        <AtListItem title='名单库' arrow='right' note='名单库用于发布填报时直接引用名单中人员' onClick={this.handelListDataBase} />
         {/* <AtListItem title='推荐小程序' arrow='right' />
         <AtListItem title='添加小程序' arrow='right' /> */}
         <AtListItem title='更新说明' arrow='right' />
