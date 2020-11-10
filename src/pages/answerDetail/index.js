@@ -47,7 +47,7 @@ class answerDetail extends Component {
     }
     // 查看单个样本答题数据
     lookAnswerResultById() {
-        const mobile = Taro.getStorageSync('mobile')
+        const mobile = Taro.getStorageSync('mobile') || Taro.getStorageSync('wxMobile')
         const reportId = this.$router.params.reportId
         const {current} = this.state
         this.props.dispatch({
