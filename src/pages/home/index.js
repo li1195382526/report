@@ -438,12 +438,18 @@ class Home extends Component {
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
             <AtTabsPane current={this.state.current} index={0} >
               {this.state.current == 0 && !!isLogin && createList.length ? <List handleOpen={this.handleOpen} createList={createList} /> :
-                <Image src={image} className='list-img' />
+                <View style={{textAlign:'center',color:'#999'}}>
+                  <Image src={image} className='list-img' />
+                  <View>{isLogin ? '暂无数据' : '请先登录'}</View>
+                </View>
               }
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
               {this.state.current == 1 && !!isLogin ? <Participate handlePart={this.handlePart} /> :
+              <View style={{textAlign:'center',color:'#999'}}>
                 <Image src={image} className='list-img' />
+                <View>请先登录</View>
+              </View>
               }
             </AtTabsPane>
           </AtTabs>

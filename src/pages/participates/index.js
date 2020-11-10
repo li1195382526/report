@@ -65,7 +65,7 @@ class Participates extends Component {
     const { Participantlist, wxInfo } = this.props
     return (
       <View className='page'>
-        {Participantlist.length == 0 && <Image src={image} className='list-img' />}
+        {Participantlist.length == 0 && (<View style={{textAlign:'center',color:'#999'}}><Image src={image} className='list-img'/><View style={{textAlign:'center'}}>暂无数据</View></View>)}
         {Participantlist.map((item, key) => (
           <View className='participate-list' key={key} onClick={() => this.submit(item)}>
             <AtCard
