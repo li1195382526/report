@@ -45,6 +45,15 @@ class WxLogin extends Component {
         iv: e.detail.iv,
         code: this.state.wx_code, oid: 'gh_13a2c24667b4'
       }
+      //获取用户信息
+      Taro.getUserInfo({
+        success: function(res) {
+          Taro.setStorage({
+            key: "wxInfo",
+            data: res.userInfo
+          })    
+          }
+      })
       this.props.dispatch({
         type: 'answer/wxMobilelogin',
         payload: params
