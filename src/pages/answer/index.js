@@ -65,7 +65,7 @@ class Answer extends Component {
     if (option.scene) {
       let qrId = decodeURIComponent(option.scene)
       this.setState({
-        id:qrId.listId
+        id:qrId.split('=')[1]
       })
     }
   }
