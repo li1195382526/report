@@ -69,7 +69,7 @@ class Participates extends Component {
         {Participantlist.map((item, key) => (
           <View className='participate-list' key={key} onClick={() => this.submit(item)}>
             <AtCard
-              note={`${item.creatorName || wxInfo.nickName} | ${item.publishTime}`}
+              note={`${item.creatorName || wxInfo.nickName} | ${item.publishTime} | 参与${item.currentPeriod}/${item.totalPeriod}周`}
               extra={item.status == 0 ? '未填报' : item.status == 1 ? '已填报' : '已结束'}
               extraStyle={{ color: item.status == 0 ? '#d9001b' : item.status == 1 ? '#1BA918' : '#c5c5c5' }}
               title={item.title}

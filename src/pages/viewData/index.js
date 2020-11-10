@@ -84,10 +84,10 @@ class ViewData extends Component {
       url: `/v3/report/${reportId}/period/${period}/results`
     })
   }
+  
   // 列表点击
   handleClick(item) {
     const { isFinished } = this.state
-    console.log(item)
     this.setState({
       currentReportId: item.reportId,
       currentMobile: item.mobile,
