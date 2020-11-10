@@ -82,6 +82,13 @@ class ViewData extends Component {
     this.props.dispatch({
       type: 'answerDetail/getResList',
       url: `/v3/report/${reportId}/period/${period}/results`
+    }).then(()=>{
+      const {resList} = this.props
+      if(resList.unfinished.length === 0){
+        this.setState({
+          isFinished:true
+        })
+      }
     })
   }
   
