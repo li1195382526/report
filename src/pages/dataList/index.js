@@ -200,7 +200,7 @@ class DataList extends Component {
 			<View>
 				<AtMessage />
 				<View className="content">
-					{dataList.length == 0 && <Image src={image} className='list-img' />}
+					{dataList.length == 0 && (<View style={{textAlign:'center',color:'#999'}}><Image src={image} className='list-img'/><View style={{textAlign:'center'}}>暂无数据</View></View>)}
 					{dataList.map((item, key) => (
 						<View key={key} className='list-item'>
 							{/* <View className='checkobox-data'><Checkbox value={key} onClick={this.checkedChange} dataItem={item} dataKey={key}></Checkbox></View> */}
