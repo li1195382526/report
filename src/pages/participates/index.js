@@ -56,7 +56,6 @@ class Participates extends Component {
         })
       } else {
         this.props.handlePart(item)
-        console.log('true', this)
       }
     })
   }
