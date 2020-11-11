@@ -54,6 +54,7 @@ class Home extends Component {
     this.close = this.close.bind(this)
     this.partHandleData = this.partHandleData.bind(this)
     this.editAns = this.editAns.bind(this)
+    this.toNextPeriod = this.toNextPeriod.bind(this)
   }
 
   componentWillMount() {
@@ -72,14 +73,16 @@ class Home extends Component {
   };
 
   componentDidShow = () => {
-    this.props.dispatch({
-      type: 'home/save',
-      payload: {
-        createList: [],
-        page: 1
-      },
-    })
-    this.getOwnerlist()
+    if(this.state.current == 0) {
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          createList: [],
+          page: 1
+        },
+      })
+      this.getOwnerlist()
+    }
   }
 
   handleOpen(value, item) {
@@ -371,6 +374,11 @@ class Home extends Component {
       })
     }
   }
+  // 继续填报
+  toNextPeriod() {
+    this.close()
+    Taro.navigateTo({url: `../answer/index?listId=${this.state.reportId}`})
+  }
   // 删除填报确认？
   confimDelete() {
     this.setState({ isDel: true, isOpened: false })
@@ -446,7 +454,7 @@ class Home extends Component {
             </AtTabsPane>
             
             <AtTabsPane current={this.state.current} index={1}>
-              {this.state.current == 1 && !!isLogin ? <Participate handlePart={this.handlePart} /> :
+              {this.state.current == 1 && !!isLogin ? <Participate ref={element => (this._Participate = element)} handlePart={this.handlePart} /> :
                 <View>
                   <Image src={image} className='list-img' />
                   <View className='no-data'>{!!isLogin ? '暂无数据' :'未登录暂无数据'}</View>
@@ -511,9 +519,8 @@ class Home extends Component {
               <AtActionSheetItem onClick={this.partHandleData}>
                 {status == 1 ? '查看答案' : '查看结果'}
               </AtActionSheetItem>
-              <AtActionSheetItem onClick={this.close}>
-                取消
-              </AtActionSheetItem>
+              {itemdata.currentPeriod < itemdata.totalPeriod && itemdata.isStrict == 0 && (<AtActionSheetItem onClick={this.toNextPeriod}>继续填报</AtActionSheetItem>)}
+              <AtActionSheetItem onClick={this.close}>取消</AtActionSheetItem>
             </AtActionSheet>
           )}
         </View>
