@@ -22,3 +22,10 @@ export const publish = ( data,token,url) => syncAction({
   token,
   url,
 });
+
+//获取二维码
+export const getWXCode = ( data,url) => syncAction({
+  data,
+  method: "POST",
+  url,
+});

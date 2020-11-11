@@ -54,8 +54,9 @@ class Release extends Component {
 
   //生成二维码
   handleCode(){
+    const id = this.$router.params.listId
     Taro.navigateTo({
-      url: '/pages/code/index'
+      url: `/pages/code/index?listId=${id}`
      })
   }
 
@@ -81,9 +82,9 @@ class Release extends Component {
           <View>
             <AtButton type='primary' className='btn' openType='share'>分享微信群</AtButton>
           </View>
-          {/* <View>
+          <View>
             <AtButton type='secondary' onClick={this.handleCode}>生成二维码</AtButton>
-          </View> */}
+          </View>
           <View>
             <AtButton type='primary' onClick={this.edit}>修改填报内容</AtButton> 
           </View>

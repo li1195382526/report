@@ -3,10 +3,11 @@ import Taro, { Component} from '@tarojs/taro'
  
 import './index.scss'
 import imageUrl from '../../assets/images/u3232.png';
-import qrcode from '../../assets/images/code.jpg';
+//import qrcode from '../../assets/images/code.jpg';
 import { connect } from '@tarojs/redux';
  
-@connect(({ home, common }) => ({
+@connect(({ edit,home, common }) => ({
+  ...edit,
   ...home,
   ...common
 }))
@@ -20,53 +21,43 @@ export default class Detail extends Component {
    */
   constructor() {
     this.state = {
-
+      url:''
     }
+    this.getWXCode = this.getWXCode.bind(this)
   }
  
 
   componentWillMount(){
-    this.generateCode()
-    this.drawImage()
+    this.getWXCode()
+    //this.generateCode()
+    //this.drawImage()
   }
 
-  //动态二维码获取
-  generateCode(){
-    //GET https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
-    Taro.request({
-      url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=	wxc860d9612140ebd3&secret=3c0dc295779e688da881665f93239923',
-      data: {
-        scene: `listId=19`,
+  getWXCode(){
+    const listId = this.$router.params.listId
+    const parmse = {
+        oid:'gh_13a2c24667b4',
+        scene: `listId=${listId}`,
         width: 280,
-        page:'pages/code/index'
-      },
-      header: {
-        'content-type': 'application/json'
-      }
-    }).then(res1 => {
-      const access_token = res1.data.access_token
-      console.log(access_token)
-      Taro.request({
-        url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`,
-        data: {
-          scene: `listId=19`,
-          width: 280,
-          page:'pages/answer/index'
-        },
-        method:"POST",
-        header: {
-          'content-type': 'application/json'
-        }
-      }).then(res => {
-          console.log(res.data)
-        })
-      })
+        page:'pages/answer/index'
+    }
+    this.props.dispatch({
+      type: 'edit/getWXCode',
+      payload:parmse,
+      url:`/v3/login/getWXCode`
+    }).then(()=>{
+      const {code} = this.props
+      console.log(this.props)
+      this.drawImage(`data:image/png;base64,${code}`)
+    })
   }
+
  
+
   /**
    * 绘制图片的方法
    */
-  async drawImage () {
+  async drawImage (qrcode) {
     //创建canvas对象
     let ctx = Taro.createCanvasContext('cardCanvas');
     //填充背景色
@@ -159,7 +150,7 @@ export default class Detail extends Component {
   render () {
     return (
       <View className='index'>
-       <View className='canvas-wrap'>
+          <View className='canvas-wrap'>
             <Canvas 
               id='card-canvas'
               className='card-canvas'
@@ -169,6 +160,7 @@ export default class Detail extends Component {
             </Canvas>
             <Button onClick={this.saveCard} className='btn-save' type='primary' size='mini'>保存到相册</Button>
           </View>
+          {/* <Image src={`data:image/png;base64,${data.data.code}`}></Image> */}
       </View>
     )
   }

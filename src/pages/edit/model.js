@@ -10,7 +10,8 @@ export default {
     message:'',
     status:'',
     isModify:true,
-    response: ''
+    response: '',
+    code:''
   },
 
   effects: {
@@ -56,6 +57,16 @@ export default {
         }
       });
     }, 
+    * getWXCode({ payload: values,url }, { call, put, select }) {
+      const { page, createList } = yield select(state => state.home);
+      const { data } = yield call(editApi.getWXCode,values,  url);
+      yield put({
+        type: 'save',
+        payload:{
+          code:data.data.code
+        }
+      });
+    },
   },
 
   reducers: {

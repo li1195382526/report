@@ -85,6 +85,7 @@ class Answer extends Component {
   //获取问卷
   getQuestionner(){
     const id = this.$router.params.listId || this.state.id
+    console.log(id)
     Taro.getSystemInfo({
       success: (res) => {
         this.setState({userAgent: JSON.stringify(res)})
