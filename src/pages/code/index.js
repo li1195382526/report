@@ -36,7 +36,7 @@ export default class Detail extends Component {
     Taro.request({
       url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=	wxc860d9612140ebd3&secret=3c0dc295779e688da881665f93239923',
       data: {
-        scene: `c=xxx&p=2&g=123`,
+        scene: `listId=19`,
         width: 280,
         page:'pages/code/index'
       },
@@ -49,7 +49,7 @@ export default class Detail extends Component {
       Taro.request({
         url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`,
         data: {
-          scene: `listId=9`,
+          scene: `listId=19`,
           width: 280,
           page:'pages/answer/index'
         },

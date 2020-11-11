@@ -59,17 +59,6 @@ class Answer extends Component {
       Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId}`})
     }
   };
-  
-  onLoad (option) {
-    console.log(option)
-    if (option.scene) {
-      let qrId = decodeURIComponent(option.scene)
-      this.setState({
-        id:qrId.split('=')[1]
-      })
-    }
-  }
-  
 
   componentDidMount(){
     this.getQuestionner()
@@ -82,6 +71,14 @@ class Answer extends Component {
       payload: {
         noModify:from === 'viewData' ? true :false
       }
+    })
+  }
+
+  componentDidShow(){
+    const scene = this.$router.params.scene
+    const qrId = decodeURIComponent(scene)
+    this.setState({
+      id:qrId.split('=')[1]
     })
   }
 
@@ -165,7 +162,7 @@ class Answer extends Component {
   getNamelist() {
     this.props.dispatch({
       type: 'answer/getNamelist',
-      url:`/v3/report/${this.$router.params.listId}/namelist`
+      url:`/v3/report/${this.$router.params.listId || this.state.id}/namelist`
     }).then(() => {
       let list = []
       const {namelist} = this.props
@@ -188,7 +185,7 @@ class Answer extends Component {
     const mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
     const {res, anw,questionnaire, info} = this.props
-    const id = this.$router.params.listId
+    const id = this.$router.params.listId || this.state.id
     const periodCount = res.data.rep.period
     
     //必答验证
@@ -213,7 +210,7 @@ class Answer extends Component {
       token: this.props.token,
       url:`/v3/report/${id}/participant/${!!mobile ? mobile :wxMobile}/submit`,
       payload: params,
-      reportId: this.$router.params.listId,
+      reportId: this.$router.params.listId || this.state.id,
       period:periodCount,
       canEdit: info.canEdit
     })
@@ -227,7 +224,7 @@ class Answer extends Component {
     const {anw,questionnaire,res, info} = this.props
     //const periodCount = res.data.rep.period
     const periodCount = this.$router.params.period
-    const id = this.$router.params.listId
+    const id = this.$router.params.listId || this.state.id
     let params = {
       anw,
     }
@@ -247,7 +244,7 @@ class Answer extends Component {
       token: this.props.token,
       url:`/v3/report/${id}/period/${periodCount}/participant/${!!mobile ? mobile :wxMobile}/answer`,
       payload: params,
-      reportId: this.$router.params.listId,
+      reportId: this.$router.params.listId || this.state.id,
       period:periodCount,
       canEdit: info.canEdit
     })
@@ -311,7 +308,7 @@ class Answer extends Component {
   // 进入填报
   join(item) {
     const {passWord, userAgent} = this.state
-    const id = this.$router.params.listId
+    const id = this.$router.params.listId || this.state.id
     const listIndex = item ? item.listIndex : ''
     var mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
@@ -358,7 +355,7 @@ class Answer extends Component {
           duration: 1000,
           mask: true
         })
-        Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId}`})
+        Taro.redirectTo({url: `./wxphone?listId=${this.$router.params.listId || this.state.id}`})
       } else if(res.status == 203) {
         Taro.showToast({
           title: res.message,
