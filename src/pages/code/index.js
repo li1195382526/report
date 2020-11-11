@@ -70,28 +70,29 @@ export default class Detail extends Component {
     //绘制圆形用户头像
     let { wxInfo } = this.props;
     // console.warn("wxInfo", wxInfo)
-    // let res = await Taro.downloadFile({
-    //   url: wxInfo.avatarUrl
-    // });
+    let res = await Taro.downloadFile({
+      url: wxInfo.avatarUrl
+    });
+    console.log(res)
     // let imageUrl = await Taro.downloadFile({
     //   url: 'https://tva1.sinaimg.cn/large/00831rSTgy1gczok56tkzj30m80m8qe4.jpg'
     // });
     // const url= 'https://tva1.sinaimg.cn/large/00831rSTgy1gczok56tkzj30m80m8qe4.jpg';
     ctx.save();
     ctx.beginPath();
-    // ctx.arc(160,88,66,0,Math.PI * 2);
-    // ctx.closePath();
-    // ctx.clip();
-    // ctx.stroke();
-    // ctx.translate(160,88);
-    ctx.drawImage(imageUrl, -20, -20, 400, 280);
+    ctx.arc(160,88,66,0,Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.stroke();
+    ctx.translate(160,88);
+    ctx.drawImage(res.tempFilePath, -80, -80, 150, 150);
     ctx.restore();
  
     // 绘制文字
     ctx.save()
     ctx.setFontSize(16)
     ctx.setFillStyle('#FFF')
-    // ctx.fillText(wxInfo.nickName, 100, 200)
+    ctx.fillText(wxInfo.nickName, 100, 200)
     ctx.setFontSize(12)
     ctx.setFillStyle('black')
     ctx.fillText('准报小程序', 20, 280)
