@@ -47,8 +47,22 @@ export default class Detail extends Component {
       url:`/v3/login/getWXCode`
     }).then(()=>{
       const {code} = this.props
-      console.log(this.props)
-      this.drawImage(`data:image/png;base64,${code}`)
+      const fs = wx.getFileSystemManager();
+      //随机定义路径名称
+      var times = new Date().getTime();
+      var codeimg = wx.env.USER_DATA_PATH + '/' + times + '.png';
+      
+      //将base64图片写入
+      var that = this;
+      fs.writeFile({
+        filePath: codeimg,
+        data: code,
+        encoding: 'base64',
+        success: (res) => {
+          //写入成功了的话，新的图片路径就能用了
+          this.drawImage(codeimg)
+        }
+      })
     })
   }
 
@@ -122,9 +136,9 @@ export default class Detail extends Component {
       x: 0,
       y: 0,
       width: 400,
-      height: 500,
+      height: 600,
       destWidth: 360,
-      destHeight: 450,
+      destHeight: 500,
       canvasId: 'cardCanvas',
       fileType: 'png'
     })
