@@ -109,13 +109,12 @@ class ViewData extends Component {
    // 步骤条change事件
    onChange (current, isCurrent, item) {
     const isStrict = this.$router.params.isStrict
-    console.log(current)
      if(isStrict == 0){
       this.setState({ current }, () => {
         this.getResList()
       })
      }else{
-      if(isCurrent >= current){
+      if(isCurrent >= current + 1){
         this.setState({ current }, () => {
           this.getResList()
         })
