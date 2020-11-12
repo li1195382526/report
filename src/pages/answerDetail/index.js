@@ -39,7 +39,6 @@ class answerDetail extends Component {
             const {periods} = this.props
             let current = periods.length ? (periods.findIndex((item) => item.isCurrent == 1)) : 0
             current = current == -1 ? 1 : current + 1
-            current = this.$router.params.currentPeriod ? this.$router.params.currentPeriod : current
             this.setState({current}, () => {
                 this.lookAnswerResultById()
             })
@@ -58,18 +57,24 @@ class answerDetail extends Component {
 
     // 步骤条change事件
     onChange (current, item) {
-        if(this.$router.params.currentPeriod >= current){
+        const isStrict = this.$router.params.isStrict
+        if(isStrict == 0){
             this.setState({ current }, () => {
                 this.lookAnswerResultById()
             })
         }else{
-            Taro.showToast({
-                title: '暂无数据！还未进行到当前周期开启时间',
-                icon: 'none',
-                duration: 2000
-            })
-        }
-        
+            if(this.$router.params.currentPeriod >= current){
+                this.setState({ current }, () => {
+                    this.lookAnswerResultById()
+                })
+            }else{
+                Taro.showToast({
+                    title: '暂无数据！还未进行到当前周期开启时间',
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
+        } 
     }
 
     // 修改填报
@@ -122,8 +127,8 @@ class answerDetail extends Component {
                             <View className='step-line'></View>
                         )}
                         {newPeriods.map((val)=>(
-                            <View style={{ marginTop: this.state.current == val.num ? '-10px' : '0', zIndex: '100' }} >
-                                {this.state.current == val.num && (
+                            <View style={{ marginTop: index + 1 == val.num ? '-10px' : '0', zIndex: '100' }} >
+                                {index + 1 == val.num && (
                                     <View className='step-light'>
                                         <View className='step-lightleft'></View>
                                         <View className='step-lightmid'></View>
@@ -131,9 +136,10 @@ class answerDetail extends Component {
                                     </View>
                                 )}
                                 <View className='step' style={{
-                                    width: this.state.current == val.num ? '30px' : '25px',
-                                    height: this.state.current == val.num ? '30px' : '25px',
-                                    lineHeight: this.state.current == val.num ? '30px' : '25px',
+                                    width: index + 1 == val.num ? '30px' : '25px',
+                                    height: index + 1 == val.num ? '30px' : '25px',
+                                    lineHeight: index + 1 == val.num ? '30px' : '25px',
+                                    color:current == val.num ? '#44e660' : '#fff'
                                 }}
                                     onClick={() => this.onChange(val.num, val)}
                                 >
@@ -149,8 +155,8 @@ class answerDetail extends Component {
                     )}
                     {periods.length > 0 && (
                         <View className="view-plain">
-                            <View className='view-text'>当前进行至第 {current} 周期</View>
-                            <View className='view-text'>截止时间 {periods[current-1].endTime}</View>
+                            <View className='view-text'>当前进行至第 {index + 1} 周期</View>
+                            <View className='view-text'>截止时间 {periods[index + 1].endTime}</View>
                         </View>
                     )}
                     {periods.length === 0 && (

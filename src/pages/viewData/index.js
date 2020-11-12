@@ -68,7 +68,7 @@ class ViewData extends Component {
     }).then(() => {
       const { periods } = this.props
       const index = periods.findIndex((item) => item.isCurrent == 1)
-      this.setState({ current: index == -1 ? periods.length - 1 : index+1 }, () => {
+      this.setState({ current: index == -1 ? periods.length - 1 : index }, () => {
         this.getResList()
       })
     })
@@ -108,18 +108,25 @@ class ViewData extends Component {
  
    // 步骤条change事件
    onChange (current, isCurrent, item) {
-    if(isCurrent >= current){
+    const isStrict = this.$router.params.isStrict
+    console.log(current)
+     if(isStrict == 0){
       this.setState({ current }, () => {
         this.getResList()
       })
-    }else{
-      Taro.showToast({
-        title: '暂无数据！还未进行到当前周期开启时间',
-        icon: 'none',
-        duration: 2000
-      })
-    }
-    
+     }else{
+      if(isCurrent >= current){
+        this.setState({ current }, () => {
+          this.getResList()
+        })
+      }else{
+        Taro.showToast({
+          title: '暂无数据！还未进行到当前周期开启时间',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+     }  
 }
   // 已填报/未填报点击
   handelToggle() {
@@ -187,7 +194,7 @@ class ViewData extends Component {
   }
 
   render() {
-    const { isFinished, isMenge, indexPeriods } = this.state
+    const { isFinished, isMenge, indexPeriods,current } = this.state
     const { periods, resList } = this.props
     const index = periods.findIndex((item) => item.isCurrent == 1)
     const list = isFinished ? resList.finished || [] : resList.unfinished || []
@@ -218,8 +225,8 @@ class ViewData extends Component {
                 <View className='step-line'></View>
               )}
               {newPeriods.map((val, key) => (
-                <View style={{ marginTop: this.state.current === val.num ? '-10px' : '0', zIndex: '100' }} key={key}>
-                  {this.state.current === val.num && (
+                <View style={{ marginTop: index + 1 === val.num ? '-10px' : '0', zIndex: '100' }} key={key}>
+                  {index + 1  === val.num && (
                     <View className='step-light'>
                       <View className='step-lightleft'></View>
                       <View className='step-lightmid'></View>
@@ -227,11 +234,12 @@ class ViewData extends Component {
                     </View>
                   )}
                   <View className='step' style={{
-                    width: this.state.current === val.num ? '30px' : '25px',
-                    height: this.state.current === val.num ? '30px' : '25px',
-                    lineHeight: this.state.current === val.num ? '30px' : '25px',
+                    width: index + 1  === val.num ? '30px' : '25px',
+                    height: index + 1  === val.num ? '30px' : '25px',
+                    lineHeight: index + 1  === val.num ? '30px' : '25px',
+                    color:current+1 == val.num ? '#44e660' : '#fff'
                   }}
-                    onClick={() => this.onChange(val.num,index+1,val)}
+                    onClick={() => this.onChange(val.num-1,index+1,val)}
                   >
                     {val.num}
                   </View>

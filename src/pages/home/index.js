@@ -34,7 +34,8 @@ class Home extends Component {
       opened: false,
       reportId: '',
       currentPeriod:'',
-      itemdata: {}
+      itemdata: {},
+      isStrict:null
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -90,7 +91,8 @@ class Home extends Component {
       isOpened: true,
       reportId: item.id,
       status: item.status,
-      itemdata: item
+      itemdata: item,
+      isStrict:item.isStrict
     })
   }
 
@@ -162,7 +164,7 @@ class Home extends Component {
   }
 
   handleData() {
-    const {itemdata} = this.state
+    const {itemdata,isStrict,reportId,status} = this.state
     this.close()
     if(itemdata.finishCount == 0) {
       Taro.showToast({
@@ -173,15 +175,16 @@ class Home extends Component {
       return
     }
     Taro.navigateTo({
-      url: `/pages/viewData/index?reportId=${this.state.reportId}&status=${this.state.status}&usePeriod=${this.state.itemdata.usePeriod}&useCount=${this.state.itemdata.useCount}&useNamelist=${this.state.itemdata.useNamelist}`
+      url: `/pages/viewData/index?reportId=${reportId}&status=${status}&usePeriod=${itemdata.usePeriod}&useCount=${itemdata.useCount}&useNamelist=${itemdata.useNamelist}&isStrict=${isStrict}`
     })
   }
   partHandleData() {
     this.close()
-    const {itemdata} = this.state
+    const {itemdata,reportId,isStrict} = this.state
+    console.log(isStrict)
     const currentPeriod = itemdata.currentPeriod == 0 ? itemdata.totalPeriod : itemdata.currentPeriod
     Taro.navigateTo({
-      url: `/pages/answerDetail/index?reportId=${this.state.reportId}&currentPeriod=${currentPeriod}`
+      url: `/pages/answerDetail/index?reportId=${reportId}&currentPeriod=${currentPeriod}&isStrict=${isStrict}`
     })
   }
 
@@ -370,7 +373,8 @@ class Home extends Component {
         status: val.status,
         reportId: val.id,
         currentPeriod:val.currentPeriod,
-        itemdata: val
+        itemdata: val,
+        isStrict:val.isStrict
       })
     }
   }
