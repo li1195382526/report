@@ -53,9 +53,9 @@ class ViewData extends Component {
   onShareAppMessage(res) {
     console.log(res)
     return {
-      title: '云调查',
+      title: '准报',
       path: `/pages/answer/index?listId=${this.$router.params.reportId}`,
-      imageUrl: 'https://www.epanel.cn/images/answer.jpg'
+      imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
   }
 

@@ -40,9 +40,9 @@ class Release extends Component {
     }
     const id = this.$router.params.listId
     return {
-      title:  '云调查',
+      title:  '准报',
       path: `/pages/answer/index?listId=${id}`,
-      imageUrl: 'https://www.epanel.cn/images/answer.jpg'
+      imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
   }
 

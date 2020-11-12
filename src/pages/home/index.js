@@ -334,9 +334,9 @@ class Home extends Component {
       console.log(res.target)
     }
     return {
-      title: '云调查',
+      title: '准报',
       path: `/pages/answer/index?listId=${this.state.reportId}`,
-      imageUrl: 'https://www.epanel.cn/images/answer.jpg'
+      imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
   }
 
