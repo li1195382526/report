@@ -157,10 +157,10 @@ class ViewData extends Component {
   share() {
     const { resList } = this.props
     const list = resList.unfinished || []
-    let data = '未填报名单为：\n'
+    let data = '未填报名单为：'
     for (let i of list) {
       if (i.id) {
-        data = data + `${i.listIndex}. ${i.resultName} \n`
+        data = data + `\n${i.listIndex}. ${i.resultName}`
       }
     }
     setTimeout(() => {

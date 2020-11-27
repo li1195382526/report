@@ -344,7 +344,7 @@ onTimeChange = e => {
 
   handleMemo(value){
     // eslint-disable-next-line no-shadow
-    let {info} = this.props
+    let info = JSON.parse(JSON.stringify(this.props.info))
     info.memo = value.target.value
     this.props.dispatch({
       type: 'edit/save',
