@@ -7,8 +7,9 @@ import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
 import './index.scss';
 
-@connect(({ ViewData, home, common, answerDetail }) => ({
+@connect(({ ViewData,eidt, home, common, answerDetail }) => ({
   ...ViewData,
+  ...eidt,
   ...home,
   ...common,
   ...answerDetail
@@ -51,9 +52,9 @@ class ViewData extends Component {
 
   //小程序分享
   onShareAppMessage(res) {
-    console.log(res)
+    const title = this.props.info.title
     return {
-      title: '准报',
+      title: title,
       path: `/pages/answer/index?listId=${this.$router.params.reportId}`,
       imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }

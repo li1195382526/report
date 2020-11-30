@@ -7,8 +7,8 @@ import { Quota } from '../../components/Quota'
 import { Link } from '../../components/link'
 import './index.scss';
 
-@connect(({ Release, home, common }) => ({
-  ...Release,
+@connect(({ edit, home, common }) => ({
+  ...edit,
   ...home,
   ...common
 }))
@@ -39,8 +39,9 @@ class Release extends Component {
       console.log(res.target)
     }
     const id = this.$router.params.listId
+    const title = this.props.info.title
     return {
-      title:  '准报',
+      title:  title,
       path: `/pages/answer/index?listId=${id}`,
       imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }

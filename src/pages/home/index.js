@@ -35,7 +35,8 @@ class Home extends Component {
       reportId: '',
       currentPeriod:'',
       itemdata: {},
-      isStrict:null
+      isStrict:null,
+      reportName:'准报'
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handleClickBar = this.handleClickBar.bind(this)
@@ -92,7 +93,8 @@ class Home extends Component {
       reportId: item.id,
       status: item.status,
       itemdata: item,
-      isStrict:item.isStrict
+      isStrict:item.isStrict,
+      reportName:item.title
     })
   }
 
@@ -337,7 +339,7 @@ class Home extends Component {
       console.log(res.target)
     }
     return {
-      title: '准报',
+      title: this.state.reportName,
       path: `/pages/answer/index?listId=${this.state.reportId}`,
       imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
@@ -374,7 +376,8 @@ class Home extends Component {
         reportId: val.id,
         currentPeriod:val.currentPeriod,
         itemdata: val,
-        isStrict:val.isStrict
+        isStrict:val.isStrict,
+        reportName:val.title
       })
     }
   }
