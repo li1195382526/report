@@ -86,6 +86,9 @@ class App extends Component {
       'pages/share/index',
       'pages/code/index',
       'pages/answerDetail/index',
+      'pages/instructions/index',
+      'pages/instructions/creatProject',
+      'pages/instructions/joinProject',
     ],
     window: {
       backgroundTextStyle: 'light',

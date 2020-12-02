@@ -24,6 +24,7 @@ class PersonalCenter extends Component {
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handelListDataBase = this.handelListDataBase.bind(this)
     this.login = this.login.bind(this)
+    this.toInstructions = this.toInstructions.bind(this)
   }
 
   handelListDataBase(){
@@ -57,6 +58,9 @@ class PersonalCenter extends Component {
       'message': msg,
       'type': 'error'
     })
+  }
+  toInstructions() {
+    Taro.navigateTo({ url: '/pages/instructions/index' })
   }
 
   handleWxLogin(){
@@ -143,6 +147,7 @@ class PersonalCenter extends Component {
         {/* <AtListItem title='推荐小程序' arrow='right' />
         <AtListItem title='添加小程序' arrow='right' /> */}
         <AtListItem title='更新说明' arrow='right' />
+        <AtListItem title='新手入门引导' arrow='right' onClick={this.toInstructions}/>
         </View>
         <AtTabBar
             fixed
