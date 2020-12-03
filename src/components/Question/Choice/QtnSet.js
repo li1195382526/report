@@ -71,9 +71,11 @@ class QtnSet extends Component {
   handeCopy(){
     const {opts,questionnaire,isChange} = this.props 
     let newQt = [] 
+    let isTrue = true
     questionnaire.pageList[0]
       .qtList.map((qt,key)=>{
-        if(qt.disSeq == opts.disSeq){
+        if(qt.disSeq == opts.disSeq && isTrue ){
+          isTrue = false
           questionnaire.pageList[0].qtList.splice(key+1,0,qt)
           return
         }
