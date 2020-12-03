@@ -392,7 +392,7 @@ class Answer extends Component {
         )}
         <View className='answer-title'>
           <View className='title'>{info.title}</View>
-          <View className='memo'>{info.memo}</View>
+          <View className='memo' style={{whiteSpace:'pre-wrap'}}>{info.memo}</View>
         </View>
         <View className='answer-list'>
           <QtnCanvas questionnaire={questionnaire} />

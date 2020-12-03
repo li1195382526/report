@@ -122,8 +122,8 @@ onTimeChange = e => {
         this.handleTips('error','填报主题不能为空')
         return
     }
-    if(info.title.length >= 20){
-      this.handleTips('error','填报主题不能超过20个字符')
+    if(info.title.length > 30){
+      this.handleTips('error','填报主题不能超过30个字符')
       return
     }
 
@@ -239,20 +239,8 @@ onTimeChange = e => {
       this.handleTips('error','填报主题不能为空')
       return
     }
-    if(info.title.length >= 20){
-      this.handleTips('error','填报主题不能超过20个字符')
-      return
-    }
-    if(info.memo.length >= 200){
-    this.handleTips('error','填报说明不能超过200个字符')
-    return
-    }
-    if (info.title.length === 0) {
-      this.handleTips('error', '填报主题不能为空')
-      return
-    }
-    if (info.title.length >= 20) {
-      this.handleTips('error', '填报主题不能超过20个字符')
+    if(info.title.length > 30){
+      this.handleTips('error','填报主题不能超过30个字符')
       return
     }
     if (info.memo.length == 0) {

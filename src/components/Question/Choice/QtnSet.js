@@ -19,6 +19,7 @@ class QtnSet extends Component {
       this.handleDelete = this.handleDelete.bind(this)
       this.handleRequired = this.handleRequired.bind(this)
       this.cancel = this.cancel.bind(this)
+      this.copy = this.copy.bind(this)
   }
 
   //删除题目
@@ -64,6 +65,10 @@ class QtnSet extends Component {
       }
     })
   }
+  copy() {
+    const {opts,isModify} = this.props
+    console.log(opts)
+  }
   
   render() {
     const {opts,isModify} = this.props
@@ -73,7 +78,10 @@ class QtnSet extends Component {
         <View className='qt-set'>
           <View><Checkbox value='选中' checked={opts.required} disabled={!isModify} onClick={() => this.handleRequired(opts.required)}></Checkbox> 必填</View>
           {isModify && (
-            <View onClick={() => this.setState({qtnset_isopen: true})}><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>
+            <View>
+              <AtIcon value='file-new' size='25' color='#ccc' onClick={this.copy}></AtIcon>
+              <AtIcon value='trash' size='25' color='#ccc' onClick={() => this.setState({qtnset_isopen: true})}></AtIcon>
+            </View>
           )}
           {!isModify && (
             <View><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>

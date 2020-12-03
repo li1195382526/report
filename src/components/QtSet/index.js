@@ -24,7 +24,6 @@ class QtSet extends Component {
         selector: ['日', '周', '月', '年'],
         selectorChecked: '日',
         hint:'',
-        hint1:''
       }
       this.handleSetName = this.handleSetName.bind(this)
       this.handleNum = this.handleNum.bind(this)
@@ -185,8 +184,7 @@ class QtSet extends Component {
     if(value){
       this.setState({
         isLimit: true,
-        hint: val === 1 ? `1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期` : "开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报",
-        hint1: val === 1 ? `2、关闭连续填报：不限制填写时间，可随时填写所有周期内的数据。` : ""
+        hint: val === 1 ? "1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期 \n2、关闭连续填报：不限制填写时间，可随时填写所有周期内的数据。" : "开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报"
       })
     }
   }
@@ -381,7 +379,7 @@ class QtSet extends Component {
               onChange={(val)=>this.handleNum(val,'creatorName')} 
             />
           </View>
-          <Model isLimit={isLimit} handleClose={this.handleClose} hint={hint} hint1={this.state.hint1}/>
+          <Model isLimit={isLimit} handleClose={this.handleClose} hint={hint}/>
         </View>
     )
   }
