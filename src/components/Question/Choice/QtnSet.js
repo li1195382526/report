@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { AtIcon, AtModal, AtModalHeader, AtModalContent, AtModalAction }  from 'taro-ui'
 import './style/setting.scss'
 import { connect } from '@tarojs/redux';
+import { fromJS } from 'immutable';
 
 @connect(({edit,home, common }) => ({
   ...edit,
@@ -19,6 +20,7 @@ class QtnSet extends Component {
       this.handleDelete = this.handleDelete.bind(this)
       this.handleRequired = this.handleRequired.bind(this)
       this.cancel = this.cancel.bind(this)
+      this.handeCopy = this.handeCopy.bind(this)
   }
 
   //删除题目
@@ -64,6 +66,34 @@ class QtnSet extends Component {
       }
     })
   }
+
+  //复制题目
+  handeCopy(){
+    const {opts,questionnaire,isChange} = this.props 
+    let newQt = [] 
+    questionnaire.pageList[0]
+      .qtList.map((qt,key)=>{
+        if(qt.disSeq == opts.disSeq){
+          questionnaire.pageList[0].qtList.splice(key+1,0,qt)
+          return
+        }
+      })
+      questionnaire.pageList[0]
+      .qtList.map((val,key)=>{
+        newQt.push(JSON.parse(JSON.stringify(val)))
+      })
+      newQt.map((val,key)=>{
+        val.disSeq = `Q${key+1}`
+      })
+      questionnaire.pageList[0].qtList = newQt
+      this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          questionnaire,
+          isChange:!isChange
+        }
+      })
+  }
   
   render() {
     const {opts,isModify} = this.props
@@ -73,7 +103,10 @@ class QtnSet extends Component {
         <View className='qt-set'>
           <View><Checkbox value='选中' checked={opts.required} disabled={!isModify} onClick={() => this.handleRequired(opts.required)}></Checkbox> 必填</View>
           {isModify && (
-            <View onClick={() => this.setState({qtnset_isopen: true})}><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>
+            <View>
+              <AtIcon onClick={() => this.setState({qtnset_isopen: true})} value='trash' size='25' color='#ccc'></AtIcon>
+              <AtIcon onClick={this.handeCopy} value='money' size='25' color='#ccc'></AtIcon>
+              </View>
           )}
           {!isModify && (
             <View><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>
