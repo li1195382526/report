@@ -72,8 +72,14 @@ export default {
           }, 100);
         }else if(isPersonal === 2){
           setTimeout(() => {
-            Taro.redirectTo({
+            Taro.navigateTo({
               url: '../dataList/index'
+            })
+          }, 100);
+        }else if(isPersonal === 3){
+          setTimeout(() => {
+            Taro.navigateTo({
+              url: '../edit/index?isInit=0&reportId='
             })
           }, 100);
         }else{
