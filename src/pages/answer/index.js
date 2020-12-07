@@ -155,7 +155,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/getAnswer',
       token: this.props.token,
-      url:`/v3/report/${reportId}/period/${period}/participant/${mobile}/answer`
+      url:`/v3/report/${reportId}/period/${period}/participant/${mobile.substring(0,11)}/answer`
     })
   }
 
@@ -209,7 +209,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/subMitAnswer',
       token: this.props.token,
-      url:`/v3/report/${id}/participant/${!!mobile ? mobile :wxMobile}/submit`,
+      url:`/v3/report/${id}/participant/${!!mobile ? mobile.substring(0,11) :wxMobile.substring(0,11)}/submit`,
       payload: params,
       reportId: this.$router.params.listId || this.state.id,
       period:periodCount,
@@ -243,7 +243,7 @@ class Answer extends Component {
     this.props.dispatch({
       type: 'answer/modifySubmit',
       token: this.props.token,
-      url:`/v3/report/${id}/period/${periodCount}/participant/${!!mobile ? mobile :wxMobile}/answer`,
+      url:`/v3/report/${id}/period/${periodCount}/participant/${!!mobile ? mobile.substring(0,11) :wxMobile.substring(0,11)}/answer`,
       payload: params,
       reportId: this.$router.params.listId || this.state.id,
       period:periodCount,
@@ -314,7 +314,7 @@ class Answer extends Component {
     var mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
     let params = {
-      mobile:!!mobile ? mobile :wxMobile,
+      mobile:!!mobile ? mobile.substring(0,11) :wxMobile.substring(0,11),
       pwd: passWord,
       listIndex,
       userAgent
