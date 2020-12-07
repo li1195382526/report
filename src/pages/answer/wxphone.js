@@ -11,7 +11,7 @@ import './wxphone.scss';
 
 class WxLogin extends Component {
   config = {
-    navigationBarTitleText: '云调查',
+    navigationBarTitleText: '准报',
   };
 
   constructor(props) {
