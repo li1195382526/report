@@ -116,6 +116,7 @@
 .save-change {
     display: border-box;
     position: fixed;
+    z-index: 2;
     bottom: 16px;   
     height: 80px;
     width: 90%;

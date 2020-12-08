@@ -254,7 +254,6 @@ class DataList extends Component {
 									value={nameList}
 									onChange={this.handleChange}
 									height={200}
-									maxLength={200}
 									placeholder={`请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：\n小明，13545678921\n小芳,15893839373`}
 									onBlur={this.formatList}
 								/>
