@@ -39,7 +39,9 @@ class Release extends Component {
       console.log(res.target)
     }
     const id = this.$router.params.listId
-    const title = this.props.info.title
+    const titles = this.props.info.title
+    const title = titles.length > 11 ? titles.substring(0,11)+'...'
+    :titles
     return {
       title:  title,
       path: `/pages/answer/index?listId=${id}`,

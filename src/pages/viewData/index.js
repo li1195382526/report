@@ -52,7 +52,9 @@ class ViewData extends Component {
 
   //小程序分享
   onShareAppMessage(res) {
-    const title = this.props.info.title
+    const titles = this.props.info.title
+    const title = titles.length > 11 ? titles.substring(0,11)+'...'
+    :titles
     return {
       title: title,
       path: `/pages/answer/index?listId=${this.$router.params.reportId}`,

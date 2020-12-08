@@ -338,8 +338,10 @@ class Home extends Component {
       // 来自页面内转发按钮
       console.log(res.target)
     }
+    const title = this.state.reportName.length > 11 ? this.state.reportName.substring(0,11)+'...'
+    :this.state.reportName
     return {
-      title: this.state.reportName,
+      title: title,
       path: `/pages/answer/index?listId=${this.state.reportId}`,
       imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
