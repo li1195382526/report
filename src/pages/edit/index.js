@@ -8,7 +8,7 @@ import { Link } from '../../components/link'
 import './index.scss';
 import {Question} from '../../components/Question'
 import { QtSet } from '../../components/QtSet'
-import {info,questionnaire} from '../../config'
+import {info as newinfo,questionnaire as newquestionnaire} from '../../config'
 
 @connect(({ edit, home, common }) => ({
   ...edit,
@@ -24,13 +24,14 @@ class Edit extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      
+      isFirstTemplate: false
     }
     this.handleSave = this.handleSave.bind(this)
     this.getQuestionner = this.getQuestionner.bind(this)
     this.handleTitle = this.handleTitle.bind(this)
     this.handleTips = this.handleTips.bind(this)
     this.handleRelease = this.handleRelease.bind(this)
+    this.getTemplate = this.getTemplate.bind(this)
   }
 
   //获取问卷
@@ -46,19 +47,32 @@ class Edit extends Component {
       url:`/v3/report/${reportId}`
     })
   }
+  // 获取模板
+  getTemplate() {
+    const reportId = this.$router.params.reportId
+    this.props.dispatch({
+      type: 'edit/getTemplate',
+      token: this.props.token,
+      url:`/v3/report/template/${reportId}`
+    })
+  }
 
   componentWillMount(){
     const init = this.$router.params.isInit
-    console.log(init)
+    const isTemplate = this.$router.params.isTemplate
     //第一次编辑填报前端数据，编辑中问卷获取问卷信息
-    if(init == 1 || init == 2){
+    if(isTemplate == 1) {
+      this.setState({isFirstTemplate: true}, () => {
+        this.getTemplate()
+      })
+    }else if(init == 1 || init == 2){
       this.getQuestionner()
     }else{
       this.props.dispatch({
         type: 'edit/save',
         payload: {
-          info: JSON.parse(JSON.stringify(info)),
-          questionnaire: JSON.parse(JSON.stringify(questionnaire))
+          info: JSON.parse(JSON.stringify(newinfo)),
+          questionnaire: JSON.parse(JSON.stringify(newquestionnaire))
         }
       })
     }
@@ -94,9 +108,31 @@ onTimeChange = e => {
 
   //发布填报
   handleRelease(){
-    const {info,questionnaire} = this.props
-    const {reportId} = this.$router.params
-    console.log(info)
+    var info = JSON.parse(JSON.stringify(this.props.info))
+    var questionnaire = JSON.parse(JSON.stringify(this.props.questionnaire))
+
+    // 如果是首次点击发布的模板问卷
+    if(this.$router.params.isTemplate == 1 && this.state.isFirstTemplate) {
+      var nInfo = JSON.parse(JSON.stringify(newinfo))
+      var nQuestionnaire = JSON.parse(JSON.stringify(newquestionnaire))
+      for(let i in nInfo) {
+        if(info[i] && i != 'id') {
+          nInfo[i] = info[i]
+        }
+      }
+      nQuestionnaire.pageList = questionnaire.pageList
+      info = nInfo
+      questionnaire = nQuestionnaire
+      this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          info,
+          questionnaire
+        }
+      })
+      this.setState({isFirstTemplate: false})
+    }
+
     for(let pg of questionnaire.pageList) {
       if(!pg.qtList.length) {
         this.handleTips('error','填报题目不能为空')
@@ -191,7 +227,7 @@ onTimeChange = e => {
     if(info.creatorName === ''){
       info.creatorName = this.props.wxInfo.nickName
     }
-
+    Taro.showLoading({title: '正在发布...', mask: true})
     const params = {
       info,
       questionnaire
@@ -210,6 +246,7 @@ onTimeChange = e => {
           url:`/v3/report/${response.data.id}/publish`
         }).then(()=>{
           const {qtnStatus,message} = this.props
+          Taro.hideLoading()
           if(qtnStatus === 200){
             Taro.redirectTo({
               url: `/pages/release/index?listId=${response.data.id}`
@@ -220,6 +257,7 @@ onTimeChange = e => {
           
         })
       } else {
+        Taro.hideLoading()
         this.handleTips('error', response.message)
       }
     })  
@@ -234,7 +272,31 @@ onTimeChange = e => {
 
   //保存
   handleSave(){
-    const {info,questionnaire} = this.props
+    var info = JSON.parse(JSON.stringify(this.props.info))
+    var questionnaire = JSON.parse(JSON.stringify(this.props.questionnaire))
+
+    // 如果是首次点击保存的模板问卷
+    if(this.$router.params.isTemplate == 1 && this.state.isFirstTemplate) {
+      var nInfo = JSON.parse(JSON.stringify(newinfo))
+      var nQuestionnaire = JSON.parse(JSON.stringify(newquestionnaire))
+      for(let i in nInfo) {
+        if(info[i] && i != 'id') {
+          nInfo[i] = info[i]
+        }
+      }
+      nQuestionnaire.pageList = questionnaire.pageList
+      info = nInfo
+      questionnaire = nQuestionnaire
+      this.props.dispatch({
+        type: 'edit/save',
+        payload: {
+          info,
+          questionnaire
+        }
+      })
+      this.setState({isFirstTemplate: false})
+    }
+
     if(info.title.length === 0){
       this.handleTips('error','填报主题不能为空')
       return
@@ -297,7 +359,7 @@ onTimeChange = e => {
       this.handleTips('error', '填报密码必须为4位正整数')
       return
     }
-
+    Taro.showLoading({title: '正在保存...', mask: true})
     if(info.creatorName.length === 0){
       info.creatorName = this.props.wxInfo.nickName
     }
@@ -311,6 +373,7 @@ onTimeChange = e => {
       payload: params,
     }).then(()=>{
       const {status,message} = this.props
+      Taro.hideLoading()
       if(status == 200){
         this.handleTips('success','保存成功')
       }else{

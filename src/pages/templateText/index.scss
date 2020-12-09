@@ -1,24 +1,20 @@
 .tempalate-box{
     background-color: #fff;
     .list{
-        height:200px;
         border-bottom: 1px solid #ccc;
         display: flex;
+        padding: 20px 3%;
         .list-img{
-            width:30%;
-            margin-top:20px;
-            margin-right: 10px;
-            height:85%;
+            width:35%;
+            margin-right: 16px;
             text-align: center;
-            //background: url(../../assets/images/u3232.png) center center / cover;
             .data-img{
                 width:100%;
                 height:100%;
             }
         }
         .list-data{
-            width:70%;
-            height:80%;
+            flex: 1;
             .list-title{
                 line-height: 60px;
             }
@@ -26,6 +22,8 @@
                 font-size: 28px;
                 line-height: 46px;
                 color:#ccc;
+                height: 100px;
+                overflow: hidden;
             }
             .list-num{
                 display: flex;
@@ -37,6 +35,10 @@
                     color:#71a0f7;
                     font-size: 28px;
                     text-align: center;
+                }
+                .list-eye {
+                    min-width: 100px;
+                    color: #ccc;
                 }
             }
         }

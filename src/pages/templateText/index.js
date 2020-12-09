@@ -7,6 +7,12 @@ import PropTypes from 'prop-types';
 import { AtGrid,AtIcon,AtTabBar } from "taro-ui"
 import './index.scss'
 import image from '../../assets/images/u3232.png'
+import { connect } from '@tarojs/redux';
+
+@connect(({ templateText, common }) => ({
+  ...templateText,
+  ...common
+}))
 
 class TemplateText extends Component {
   config = {
@@ -18,8 +24,57 @@ class TemplateText extends Component {
     this.state = {
       currentBar:1
     }
+    this.getList = this.getList.bind(this)
+    this.toEdit = this.toEdit.bind(this)
   }
-
+  componentDidShow() {
+    this.props.dispatch({
+      type: 'templateText/save',
+      payload: {
+        current: 1,
+        templist: []
+      },
+    });
+    this.getList()
+  }
+  // 小程序上拉加载onReachBottom
+  onReachBottom() {
+    const { templist, templistTotal } = this.props
+    if(templist.length < templistTotal) {
+      this.props.dispatch({
+        type: 'templateText/save',
+        payload: {
+          current: this.props.current + 1,
+        },
+      });
+      this.getList()
+    } else {
+      Taro.showToast({
+        title: '暂无更多数据',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  }
+  toEdit(id) {
+    Taro.navigateTo({url: `/pages/edit/index?isInit=1&reportId=${id}&isTemplate=1`})
+  }
+  getList() {
+    const {userinfo} = this.props
+    // Taro.showLoading({title: '加载中...', mask: true})
+    let params = {
+      creatorId: userinfo.id,
+      current: this.props.current,
+      pageSize: this.props.pageSize
+    }
+    this.props.dispatch({
+      type: 'templateText/getTemplist',
+      payload: params,
+      token: this.props.token,
+    // }).then(() => {
+    //   Taro.hideLoading()
+    })
+  }
   handleClickBar(value){
     switch (value) {
       case 0:
@@ -42,155 +97,38 @@ class TemplateText extends Component {
     } 
   }
   render() {
-
+    const {templist} = this.props
     return (
       <View className='tempalate-box'>
-        <View className='list'>
-          <View className='list-img'>
-          <Image src={image} className='data-img'/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
+        {templist.map((item, key) => (
+          <View className='list' key={key} onClick={() => this.toEdit(item.id)}>
+            <View className='list-img'>
+              <Image src='https://www.epanel.cn/images/zhunbao2.jpg' className='data-img' mode='aspectFill'/>
             </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
-            </View>
-          </View>
-        </View>
-        <View className='list'>
-          <View className='list-img'>
-            <Image src={image} className='data-img'/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
-            </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
+            <View className='list-data'>
+              <View className='list-title'>
+                {item.title}
+              </View>
+              <View className='list-description'>
+                {item.memo}
+              </View>
+              <View className="list-num">
+                <View className='list-clock'>{item.templateLabel}</View>
+                <View className='list-eye'><AtIcon value='eye' size='25' color='#ccc'></AtIcon> {item.referenceNum}</View>
+              </View>
             </View>
           </View>
-        </View>
-        <View className='list'>
-          <View className='list-img'>
-            <Image src={image} className='data-img'/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
-            </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
-            </View>
-          </View>
-        </View>
-        <View className='list'>
-          <View className='list-img'>
-            <Image src={image} className='data-img'/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
-            </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
-            </View>
-          </View>
-        </View>
-        <View className='list'>
-          <View className='list-img'>
-            <img src="" alt=""/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
-            </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
-            </View>
-          </View>
-        </View>
-        <View className='list'>
-          <View className='list-img'>
-            <img src="" alt=""/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
-            </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
-            </View>
-          </View>
-        </View>
-        <View className='list'>
-          <View className='list-img'>
-            <img src="" alt=""/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
-            </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='25' color='#ccc'></AtIcon>275</View>
-            </View>
-          </View>
-        </View>
-        <View className='list'>
-          <View className='list-img'>
-            <img src="" alt=""/>
-          </View>
-          <View className='list-data'>
-            <View className='list-title'>
-            暑假学生作业完成情况
-            </View>
-            <View className='list-description'>
-            为了更好的收集各学科作业，请各位家长配合填写记录单
-            </View>
-            <View className="list-num">
-              <View className='list-clock'>打卡</View>
-              <View><AtIcon value='eye' size='30' color='#F00'></AtIcon>275</View>
-            </View>
-          </View>
-        </View>
+        ))}
         <AtTabBar
-            fixed
-            tabList={[
-              { title: '首页', iconType: 'home' },
-              { title: '模板库', iconType: 'list' },
-              { title: '个人中心', iconType: 'user' }
-            ]}
-            onClick={this.handleClickBar.bind(this)}
-            current={this.state.currentBar}
-          />
+          fixed
+          tabList={[
+            { title: '首页', iconType: 'home' },
+            { title: '模板库', iconType: 'list' },
+            { title: '个人中心', iconType: 'user' }
+          ]}
+          onClick={this.handleClickBar.bind(this)}
+          current={this.state.currentBar}
+        />
       </View>
     )
   }
