@@ -29,3 +29,8 @@ export const getWXCode = ( data,url) => syncAction({
   method: "POST",
   url,
 });
+
+export const getTemplate = (url) => syncAction({
+  method: "GET",
+  url,
+});

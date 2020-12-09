@@ -143,7 +143,7 @@ class NameList extends Component {
       }
       if(limit.length) {
         for(let i of limit) {
-          if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
+          if(!/^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(i)) {
             Taro.atMessage({
               message: `'${i}'号码格式有误，请仔细核对您的输入`,
               type: 'error'
@@ -295,7 +295,7 @@ class NameList extends Component {
       return
     }
     for(let i of newlist) {
-      if(!/^((13[0-9])|(17[0-1,6-8])|(15[^4,\\D])|(18[0-9]))\d{8}$/.test(i)) {
+      if(!/^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(i)) {
         Taro.atMessage({
           message: `'${i}'号码格式有误，请仔细核对您的输入`,
           type: 'error'
@@ -434,7 +434,6 @@ class NameList extends Component {
                 count={false}
                 value={imvalue}
                 height={200}
-                maxLength={200}
                 onChange={this.handleSubUsername}
                 placeholder={`请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：\n小明,13555555555\n小芳，15888888888`}
               />
@@ -477,7 +476,6 @@ class NameList extends Component {
                 value={devalue}
                 onChange={this.handleBind}
                 height={200}
-                maxLength={200}
                 placeholder={`请输入/粘贴微信绑定的手机号，示例：\n15666666666,18777777777`}
               />
               <View className='model-text'>仅允许关联的账号填报</View>

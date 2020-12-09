@@ -6,5 +6,6 @@ import data from '../pages/dataList/model'
 import answer from '../pages/answer/model'
 import name from '../pages/nameList/model'
 import answerDetail from '../pages/answerDetail/model'
+import templateText from '../pages/templateText/model'
 
-export default [common,home,person,edit,data,answer,name,answerDetail];
+export default [common,home,person,edit,data,answer,name,answerDetail,templateText];

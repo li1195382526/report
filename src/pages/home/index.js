@@ -251,16 +251,6 @@ class Home extends Component {
   }
 
   handleClickBar(value) {
-    // if(value === 1){
-    //   Taro.navigateTo({
-    //     url: '/pages/templateText/index'
-    //    })
-    // }
-    // if(value === 2){
-    //   Taro.navigateTo({
-    //     url: '/pages/personalCenter/index'
-    //    })
-    // }
     this.setState({
       isOpened: false,
       ispartOpened: false
@@ -276,6 +266,11 @@ class Home extends Component {
         })
         break;
       case 1:
+        Taro.redirectTo({
+          url: '/pages/templateText/index'
+        })
+        break;
+      case 2:
         Taro.redirectTo({
           url: '/pages/personalCenter/index'
         })
@@ -454,7 +449,7 @@ class Home extends Component {
           </Swiper>
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
             <AtTabsPane current={this.state.current} index={0} >
-              {this.state.current == 0 && !!isLogin && createList.length ? <List handleOpen={this.handleOpen} createList={createList} /> :
+              {!!isLogin && createList.length ? <List handleOpen={this.handleOpen} createList={createList} /> :
                 <View>
                   <Image src={image} className='list-img' />
                   <View className='no-data'>{!!isLogin ? '暂无数据' :'未登录暂无数据'}</View>
@@ -463,10 +458,10 @@ class Home extends Component {
             </AtTabsPane>
             
             <AtTabsPane current={this.state.current} index={1}>
-              {this.state.current == 1 && !!isLogin ? <Participate ref={element => (this._Participate = element)} handlePart={this.handlePart} /> :
+              {!!isLogin ? <Participate ref={element => (this._Participate = element)} handlePart={this.handlePart} /> :
                 <View>
                   <Image src={image} className='list-img' />
-                  <View className='no-data'>{!!isLogin ? '暂无数据' :'未登录暂无数据'}</View>
+                  <View className='no-data'>未登录暂无数据</View>
                 </View>
               }
             </AtTabsPane>
@@ -551,6 +546,7 @@ class Home extends Component {
           fixed
           tabList={[
             { title: '首页', iconType: 'home' },
+            { title: '模板库', iconType: 'list' },
             { title: '个人中心', iconType: 'user' }
           ]}
           onClick={this.handleClickBar}
