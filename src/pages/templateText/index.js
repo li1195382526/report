@@ -103,7 +103,7 @@ class TemplateText extends Component {
         {templist.map((item, key) => (
           <View className='list' key={key} onClick={() => this.toEdit(item.id)}>
             <View className='list-img'>
-              <Image src='https://www.epanel.cn/images/zhunbao2.jpg' className='data-img' mode='aspectFill'/>
+              <Image src={item.imageUrl?item.imageUrl:'https://www.epanel.cn/images/zhunbao2.jpg'} className='data-img' mode='aspectFill'/>
             </View>
             <View className='list-data'>
               <View className='list-title'>
