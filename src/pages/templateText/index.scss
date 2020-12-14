@@ -1,5 +1,6 @@
 .tempalate-box{
     background-color: #fff;
+    margin-bottom: 116px;
     .list{
         border-bottom: 1px solid #ccc;
         display: flex;
@@ -29,7 +30,7 @@
                 display: flex;
                 justify-content:space-between;
                 .list-clock{
-                    width:68px;
+                    min-width:68px;
                     height:42px;
                     border:1px solid #71a0f7;
                     color:#71a0f7;
