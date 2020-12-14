@@ -46,6 +46,8 @@ class DataList extends Component {
 	};
 	
 	componentDidMount() {
+	}
+	componentDidShow() {
 		this.props.dispatch({
 			type: 'dataList/resetReleaseData',
 		}) // 清空引用
@@ -254,6 +256,7 @@ class DataList extends Component {
 									value={nameList}
 									onChange={this.handleChange}
 									height={200}
+									maxLength={-1}
 									placeholder={`请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：\n小明，13545678921\n小芳,15893839373`}
 									onBlur={this.formatList}
 								/>

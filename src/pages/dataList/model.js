@@ -89,8 +89,11 @@ export default {
           'duration': 1500
         })
         setTimeout(() => {
-          Taro.redirectTo({
-            url: '../dataList/index'
+          // Taro.redirectTo({
+          //   url: '../dataList/index'
+          // })
+          Taro.navigateBack({
+            delta: 1
           })
         }, 500);
       } else {

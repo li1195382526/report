@@ -433,6 +433,7 @@ class NameList extends Component {
                 showConfirmBar={true}
                 count={false}
                 value={imvalue}
+                maxLength={-1}
                 height={200}
                 onChange={this.handleSubUsername}
                 placeholder={`请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：\n小明,13555555555\n小芳，15888888888`}
@@ -476,6 +477,7 @@ class NameList extends Component {
                 value={devalue}
                 onChange={this.handleBind}
                 height={200}
+                maxLength={-1}
                 placeholder={`请输入/粘贴微信绑定的手机号，示例：\n15666666666,18777777777`}
               />
               <View className='model-text'>仅允许关联的账号填报</View>

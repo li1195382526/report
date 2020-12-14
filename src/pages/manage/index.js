@@ -347,6 +347,7 @@ class NameList extends Component {
                 showConfirmBar={true}
                 count={false}
                 value={value}
+                maxLength={-1}
                 onChange={this.handleSubUsername}
                 height={200}
                 placeholder={`请输入名单，以及名单关联的填报人员微信手机号，参考以下示例：\n小明,13555555555\n小芳，15888888888`}
@@ -368,6 +369,7 @@ class NameList extends Component {
                 showConfirmBar={true}
                 count={false}
                 value={devalue}
+                maxLength={-1}
                 onChange={this.handleBind}
                 height={200}
                 placeholder={`请输入/粘贴微信绑定的手机号，示例：\n15666666666,18777777777`}
