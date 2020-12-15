@@ -4,6 +4,7 @@ import { connect } from '@tarojs/redux';
 import PropTypes from 'prop-types';
 import { AtGrid,AtListItem,AtAvatar,AtTabBar } from "taro-ui"
 import './index.scss'
+import image from '../../assets/images/user.png'
 
 
 @connect(({ edit, home, common }) => ({
@@ -132,7 +133,7 @@ class PersonalCenter extends Component {
       <View className='personal'>
         <View className='personal-login'>
           <View className='head-img'>
-            <AtAvatar image={!!token ?wxInfo.avatarUrl :'https://jdc.jd.com/img/200'} circle={true} size='300' ></AtAvatar>
+            <AtAvatar image={!!token ?wxInfo.avatarUrl : image} circle={true} size='300' ></AtAvatar>
           </View>
         <View className='wechat-name'>
             <View>
