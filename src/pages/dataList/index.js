@@ -219,7 +219,7 @@ class DataList extends Component {
 									<View className='title'>{item.tilte}</View>
 									<View className='count'>共{item.totalCount}人</View>
 								</View>
-								<View className="right">管理 &gt;</View>
+								<View className="right">管理 ＞</View>
 							</View>
 							{/* <AtListItem title={item.tilte} note={`共 ${item.totalCount} 人`} arrow='right' extraText='管理' onClick={() => this.handleManage(item)} /> */}
 						</View>

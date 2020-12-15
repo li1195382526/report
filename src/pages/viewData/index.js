@@ -282,10 +282,10 @@ class ViewData extends Component {
               item.id && (
                 <View className='item-content' onClick={() => this.handleClick(item)} key={key}>
                   <View className="left">{item.listIndex ? item.listIndex + '. ' + item.resultName : key + 1 + '. ' + item.resultName}</View>
-                  {isFinished && (<View className="right">{item.finishTime + '填报'}&gt;</View>)}
+                  {isFinished && (<View className="right">{item.finishTime + '填报'}＞</View>)}
                   {!isFinished && status != 5 && (
                     <View className="right">
-                      <Button openType='share' className='r-btn'>督促填报&gt;</Button>
+                      <Button openType='share' className='r-btn'>督促填报＞</Button>
                     </View>
                   )}
                 </View>

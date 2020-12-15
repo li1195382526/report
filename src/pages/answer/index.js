@@ -385,7 +385,7 @@ class Answer extends Component {
             <View>{res.status == 200 ? res.data.rep.name : '未知'}</View>
             {checkNamelist && info.isUserlimit == 0 && (
               <Picker mode='selector' range={togglelist} rangeKey='name' onChange={this.onChange}>
-                <View>切换名单 &gt;</View>
+                <View>切换名单 ＞</View>
               </Picker>
             )}
           </View>
