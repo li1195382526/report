@@ -22,6 +22,9 @@ class Question extends Component {
       }
   }
 
+  static defaultProps = {
+    questionnaire: {}
+  };
   componentDidMount(){
     console.log(this.props)
   }

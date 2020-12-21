@@ -19,6 +19,9 @@ class AnswerOptList extends Component {
 
   componentWillMount() {
   }
+  static defaultProps = {
+    optList: []
+  };
 
   componentDidMount() {
     // const { doc } = this.props

@@ -21,6 +21,9 @@ class MultipleChoice extends Component {
      this.handleChange = this.handleChange.bind(this)
   }
 
+  static defaultProps = {
+    opts: {}
+  };
   handleChange(val,isSelected){
     const {anw, opts} = this.props
     const QuestionMySeq = opts.disSeq
@@ -48,7 +51,7 @@ class MultipleChoice extends Component {
     
     return (
       <View className='single-choice'>
-        {opts.optlist.map((val, i)=>{
+        {opts.optlist && opts.optlist.map((val, i)=>{
           const premise = `${opts.disSeq}(${val.mySeq})`
           const answer = anw[opts.disSeq] && anw[opts.disSeq] .indexOf(premise) !== -1
           const isSelected = !!answer

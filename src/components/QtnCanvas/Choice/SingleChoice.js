@@ -21,6 +21,9 @@ class SingleChoice extends Component {
       this.handleChange = this.handleChange.bind(this)
   }
 
+  static defaultProps = {
+    opts: {}
+  };
   handleChange(val){
     const {opts,anw} = this.props
     let newAnw = fromJS(anw)
@@ -39,7 +42,7 @@ class SingleChoice extends Component {
     const {opts,anw,noModify} = this.props
     return (
       <View className='single-choice'>
-        {opts.optlist.map((val, i)=> {
+        {opts.optlist && opts.optlist.map((val, i)=> {
           const premise = `${opts.mySeq}(${val.mySeq})`
           const answer = fromJS(anw).find(answer => answer.indexOf(premise) === 0)
           const isSelected = answer !== undefined

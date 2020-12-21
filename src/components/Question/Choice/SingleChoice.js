@@ -21,6 +21,9 @@ class SingleChoice extends Component {
       this.handleDeleteOpt = this.handleDeleteOpt.bind(this)
   }
 
+  static defaultProps = {
+    opts: {}
+  };
   handleChange (value,item) {
     if(value === ''){
       return
@@ -117,7 +120,7 @@ class SingleChoice extends Component {
           value={opts.text}
           onChange={this.handleText}
         />
-          {opts.optlist.map((item,key)=>(
+          {opts.optlist && opts.optlist.map((item,key)=>(
             <View className='multi-opt' key={key}>
               <View className='multi-input'>
                 <AtInput

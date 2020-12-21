@@ -12,6 +12,9 @@ class QuestionChoice extends Component {
       }
   }
 
+  static defaultProps = {
+    opts: {}
+  };
   handleChange (value) {
     this.setState({
       value

@@ -21,6 +21,9 @@ class QuestionOpen extends Component {
       this.handleText = this.handleText.bind(this)
   }
 
+  static defaultProps = {
+    opts: {}
+  };
   handleChange (value) {
     this.setState({
       value

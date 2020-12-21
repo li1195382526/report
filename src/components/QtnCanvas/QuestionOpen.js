@@ -20,6 +20,9 @@ class QuestionOpen extends Component {
       this.handleChange = this.handleChange.bind(this)
   }
 
+  static defaultProps = {
+    opts: {}
+  };
   handleChange(val,item){
     const {opts,anw} = this.props
     let newAnw = fromJS(anw)
@@ -39,7 +42,7 @@ class QuestionOpen extends Component {
     return (
       <View className='open'>
         <View className='open-text'>
-        {opts.optlist.map((item,key)=>{
+        {opts.optlist && opts.optlist.map((item,key)=>{
           const inputValue = anw[opts.mySeq] && anw[opts.mySeq][key]
           const value = inputValue && inputValue.split('_')[1]
           return(

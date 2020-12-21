@@ -3,7 +3,7 @@ import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import './index.scss';
 
-const AnswerSubList = ({subList}) => (
+const AnswerSubList = ({subList=[]}) => (
   <View>
     {subList.map((sub, key) => (
       <View className="qtn_warn" key={key}>
