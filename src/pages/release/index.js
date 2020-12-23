@@ -44,7 +44,7 @@ class Release extends Component {
     :titles
     return {
       title:  title,
-      path: `/pages/answer/index?listId=${id}`,
+      path: `/pages/answer/loadingStatus?listId=${id}`,
       imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
   }

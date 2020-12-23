@@ -183,7 +183,6 @@ class Home extends Component {
   partHandleData() {
     this.close()
     const {itemdata,reportId,isStrict} = this.state
-    console.log(isStrict)
     const currentPeriod = itemdata.currentPeriod == 0 ? itemdata.totalPeriod : itemdata.currentPeriod
     Taro.navigateTo({
       url: `/pages/answerDetail/index?reportId=${reportId}&currentPeriod=${currentPeriod}&isStrict=${isStrict}`
@@ -337,7 +336,7 @@ class Home extends Component {
     :this.state.reportName
     return {
       title: title,
-      path: `/pages/answer/index?listId=${this.state.reportId}`,
+      path: `/pages/answer/loadingStatus?listId=${this.state.reportId}`,
       imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
   }

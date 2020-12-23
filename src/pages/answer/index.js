@@ -39,7 +39,6 @@ class Answer extends Component {
     this.join = this.join.bind(this)
     this.getNamelist = this.getNamelist.bind(this)
     this.getAnswer = this.getAnswer.bind(this)
-    this.wxMobilelogin = this.wxMobilelogin.bind(this)
     this.getQuestionner = this.getQuestionner.bind(this)
     this.modifySubmit = this.modifySubmit.bind(this)
   }
@@ -85,7 +84,6 @@ class Answer extends Component {
   //获取问卷
   getQuestionner(){
     const id = this.$router.params.listId || this.state.id
-    console.log(id)
     Taro.getSystemInfo({
       success: (res) => {
         this.setState({userAgent: JSON.stringify(res)})
@@ -101,44 +99,6 @@ class Answer extends Component {
       }
     })
   }
-
-  wxMobilelogin(){
-    return
-    let encryptedData = ''
-    let iv = ''
-    Taro.login()
-      .then(r => {
-        var code = r.code // 登录凭证
-        if (code) {
-          // 调用获取用户信息接口
-          Taro.getUserInfo({
-            success: function (res) {
-              Taro.setStorage({
-                key: "wxInfo",
-                data: res.userInfo
-              })
-              encryptedData = res.encryptedData
-              iv = res.iv
-            }
-          }).then(() => {
-            let params = { encryptedData: encryptedData, iv: iv, code: code, oid: 'gh_13a2c24667b4',"userId": '0'}
-            if (!!encryptedData && !!iv) {
-              this.props.dispatch({
-                type: 'answer/wxMobilelogin',
-                payload: params
-              }).then(()=>{
-                this.getQuestionner()
-              })
-            } else {
-              this.errorMessage('微信获取用户信息失败')
-            }
-          })
-        } else {
-          this.errorMessage('微信授权登录失败')
-        }
-      })
-  }
-
   //获取指定填报结果数据
   getAnswer(){
     //const mobile = Taro.getStorageSync('mobile')

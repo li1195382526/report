@@ -76,6 +76,7 @@ class App extends Component {
       'pages/edit/index',
       'pages/answer/index',
       'pages/answer/wxphone',
+      'pages/answer/loadingStatus',
       'pages/release/index',
       'pages/submits/index',
       'pages/nameList/index',

@@ -1,0 +1,45 @@
+
+.content {
+    .info {
+        background: #fff;
+        padding: 0 4%;
+        margin-top: 14px;
+        margin-bottom: 70px;
+        .title {
+            display: flex;
+            justify-content: space-between;
+            padding: 36px 0;
+            .status {
+                color:#7f8389;
+                font-size: 30px;
+                min-width: 120px;
+                text-align: right;
+            }
+        }
+        .memo {
+            color:#7f8389;
+            font-size: 28px;
+            line-height: 1.6;
+        }
+        .note {
+            color: #999;
+            font-size: 28px;
+            padding: 20px 0;
+        }
+    }
+    .btn {
+        padding: 0 4%;
+        .create {
+            margin-top: 28px;
+        }
+    }
+    .to-home {
+        position: fixed;
+        bottom: 50px;
+        width: 100%;
+        text-align: center;
+        color: #576b95;
+        font-size: 30px;
+        // text-decoration: underline;
+    }
+}

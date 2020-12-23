@@ -58,7 +58,7 @@ class WxLogin extends Component {
         type: 'answer/wxMobilelogin',
         payload: params
       }).then(() => {
-        Taro.redirectTo({url: `./index?listId=${this.$router.params.listId}`})
+        Taro.navigateBack({delta: 1})
       })
     } else {
       this.errorMessage('微信授权失败')

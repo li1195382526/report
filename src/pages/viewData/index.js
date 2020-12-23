@@ -57,7 +57,7 @@ class ViewData extends Component {
     :titles
     return {
       title: title,
-      path: `/pages/answer/index?listId=${this.$router.params.reportId}`,
+      path: `/pages/answer/loadingStatus?listId=${this.$router.params.reportId}`,
       imageUrl: 'https://www.epanel.cn/images/zhb-link.png'
     }
   }
