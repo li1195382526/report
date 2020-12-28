@@ -3,15 +3,6 @@ import { View, Text, Swiper, SwiperItem } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { AtMessage, AtTabBar } from 'taro-ui'
 import './index.scss';
-import image1 from '../../assets/images/u190.png'
-import image2 from '../../assets/images/u192.png'
-import image3 from '../../assets/images/u195.png'
-import image4 from '../../assets/images/u198.png'
-import image5 from '../../assets/images/u201.png'
-import image6 from '../../assets/images/u204.png'
-import image7 from '../../assets/images/u147.png'
-import image8 from '../../assets/images/u148.png'
-import image9 from '../../assets/images/u149.jpg'
 
 @connect(({ home, common, templateText }) => ({
   ...home,
@@ -183,40 +174,40 @@ class Home extends Component {
           autoplay
         >
           <SwiperItem>
-            <Image src={image7} style='width: 100%; height: 100%' mode='aspectFull' onClick={() => Taro.redirectTo({url: '/pages/project/index'})}></Image>
+            <Image src='https://www.epanel.cn/images/u147.png' style='width: 100%; height: 100%' mode='aspectFull' onClick={() => Taro.redirectTo({url: '/pages/project/index'})}></Image>
           </SwiperItem>
           <SwiperItem>
-            <Image src={image8} style='width: 100%; height: 100%' mode='aspectFull'></Image>
+            <Image src='https://www.epanel.cn/images/u148.png' style='width: 100%; height: 100%' mode='aspectFull'></Image>
           </SwiperItem>
           <SwiperItem>
-            <Image src={image9} style='width: 100%; height: 100%' mode='aspectFull' onClick={() => Taro.navigateTo({url: '/pages/instructions/index'})}></Image>
+            <Image src='https://www.epanel.cn/images/u149.png' style='width: 100%; height: 100%' mode='aspectFull' onClick={() => Taro.navigateTo({url: '/pages/instructions/index'})}></Image>
           </SwiperItem>
         </Swiper>
         <View className='info-card'>
           <View className='title'>应用场景</View>
           <View className='info-content'>
             <View className='item' onClick={() => this.signUp('register')}>
-              <Image src={image1} mode='aspectFit' style={{ width: '100%' }}></Image>
+              <Image src='https://www.epanel.cn/images/u190.png' mode='aspectFit' style={{ width: '100%' }}></Image>
               <View>报名登记</View>
             </View>
             <View className='item' onClick={() => this.signUp('vote')}>
-              <Image src={image2} mode='aspectFit' style={{ width: '100%' }}></Image>
+              <Image src='https://www.epanel.cn/images/u192.png' mode='aspectFit' style={{ width: '100%' }}></Image>
               <View>活动投票</View>
             </View>
             <View className='item' onClick={() => this.signUp('attendance')}>
-              <Image src={image3} mode='aspectFit' style={{ width: '100%' }}></Image>
+              <Image src='https://www.epanel.cn/images/u195.png' mode='aspectFit' style={{ width: '100%' }}></Image>
               <View>打卡签到</View>
             </View>
             <View className='item' onClick={() => this.signUp('notice')}>
-              <Image src={image4} mode='aspectFit' style={{ width: '100%' }}></Image>
+              <Image src='https://www.epanel.cn/images/u198.png' mode='aspectFit' style={{ width: '100%' }}></Image>
               <View>消息通知</View>
             </View>
             <View className='item' onClick={() => this.signUp('investigation')}>
-              <Image src={image5} mode='aspectFit' style={{ width: '100%' }}></Image>
+              <Image src='https://www.epanel.cn/images/u201.png' mode='aspectFit' style={{ width: '100%' }}></Image>
               <View>调查问卷</View>
             </View>
             <View className='item' onClick={() => this.signUp('new')}>
-              <Image src={image6} mode='aspectFit' style={{ width: '100%' }}></Image>
+              <Image src='https://www.epanel.cn/images/u204.png' mode='aspectFit' style={{ width: '100%' }}></Image>
               <View>自定义场景</View>
             </View>
           </View>
