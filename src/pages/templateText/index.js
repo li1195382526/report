@@ -1,12 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { ChartText } from '../ChartText'
-import { ChartSubTable } from '../ChartSubTable'
-import { ChartOptTable } from '../ChartOptTable'
-import PropTypes from 'prop-types';
-import { AtGrid,AtIcon,AtTabBar } from "taro-ui"
+import { AtIcon,AtTabBar } from "taro-ui"
 import './index.scss'
-import image from '../../assets/images/u3232.png'
 import { connect } from '@tarojs/redux';
 
 @connect(({ templateText, common }) => ({
@@ -22,7 +17,7 @@ class TemplateText extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentBar:1
+      currentBar:2
     }
     this.getList = this.getList.bind(this)
     this.toEdit = this.toEdit.bind(this)
@@ -84,10 +79,15 @@ class TemplateText extends Component {
           break;
       case 1:
           Taro.redirectTo({
-              url: '/pages/templateText/index'
+              url: '/pages/project/index'
           })
           break;
       case 2:
+          Taro.redirectTo({
+              url: '/pages/templateText/index'
+          })
+          break;
+      case 3:
           Taro.redirectTo({
               url: '/pages/personalCenter/index'
           })
@@ -123,6 +123,7 @@ class TemplateText extends Component {
           fixed
           tabList={[
             { title: '首页', iconType: 'home' },
+            { title: '我的项目', iconType: 'folder' },
             { title: '模板库', iconType: 'list' },
             { title: '个人中心', iconType: 'user' }
           ]}

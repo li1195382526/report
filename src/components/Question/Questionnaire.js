@@ -36,9 +36,9 @@ class Questionnaire extends Component {
     let questionnaire = this.props.questionnaire
     let optlist = []
     if(value == 0 || value == 1){
-      optlist = choiceOpt
+      optlist = JSON.parse(JSON.stringify(choiceOpt))
     }else{
-      optlist = openOpt
+      optlist = JSON.parse(JSON.stringify(openOpt))
     }
     const qtList = {
       "type": value == 0 || value == 1 ? 1 : 2,

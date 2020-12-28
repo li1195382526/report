@@ -37,7 +37,7 @@ export function syncAction(options) {
       } else if (data.status == HTTP_STATUS.AUTHENTICATE) {
         Taro.removeStorageSync('token')
         Taro.redirectTo({
-          url: '/pages/home/index',
+          url: '/pages/project/index',
         })
       }
     },

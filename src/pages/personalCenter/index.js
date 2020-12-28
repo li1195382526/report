@@ -20,7 +20,7 @@ class PersonalCenter extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentBar: 2
+      currentBar: 3
     }
     this.handleWxLogin = this.handleWxLogin.bind(this)
     this.handelListDataBase = this.handelListDataBase.bind(this)
@@ -114,10 +114,15 @@ class PersonalCenter extends Component {
           break;
       case 1:
           Taro.redirectTo({
-              url: '/pages/templateText/index'
+              url: '/pages/project/index'
           })
           break;
       case 2:
+          Taro.redirectTo({
+              url: '/pages/templateText/index'
+          })
+          break;
+      case 3:
           Taro.redirectTo({
               url: '/pages/personalCenter/index'
           })
@@ -159,6 +164,7 @@ class PersonalCenter extends Component {
             fixed
             tabList={[
               { title: '首页', iconType: 'home' },
+              { title: '我的项目', iconType: 'folder' },
               { title: '模板库', iconType: 'list' },
               { title: '个人中心', iconType: 'user' }
             ]}

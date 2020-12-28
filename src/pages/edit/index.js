@@ -3,12 +3,12 @@ import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import { AtList,AtListItem,AtInput,AtTextarea,AtMessage } from 'taro-ui'
-import { BeginToCollect } from '../../components/beginToCollect'
-import { Link } from '../../components/link'
+// import { BeginToCollect } from '../../components/beginToCollect'
+// import { Link } from '../../components/link'
 import './index.scss';
 import {Question} from '../../components/Question'
 import { QtSet } from '../../components/QtSet'
-import {info as newinfo,questionnaire as newquestionnaire} from '../../config'
+import { info as newinfo, questionnaire as newquestionnaire, registerInfo, registerQuestionnaire, voteInfo, voteQuestionnaire, attendanceInfo, attendanceQuestionnaire, noticeInfo, noticeQuestionnaire, investigationInfo, investigationQuestionnaire} from '../../config'
 
 @connect(({ edit, home, common }) => ({
   ...edit,
@@ -60,6 +60,7 @@ class Edit extends Component {
   componentWillMount(){
     const init = this.$router.params.isInit
     const isTemplate = this.$router.params.isTemplate
+    const type = this.$router.params.type
     //第一次编辑填报前端数据，编辑中问卷获取问卷信息
     if(isTemplate == 1) {
       this.setState({isFirstTemplate: true}, () => {
@@ -68,11 +69,33 @@ class Edit extends Component {
     }else if(init == 1 || init == 2){
       this.getQuestionner()
     }else{
+      var info = {}
+      var questionnaire = {}
+      // 首页场景
+      if (type == 'register') {
+        info = JSON.parse(JSON.stringify(registerInfo))
+        questionnaire = JSON.parse(JSON.stringify(registerQuestionnaire))
+      } else if (type == 'vote') {
+        info = JSON.parse(JSON.stringify(voteInfo))
+        questionnaire = JSON.parse(JSON.stringify(voteQuestionnaire))
+      } else if (type == 'attendance') {
+        info = JSON.parse(JSON.stringify(attendanceInfo))
+        questionnaire = JSON.parse(JSON.stringify(attendanceQuestionnaire))
+      } else if (type == 'notice') {
+        info = JSON.parse(JSON.stringify(noticeInfo))
+        questionnaire = JSON.parse(JSON.stringify(noticeQuestionnaire))
+      } else if (type == 'investigation') {
+        info = JSON.parse(JSON.stringify(investigationInfo))
+        questionnaire = JSON.parse(JSON.stringify(investigationQuestionnaire))
+      } else {
+        info = JSON.parse(JSON.stringify(newinfo))
+        questionnaire = JSON.parse(JSON.stringify(newquestionnaire))
+      }
       this.props.dispatch({
         type: 'edit/save',
         payload: {
-          info: JSON.parse(JSON.stringify(newinfo)),
-          questionnaire: JSON.parse(JSON.stringify(newquestionnaire))
+          info: info,
+          questionnaire: questionnaire
         }
       })
     }

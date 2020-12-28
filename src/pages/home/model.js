@@ -67,7 +67,7 @@ export default {
         if(isPersonal === 0){
           setTimeout(() => {
             Taro.redirectTo({
-              url: '../home/index'
+              url: '../project/index'
             })
           }, 100);
         }else if(isPersonal === 2){

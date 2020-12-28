@@ -1,0 +1,40 @@
+@import "../../styles/mixin";
+
+.create-fill{
+    position: fixed;
+    bottom: 116px;
+    left: 3%;
+    width: 94%;
+}
+.list-img{
+    width: 300px;
+    height: 300px;
+    margin-top: 24%;
+    margin-left: 30%;
+
+}
+.no-data{
+    text-align: center;
+    color: #7F7F7F;
+}
+.share-btn{
+    background: #fff;
+    color: #352e2e;
+    font-size: 36px;
+    border: none;
+    height: 66px;
+}
+.page {
+    .at-modal__content {
+        min-height: 100px;
+        text-align: center;
+        line-height: 100px;
+    }
+}
+.home-tabs {
+    margin-bottom: 230px;
+}
+.at-card__content-info{
+    max-height: 116px;
+    overflow: hidden;
+}
