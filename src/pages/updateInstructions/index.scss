@@ -1,0 +1,13 @@
+.UpdateInstructions {
+    .card {
+        margin: 20px;
+        padding: 50px 30px;
+        background: #fff;
+        display: flex;
+        justify-content: space-between;
+        .right {
+            min-width: 230px;
+            text-align: right;
+        }
+    }
+}

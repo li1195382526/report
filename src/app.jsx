@@ -91,6 +91,8 @@ class App extends Component {
       'pages/instructions/creatProject',
       'pages/instructions/joinProject',
       'pages/project/index',
+      'pages/updateInstructions/index',
+      'pages/versionDetail/index',
     ],
     window: {
       backgroundTextStyle: 'light',

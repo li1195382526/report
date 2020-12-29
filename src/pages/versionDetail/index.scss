@@ -1,0 +1,27 @@
+.UpdateInstructions {
+    padding: 38px;
+    background: #fff;
+    height: 100vh;
+    .title {
+        text-align: center;
+        color: #75a3fa;
+        font-size: 36px;
+        margin-top: 10px;
+    }
+    .version, .foot {
+        text-align: center;
+        color: #a6a6a6;
+        font-size: 26px;
+    }
+    .content {
+        margin-top: 40px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+    }
+    .p-button {
+        margin: 60px;
+    }
+    .foot {
+        margin: 40px 0;
+    }
+}
