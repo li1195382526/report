@@ -10,6 +10,16 @@
     //         color: #ca1;
     //     }
     // }
+    .diy-list-item {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #eee;
+        padding: 24px;
+        .title {
+            display: flex;
+            align-items: center;
+        }
+    }
     .set-publisher{
         height: 100px;
         background-color: #fff;

@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View,Picker,Text } from '@tarojs/components'
 import PropTypes from 'prop-types';
-import {AtList,AtListItem, AtFloatLayout, AtSwitch }  from 'taro-ui'
+import { AtList, AtListItem, AtFloatLayout, AtSwitch, AtIcon }  from 'taro-ui'
 import { DateTimePicker } from '../../components/DateTimePicker'
 import Model from '../Model/model'
 import { connect } from '@tarojs/redux';
@@ -34,6 +34,7 @@ class QtSet extends Component {
       this.handleClose = this.handleClose.bind(this)
       this.handleChange = this.handleChange.bind(this)
       this.saveTime = this.saveTime.bind(this)
+      this.handleNotice = this.handleNotice.bind(this)
   }
 
   //填报设置
@@ -208,6 +209,12 @@ class QtSet extends Component {
       }
     })
   }
+  handleNotice(val) {
+    this.setState({
+      isLimit: true,
+      hint: val === 'Namelist' ? `1、什么类型的项目使用“填报名单”？\n您提前知晓参与项目的人员名单，那么您可直接使用“填报名单”快速导入或引用名单库导入参与人员名单，发布之后针对名单分享填报项目。\n2、如使用“填报名单”？\n · 您可通过三种方式创建添加名单：导入名单、引用名单库、单个添加名单人员。\n · 填报人员限制，该功能可对参与填报的人员进行限制，若添加名单时关联了填报手机号，那么开启“填报人员限制”后，仅允许关联的手机号参与填报。` : `1、什么情况使用“填报周期“？\n若您的项目要求参与者连续多期填写，那么您需要开启“填报周期”，完成设置后，您只需发布一次，即可让参与者连续填写多期。\n2、如何使用“填报周期”？\n · 设置“周期数”，即该项目需要参与者连续填写的期数\n · 设置“周期类型”（日/周/年），即该项目的填写周期是每日为一期，还是每周、每年为一期。`
+    })
+  }
   
   render() {
     const {isLimit,hint} = this.state
@@ -216,14 +223,14 @@ class QtSet extends Component {
     let expireTimeList = !!info.endTime ? info.endTime  :'未设置'
     const nameSet =  info.namelist && info.namelist.length > 0 ? info.namelist.length + '人' :'未设置'
     return (
-        <View className='qtn-setting'>
-          <AtList>
+      <View className='qtn-setting'>
+        <AtList>
           <AtListItem
             title='时间限制'
             isSwitch
             disabled={!isModify}
-            switchIsCheck={info.useTimelimit == 1 ? true :false} 
-            onSwitchChange={(val)=>this.handleChange(val,'useTimelimit')} 
+            switchIsCheck={info.useTimelimit == 1 ? true : false}
+            onSwitchChange={(val) => this.handleChange(val, 'useTimelimit')}
           />
           {info.useTimelimit == 1 && (
             <View className='time'>
@@ -241,146 +248,167 @@ class QtSet extends Component {
               />
             </View>
           )}
-          </AtList>
-          {this.state.isShowBeginTime && (
-            <AtFloatLayout isOpened={this.state.isShowBeginTime} title='开始时间设置'
-              onClose={()=>this.handleBeginTimeSetting( false)}
-            >
-              <DateTimePicker initValue={info.beginTime}
-                onOk={(val)=>this.saveTime(val,"beginTime")}
-                onClear={(val)=>this.saveTime(val,"beginTime")} 
-              />
-            </AtFloatLayout>
-          )}
-          {this.state.isShowExpireTime && (
-            <AtFloatLayout isOpened={this.state.isShowExpireTime} title='结束时间设置' onClose={()=>this.handleExpireTimeSetting(false)}>
-              <DateTimePicker initValue={info.endTime}
-                onOk={(val)=>this.saveTime(val,"endTime")}
-                onClear={(val)=>this.saveTime(val,"endTime")}
-              />
-            </AtFloatLayout> 
-          )}
-           
-          <AtList>
+        </AtList>
+        {this.state.isShowBeginTime && (
+          <AtFloatLayout isOpened={this.state.isShowBeginTime} title='开始时间设置'
+            onClose={() => this.handleBeginTimeSetting(false)}
+          >
+            <DateTimePicker initValue={info.beginTime}
+              onOk={(val) => this.saveTime(val, "beginTime")}
+              onClear={(val) => this.saveTime(val, "beginTime")}
+            />
+          </AtFloatLayout>
+        )}
+        {this.state.isShowExpireTime && (
+          <AtFloatLayout isOpened={this.state.isShowExpireTime} title='结束时间设置' onClose={() => this.handleExpireTimeSetting(false)}>
+            <DateTimePicker initValue={info.endTime}
+              onOk={(val) => this.saveTime(val, "endTime")}
+              onClear={(val) => this.saveTime(val, "endTime")}
+            />
+          </AtFloatLayout>
+        )}
+        <AtList>
           <AtListItem
             title='填写人数'
             disabled={!isModify}
             isSwitch
-            switchIsCheck={info.useCount == 1 ? true :false}  
-            onSwitchChange={(val)=>this.handleChange(val,'useCount')} 
+            switchIsCheck={info.useCount == 1 ? true : false}
+            onSwitchChange={(val) => this.handleChange(val, 'useCount')}
           />
-                {info.useCount == 1 && (
-                  <AtList>
-                  <View className='set-cycle'>
-                    <View>设置人数</View>
-                    <Input type='number' 
-                      disabled={!isModify}
-                      placeholder='请输入填报人数' 
-                      onChange={(val)=>this.handleNum(val,'pnlCount')}
-                      value={info.pnlCount} 
-                    />
-                  </View>
-                  </AtList>
-                )}
-                <AtListItem
-                  title='填报名单'
-                  isSwitch
+          {info.useCount == 1 && (
+            <AtList>
+              <View className='set-cycle'>
+                <View>设置人数</View>
+                <Input type='number'
                   disabled={!isModify}
-                  switchIsCheck={info.useNamelist == 1 ? true :false}
-                  onSwitchChange={(val)=>this.handleChange(val,'useNamelist')}
+                  placeholder='请输入填报人数'
+                  onChange={(val) => this.handleNum(val, 'pnlCount')}
+                  value={info.pnlCount}
                 />
-                
-              {info.useNamelist == 1 && (<AtListItem title='名单设置'  extraText={nameSet} onClick={this.handleSetName} arrow='right'/>)}
-              {info.useNamelist == 1 && (
-                <AtSwitch 
-                  title='填报人员限制'
-                  disabled={!isModify} 
-                  checked={info.isUserlimit == 1 ? true :false} 
-                  onChange={(val)=>this.handlePeopleLimit(val,0,"isUserlimit")} 
-                />
-              )} 
-               <AtListItem
-                 title='填写周期'
-                 disabled={!isModify}
-                 isSwitch
-                 switchIsCheck={info.usePeriod == 1 ? true :false}
-                 onSwitchChange={(val)=>this.handleChange(val,'usePeriod')} 
-               />
-                {info.usePeriod == 1 && (
-                  <View>
-                  <Picker mode='selector' range={this.state.selector} onChange={this.onChange} disabled={!isModify}>
-                    <AtList>
-                      <AtListItem
-                        title='周期类型'
-                        extraText={
-                          info.periodType.length === 0 ? "未设置" : this.state.selector[info.periodType]
-                        }
-                      />
-                    </AtList>
-                  </Picker>
-                  <AtList>
-                      <View className='set-cycle'>
-                        <View>连续周期数</View>
-                        <Input 
-                          type='number'
-                          disabled={!isModify} 
-                          placeholder='请输入周期数'
-                          value={info.periodSize}
-                          onChange={(val)=>this.handleNum(val,'periodSize')}
-                        />
-                      </View>
-                  </AtList>
-                  <AtSwitch 
-                    title='连续填报'
-                    disabled={!isModify} 
-                    checked={info.isStrict == 1 ? true :false} 
-                    onChange={(val)=>this.handlePeopleLimit(val,1,'isStrict')}
-                  />
-                  </View>
-                )}
-                <AtListItem
-                  title='允许填报人修改'
-                  disabled={!isModify}
-                  isSwitch
-                  switchIsCheck={info.canEdit == 1 ? true :false} 
-                  onSwitchChange={(val)=>this.handleChange(val,'canEdit')} 
-                />
-                <AtListItem
-                  title='填报密码'
-                  disabled={!isModify}
-                  isSwitch
-                  switchIsCheck={info.needPwd == 1 ? true :false}  
-                  onSwitchChange={(val)=>this.handleChange(val,'needPwd')} 
-                />
-                {info.needPwd == 1 && (
-                  <AtList>
-                    <View className='set-cycle'>
-                      <View>设置密码</View>
-                      <Input 
-                        disabled={!isModify}
-                        type='number' 
-                        placeholder='请输入填报密码'
-                        value={info.pwd}
-                        maxLength={4}
-                        onChange={(val)=>this.handleNum(val,'pwd')} 
-                      />
-                    </View>
-                </AtList>
-                )}
-                
-          </AtList>
-          <View className='set-publisher'>
-            <View>发布人昵称</View>
-            <Input 
-              disabled={!isModify}
-              type='text' 
-              placeholder='示例:李老师'
-              value={info.creatorName}
-              onChange={(val)=>this.handleNum(val,'creatorName')} 
-            />
+              </View>
+            </AtList>
+          )}
+          <View className="diy-list-item">
+            <View className='title'>
+              <Text style={{ marginRight: '6px' }}>填报名单</Text>
+              <AtIcon value='help' color='#666' size='22' onClick={() => this.handleNotice('Namelist')}></AtIcon>
+            </View>
+            <View>
+              <AtSwitch
+                disabled={!isModify}
+                checked={info.useNamelist == 1 ? true : false}
+                onChange={(val) => this.handleChange({ target: { value: val } }, 'useNamelist')}
+              />
+            </View>
           </View>
-          <Model isLimit={isLimit} handleClose={this.handleClose} hint={hint}/>
+          {info.useNamelist == 1 && (<AtListItem title='名单设置' extraText={nameSet} onClick={this.handleSetName} arrow='right' />)}
+          {info.useNamelist == 1 && (
+            <View className="diy-list-item">
+              <View className='title'>
+                <Text style={{ marginRight: '6px' }}>填报人员限制</Text>
+              </View>
+              <View>
+                <AtSwitch
+                  disabled={!isModify}
+                  checked={info.isUserlimit == 1 ? true : false}
+                  onChange={(val) => this.handlePeopleLimit(val, 0, "isUserlimit")}
+                />
+              </View>
+            </View>
+          )}
+          <View className="diy-list-item">
+            <View className='title'>
+              <Text style={{ marginRight: '6px' }}>填写周期</Text>
+              <AtIcon value='help' color='#666' size='22' onClick={() => this.handleNotice('Period')}></AtIcon>
+            </View>
+            <View>
+              <AtSwitch
+                disabled={!isModify}
+                checked={info.usePeriod == 1 ? true : false}
+                onChange={(val) => this.handleChange({ target: { value: val } }, 'usePeriod')}
+              />
+            </View>
+          </View>
+          {info.usePeriod == 1 && (
+            <View>
+              <Picker mode='selector' range={this.state.selector} onChange={this.onChange} disabled={!isModify}>
+                <AtList>
+                  <AtListItem
+                    title='周期类型'
+                    extraText={
+                      info.periodType.length === 0 ? "未设置" : this.state.selector[info.periodType]
+                    }
+                  />
+                </AtList>
+              </Picker>
+              <AtList>
+                <View className='set-cycle'>
+                  <View>连续周期数</View>
+                  <Input
+                    type='number'
+                    disabled={!isModify}
+                    placeholder='请输入周期数'
+                    value={info.periodSize}
+                    onChange={(val) => this.handleNum(val, 'periodSize')}
+                  />
+                </View>
+              </AtList>
+              <View className="diy-list-item">
+                <View className='title'>
+                  <Text style={{ marginRight: '6px' }}>连续填报</Text>
+                </View>
+                <View>
+                  <AtSwitch
+                    disabled={!isModify}
+                    checked={info.isStrict == 1 ? true : false}
+                    onChange={(val) => this.handlePeopleLimit(val, 1, 'isStrict')}
+                  />
+                </View>
+              </View>
+            </View>
+          )}
+          <AtListItem
+            title='允许填报人修改'
+            disabled={!isModify}
+            isSwitch
+            switchIsCheck={info.canEdit == 1 ? true : false}
+            onSwitchChange={(val) => this.handleChange(val, 'canEdit')}
+          />
+          <AtListItem
+            title='填报密码'
+            disabled={!isModify}
+            isSwitch
+            switchIsCheck={info.needPwd == 1 ? true : false}
+            onSwitchChange={(val) => this.handleChange(val, 'needPwd')}
+          />
+          {info.needPwd == 1 && (
+            <AtList>
+              <View className='set-cycle'>
+                <View>设置密码</View>
+                <Input
+                  disabled={!isModify}
+                  type='number'
+                  placeholder='请输入填报密码'
+                  value={info.pwd}
+                  maxLength={4}
+                  onChange={(val) => this.handleNum(val, 'pwd')}
+                />
+              </View>
+            </AtList>
+          )}
+        </AtList>
+        <View className='set-publisher'>
+          <View>发布人昵称</View>
+          <Input
+            disabled={!isModify}
+            type='text'
+            placeholder='示例:李老师'
+            value={info.creatorName}
+            onChange={(val) => this.handleNum(val, 'creatorName')}
+          />
         </View>
+        <Model isLimit={isLimit} handleClose={this.handleClose} hint={hint} />
+      </View>
     )
   }
 }

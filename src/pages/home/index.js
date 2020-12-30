@@ -180,7 +180,7 @@ class Home extends Component {
             <Image src='https://www.epanel.cn/images/u148.png' style='width: 100%; height: 100%' mode='aspectFull'></Image>
           </SwiperItem>
           <SwiperItem>
-            <Image src='https://www.epanel.cn/images/u149.png' style='width: 100%; height: 100%' mode='aspectFull' onClick={() => Taro.navigateTo({url: '/pages/instructions/index'})}></Image>
+            <Image src='https://www.epanel.cn/images/u149.jpg' style='width: 100%; height: 100%' mode='aspectFull' onClick={() => Taro.navigateTo({url: '/pages/instructions/index'})}></Image>
           </SwiperItem>
         </Swiper>
         <View className='info-card'>
