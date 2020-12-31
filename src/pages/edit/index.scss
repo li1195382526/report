@@ -30,14 +30,15 @@
             background-color: #71a0f7;
             line-height: 100px;
             text-align: center;
+            color: #fff;
         }
         .edit-save1{
-            width:80%;
+            width:100%;
             background-color: #71a0f7;
             line-height: 100px;
             text-align: center;
             margin: auto;
-            border-radius: 14px;
+            color: #fff;
         }
     }
 }
@@ -49,4 +50,7 @@
 }
 .at-switch {
     padding: 0;
+}
+.at-switch::after {
+    border-bottom-width: 0;
 }

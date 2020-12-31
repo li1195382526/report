@@ -290,8 +290,8 @@ class QtSet extends Component {
           )}
           <View className="diy-list-item">
             <View className='title'>
-              <Text style={{ marginRight: '6px' }}>填报名单</Text>
-              <AtIcon value='help' color='#666' size='22' onClick={() => this.handleNotice('Namelist')}></AtIcon>
+              <Text style={{ marginRight: '6px', color: isModify ? '' : '#c2c2c2' }}>填报名单</Text>
+              <AtIcon value='help' color={isModify ? '#666' : '#c2c2c2'} size='22' onClick={() => this.handleNotice('Namelist')}></AtIcon>
             </View>
             <View>
               <AtSwitch
@@ -305,7 +305,7 @@ class QtSet extends Component {
           {info.useNamelist == 1 && (
             <View className="diy-list-item">
               <View className='title'>
-                <Text style={{ marginRight: '6px' }}>填报人员限制</Text>
+                <Text style={{ marginRight: '6px', color: isModify ? '' : '#c2c2c2' }}>填报人员限制</Text>
               </View>
               <View>
                 <AtSwitch
@@ -318,8 +318,8 @@ class QtSet extends Component {
           )}
           <View className="diy-list-item">
             <View className='title'>
-              <Text style={{ marginRight: '6px' }}>填写周期</Text>
-              <AtIcon value='help' color='#666' size='22' onClick={() => this.handleNotice('Period')}></AtIcon>
+              <Text style={{ marginRight: '6px', color: isModify ? '' : '#c2c2c2' }}>填写周期</Text>
+              <AtIcon value='help' color={isModify ? '#666' : '#c2c2c2'} size='22' onClick={() => this.handleNotice('Period')}></AtIcon>
             </View>
             <View>
               <AtSwitch
@@ -335,6 +335,7 @@ class QtSet extends Component {
                 <AtList>
                   <AtListItem
                     title='周期类型'
+                    disabled={!isModify}
                     extraText={
                       info.periodType.length === 0 ? "未设置" : this.state.selector[info.periodType]
                     }
@@ -343,11 +344,12 @@ class QtSet extends Component {
               </Picker>
               <AtList>
                 <View className='set-cycle'>
-                  <View>连续周期数</View>
+                  <View style={{ color: isModify ? '' : '#c2c2c2' }}>连续周期数</View>
                   <Input
                     type='number'
                     disabled={!isModify}
                     placeholder='请输入周期数'
+                    placeholderClass='i'
                     value={info.periodSize}
                     onChange={(val) => this.handleNum(val, 'periodSize')}
                   />
@@ -355,7 +357,7 @@ class QtSet extends Component {
               </AtList>
               <View className="diy-list-item">
                 <View className='title'>
-                  <Text style={{ marginRight: '6px' }}>连续填报</Text>
+                  <Text style={{ marginRight: '6px', color: isModify ? '' : '#c2c2c2' }}>连续填报</Text>
                 </View>
                 <View>
                   <AtSwitch

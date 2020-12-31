@@ -13,7 +13,7 @@
     .diy-list-item {
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #eaf1f7;
         padding: 24px;
         .title {
             display: flex;
@@ -28,6 +28,7 @@
         display: flex;
         justify-content: space-between;
         line-height: 100px;
+        padding-left: 24px;
         input{
             width: 200px;
             height:100px;
