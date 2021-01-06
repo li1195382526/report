@@ -1,11 +1,11 @@
-.UpdateInstructions {
+.VersionDetail {
     padding: 38px;
     background: #fff;
-    height: 100vh;
+    min-height: 100vh;
     .title {
         text-align: center;
         color: #75a3fa;
-        font-size: 36px;
+        font-size: 38px;
         margin-top: 10px;
     }
     .version, .foot {
@@ -22,6 +22,6 @@
         margin: 60px;
     }
     .foot {
-        margin: 40px 0;
+        padding: 40px 0;
     }
 }

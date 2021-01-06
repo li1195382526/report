@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux';
 import { AtButton } from 'taro-ui'
 import './index.scss'
@@ -40,10 +40,15 @@ class VersionDetail extends Component {
     render() {
         const { content } = this.state
         return (
-            <View className='UpdateInstructions'>
+            <View className='VersionDetail'>
                 <View className='title'>{content.title}</View>
                 <View className='version'>{content.version}</View>
-                <View className='content'>{content.text}</View>
+                <View className='content'>
+                    {content.bold && content.bold.map((item) => (
+                        <View><Text style={{ fontWeight: 'bold' }}>{item.boldtext}</Text>{item.normaltext}</View>
+                    ))}
+                    {content.text}
+                </View>
                 <AtButton type='primary' circle onClick={this.toCreate} className='p-button'>立即体验</AtButton>
                 <View className='foot'>若有使用问题，请咨询客服 010-5751 0088-8018</View>
             </View>

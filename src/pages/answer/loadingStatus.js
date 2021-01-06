@@ -18,7 +18,9 @@ class LoadingStatus extends Component {
     super(props)
     this.state = {
       userAgent: '',
-      id: ''
+      id: '',
+      text: '--',
+      showHandelRes: true
     }
     this.join = this.join.bind(this)
     this.getQuestionner = this.getQuestionner.bind(this)
@@ -105,6 +107,54 @@ class LoadingStatus extends Component {
           mask: true
         })
         Taro.navigateTo({ url: `./wxphone?listId=${this.$router.params.listId || this.state.id}` })
+      } else if (res.status == 203 && res.message == '填报已满额') {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        this.setState({ text: '已满额', showHandelRes: false })
+      } else if (res.status == 203 && res.message == '填报信息不匹配') {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        this.setState({ text: '不匹配', showHandelRes: false })
+      } else if (res.status == 203 && (res.message == '填报已参与' || res.message == '本次填报已完成')) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        this.setState({ text: '已填报' })
+      } else if (res.status == 203 && res.message == '填报已关闭') {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        this.setState({ text: '已结束' })
+      } else if (res.status == 203 && (res.message == '填报不存在' || res.message == '问卷状态不支持填答')) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        this.setState({ text: '问卷不存在/被删除', showHandelRes: false })
+      } else if (res.status == 203 && res.message == '填报未发布') {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+        this.setState({ text: '未发布', showHandelRes: false })
       } else {
         Taro.showToast({
           title: res.message,
@@ -135,6 +185,7 @@ class LoadingStatus extends Component {
   }
 
   render() {
+    const { text, showHandelRes } = this.state
     const { info, res } = this.props
     return (
       <View className='content'>
@@ -144,13 +195,13 @@ class LoadingStatus extends Component {
             <View className="info">
               <View className='title'>
                 <Text style={{ fontWeight: 'bold' }}>{info.title}</Text>
-                <Text className="status">{info.status == 5 ? '已结束' : '已填报'}</Text>
+                <Text className="status">{text}</Text>
               </View>
               <View className='memo'>{info.memo}</View>
               <View className="note">{`${info.creatorName} | ${info.updateTime || info.createTime} | 参与${info.finishCount}/${info.totalCount || '不限'}`}</View>
             </View>
             <View className='btn'>
-              <AtButton type='primary' onClick={this.handelRes}>查看结果</AtButton>
+              {showHandelRes && <AtButton type='primary' onClick={this.handelRes}>查看结果</AtButton>}
               <AtButton className='create' type='secondary' onClick={this.handelCreate}>创建填报</AtButton>
             </View>
             <View className="to-home" onClick={this.toHome}>返回首页</View>

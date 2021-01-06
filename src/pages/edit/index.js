@@ -56,7 +56,6 @@ class Edit extends Component {
       url:`/v3/report/template/${reportId}`
     })
   }
-
   componentWillMount(){
     const init = this.$router.params.isInit
     const isTemplate = this.$router.params.isTemplate
@@ -106,7 +105,6 @@ class Edit extends Component {
         }
       })
   }
-
   onChange = e => {
     this.setState({
       selectorChecked: this.state.selector[e.detail.value]

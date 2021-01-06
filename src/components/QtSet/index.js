@@ -278,12 +278,13 @@ class QtSet extends Component {
           {info.useCount == 1 && (
             <AtList>
               <View className='set-cycle'>
-                <View>设置人数</View>
+                <View style={{ color: isModify ? '' : '#c2c2c2' }}>设置人数</View>
                 <Input type='number'
                   disabled={!isModify}
                   placeholder='请输入填报人数'
                   onChange={(val) => this.handleNum(val, 'pnlCount')}
                   value={info.pnlCount}
+                  style={{ color: isModify ? '' : '#c2c2c2' }}
                 />
               </View>
             </AtList>
@@ -349,9 +350,9 @@ class QtSet extends Component {
                     type='number'
                     disabled={!isModify}
                     placeholder='请输入周期数'
-                    placeholderClass='i'
                     value={info.periodSize}
                     onChange={(val) => this.handleNum(val, 'periodSize')}
+                    style={{ color: isModify ? '' : '#c2c2c2' }}
                   />
                 </View>
               </AtList>
@@ -386,7 +387,7 @@ class QtSet extends Component {
           {info.needPwd == 1 && (
             <AtList>
               <View className='set-cycle'>
-                <View>设置密码</View>
+                <View style={{ color: isModify ? '' : '#c2c2c2' }}>设置密码</View>
                 <Input
                   disabled={!isModify}
                   type='number'
@@ -394,19 +395,21 @@ class QtSet extends Component {
                   value={info.pwd}
                   maxLength={4}
                   onChange={(val) => this.handleNum(val, 'pwd')}
+                  style={{ color: isModify ? '' : '#c2c2c2' }}
                 />
               </View>
             </AtList>
           )}
         </AtList>
         <View className='set-publisher'>
-          <View>发布人昵称</View>
+          <View style={{ color: isModify ? '' : '#c2c2c2' }}>发布人昵称</View>
           <Input
             disabled={!isModify}
             type='text'
             placeholder='示例:李老师'
             value={info.creatorName}
             onChange={(val) => this.handleNum(val, 'creatorName')}
+            style={{ color: isModify ? '' : '#c2c2c2' }}
           />
         </View>
         <Model isLimit={isLimit} handleClose={this.handleClose} hint={hint} />
