@@ -69,13 +69,17 @@ export default {
     },
     * getTemplate({ payload: values, url }, { call, put }) {
       const { data } = yield call(editApi.getTemplate, url);
-      yield put({
-        type: 'save',
-        payload:{
-          questionnaire: data.questionnaire,
-          info: data.info
-        }
-      });
+      if (data.info) {
+        yield put({
+          type: 'save',
+          payload:{
+            questionnaire: data.questionnaire,
+            info: data.info
+          }
+        });
+      } else {
+        yield put({type: 'save'});
+      }
     },
   },
 

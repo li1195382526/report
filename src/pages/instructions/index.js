@@ -123,7 +123,7 @@ class instructions extends Component {
             <View>2）点击项目列表参与填报</View>
             <View>3）查看/修改填报答案</View>
           </View>
-          <View className="explain">另外，创建人员在项目收集过程中，可以实时查看填报回收进度、填报作答结果、督促他人填报呢。</View>
+          <View className="explain">另外，参与人员也可以微信转发分享填报项目，或者自己创建填报呢。</View>
         </View>
         <View className="point">
           <Image src={image} />
