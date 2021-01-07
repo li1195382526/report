@@ -7,18 +7,28 @@ export default {
     dataList:[],
     nameData:[],
     title:'',
+    current: 1,
+    total: 0,
     releaseData: [] // 引用的名单
   },
 
   effects: {
-    * getNamelist({ payload: value,token,url }, { call, put }) {
+    * getNamelist({ payload: value, token, url }, { call, put, select }) {
       const { data } = yield call(dataListApi.getNamelist,value, token, url);
-      yield put({
-        type: 'save',
-        payload: {
-          dataList:data.data
-        }
-      });
+      let { dataList } = yield select((state) => state.dataList);
+      if(data.total) {
+        yield put({
+          type: 'save',
+          payload: {
+            dataList: dataList.concat(data.data),
+            total: data.total
+          }
+        });
+      } else {
+        yield put({
+          type: 'save',
+        });
+      }
     },
     * create({ payload: value,token,url }, { call, put }) {
       const { data } = yield call(dataListApi.create,value, token, url);
@@ -115,9 +125,7 @@ export default {
       });
       if(now == end) {
         Taro.hideLoading()
-        Taro.redirectTo({
-          url: '/pages/nameList/index?from=dataList'
-        })
+        Taro.navigateBack({delta:1})
       }
     },
     * resetReleaseData({ payload: value }, { put }) {

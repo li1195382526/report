@@ -26,7 +26,7 @@ class DataList extends Component {
 			isMenge: false,
 			listId: '',
 			userId: '',
-			checkedList: []
+			checkedList: [],
 		}
 		this.getDataList = this.getDataList.bind(this)
 		this.handleAddNameList = this.handleAddNameList.bind(this)
@@ -43,23 +43,24 @@ class DataList extends Component {
 	}
 
 	componentWillMount() {
+		this.props.dispatch({
+			type: 'dataList/save',
+			payload: { current: 1, dataList: [], releaseData: [] },
+		})
+		this.getDataList()
 	};
 	
 	componentDidMount() {
 	}
 	componentDidShow() {
-		this.props.dispatch({
-			type: 'dataList/resetReleaseData',
-		}) // 清空引用
-		this.getDataList()
 	}
 
 	//获取名单库
 	getDataList() {
-		const { userinfo } = this.props
+		const { userinfo, current } = this.props
 		const params = {
-			current: 1,
-			pageSize: 10
+			current,
+			pageSize: 15
 		}
 		this.props.dispatch({
 			type: 'dataList/getNamelist',
@@ -68,7 +69,23 @@ class DataList extends Component {
 			url: `/v3/reportuser/${userinfo.id}/namelist`
 		})
 	}
-
+	// 小程序上拉加载
+	onReachBottom() {
+		const { current, total, dataList } = this.props
+		if (total > dataList.length) {
+			this.props.dispatch({
+				type: 'dataList/save',
+				payload: { current: current + 1 }
+			})
+			this.getDataList()
+		} else {
+			Taro.showToast({
+				title: '暂无更多数据',
+				icon: 'none',
+				duration: 2000
+			})
+		}
+	}
 	//添加名单库
 	handleAddNameList() {
 		this.setState({
@@ -128,6 +145,10 @@ class DataList extends Component {
 			url: `/v3/reportuser/${userinfo.id}/namelist/create`
 		}).then(() => {
 			this.cancel()
+			this.props.dispatch({
+				type: 'dataList/save',
+				payload: { current: 1, dataList: [] },
+			})
 			this.getDataList()
 		})
 	}
@@ -160,6 +181,10 @@ class DataList extends Component {
 			token: this.props.token,
 			url: `/v3/reportuser/${this.state.userId}/namelist/${this.state.listId}`
 		}).then(()=>{
+			this.props.dispatch({
+				type: 'dataList/save',
+				payload: { current: 1, dataList: [] },
+			})
 			this.getDataList()
 		})
 	}
@@ -174,7 +199,7 @@ class DataList extends Component {
 	// 引用名单
 	handleRelease() {
 		const { checkedList } = this.state
-		if(checkedList.length) {
+		if (checkedList && checkedList.length) {
 			Taro.showLoading({
 				title: '正在处理...',
 			})
@@ -188,9 +213,7 @@ class DataList extends Component {
 				})
 			}
 		} else {
-			Taro.redirectTo({
-				url: '/pages/nameList/index?from=dataList'
-			})
+			Taro.navigateBack({ delta: 1 })
 		}
 	}
 

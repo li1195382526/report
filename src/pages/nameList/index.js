@@ -34,8 +34,8 @@ class NameList extends Component {
       poolTitle: '',
       bindKey: 0,
       isBindNum: false,
-      devalue: ''
-      
+      devalue: '',
+      fromEdit: true
     }
     this.handleSubUsername = this.handleSubUsername.bind(this)
     this.handleImport = this.handleImport.bind(this)
@@ -57,7 +57,7 @@ class NameList extends Component {
     this.formatName = this.formatName.bind(this)
   }
 
-  componentWillMount() {
+  componentDidShow() {
     this.initialization()
   };
 
@@ -67,7 +67,12 @@ class NameList extends Component {
   // 初始数据
   initialization() {
     const from = this.$router.params.from
-    if(from == 'dataList') { // 引用名单库的
+    if (from == 'edit' && this.state.fromEdit) {
+      this.props.dispatch({
+        type: 'nameList/getData',
+      })
+      this.setState({ fromEdit: false })
+    } else { // 引用名单库的
       let { releaseData } = this.props
       let { tableList } = this.props
       var list = tableList.concat(releaseData)
@@ -90,10 +95,6 @@ class NameList extends Component {
           tableList: list
         }
       });
-    } else if (from == 'edit') {
-      this.props.dispatch({
-        type: 'nameList/getData',
-      })
     }
   }
   handleSubUsername(event) {

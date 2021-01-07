@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux';
 import PropTypes from 'prop-types';
-import { AtGrid,AtListItem,AtAvatar,AtTabBar } from "taro-ui"
+import { AtGrid, AtListItem, AtAvatar, AtTabBar, AtButton } from "taro-ui"
 import './index.scss'
 import image from '../../assets/images/user.png'
 
@@ -29,19 +29,19 @@ class PersonalCenter extends Component {
   }
 
   handelListDataBase(){
-    if(!!this.props.token){
+    // if(!!this.props.token){
       Taro.navigateTo({
             url: '/pages/dataList/index?from=personalCenter'
           })
-    }else{
-      this.props.dispatch({
-        type: 'home/save',
-        payload: {
-          isPersonal:2
-        }
-      })
-      this.handleWxLogin()
-    } 
+    // }else{
+    //   this.props.dispatch({
+    //     type: 'home/save',
+    //     payload: {
+    //       isPersonal:2
+    //     }
+    //   })
+    //   this.handleWxLogin()
+    // } 
   }
 
   login(){
@@ -145,9 +145,7 @@ class PersonalCenter extends Component {
               {!!token ? wxInfo.nickName :'暂无'}
             </View>
             {!token && (
-              <View onClick={this.login}>
-                  立即登录
-              </View>
+              <AtButton openType='getUserInfo' onClick={this.login}>立即登录</AtButton>
             )}
             
         </View>
