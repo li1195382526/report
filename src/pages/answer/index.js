@@ -30,6 +30,7 @@ class Answer extends Component {
       userAgent: '',
       checkNamelist: false,
       togglelist: [],
+      listIndex: '',
       id:''
     }
     this.onChange = this.onChange.bind(this)
@@ -41,6 +42,7 @@ class Answer extends Component {
     this.getAnswer = this.getAnswer.bind(this)
     this.getQuestionner = this.getQuestionner.bind(this)
     this.modifySubmit = this.modifySubmit.bind(this)
+    this.goJoin = this.goJoin.bind(this)
   }
 
   componentWillMount() {
@@ -268,9 +270,17 @@ class Answer extends Component {
 
   // 进入填报
   join(item) {
-    const {passWord, userAgent} = this.state
+    if(item) {
+      this.setState({ listIndex: item.listIndex }, () => {
+        this.goJoin()
+      })
+    } else {
+      this.goJoin()
+    }
+  }
+  goJoin() {
+    const { passWord, userAgent, listIndex } = this.state
     const id = this.$router.params.listId || this.state.id
-    const listIndex = item ? item.listIndex : ''
     var mobile = Taro.getStorageSync('mobile')
     const wxMobile = Taro.getStorageSync('wxMobile')
     let params = {
