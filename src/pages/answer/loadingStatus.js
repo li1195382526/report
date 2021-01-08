@@ -97,9 +97,7 @@ class LoadingStatus extends Component {
     }).then(() => {
       Taro.hideLoading()
       let { res } = this.props
-      if (res.status == 200) {
-        Taro.redirectTo({ url: `./index?listId=${this.$router.params.listId}` })
-      } else if (res.status == -1002) {
+      if (res.status == -1002) {
         Taro.showToast({
           title: res.message,
           icon: 'none',
@@ -155,6 +153,8 @@ class LoadingStatus extends Component {
           mask: true
         })
         this.setState({ text: '未发布', showHandelRes: false })
+      } else if (res.status == 200 || res.status == -1001 || res.status == -1003) {
+        Taro.redirectTo({ url: `./index?listId=${this.$router.params.listId}` })
       } else {
         Taro.showToast({
           title: res.message,
