@@ -2,7 +2,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtList,AtListItem,AtInput,AtTextarea,AtMessage } from 'taro-ui'
+import { AtList, AtListItem, AtInput, AtTextarea, AtMessage, AtButton } from 'taro-ui'
 // import { BeginToCollect } from '../../components/beginToCollect'
 // import { Link } from '../../components/link'
 import './index.scss';
@@ -32,6 +32,7 @@ class Edit extends Component {
     this.handleTips = this.handleTips.bind(this)
     this.handleRelease = this.handleRelease.bind(this)
     this.getTemplate = this.getTemplate.bind(this)
+    this.handleWxLogin = this.handleWxLogin.bind(this)
   }
 
   //获取问卷
@@ -110,28 +111,20 @@ class Edit extends Component {
       selectorChecked: this.state.selector[e.detail.value]
     })
   }
-
 onTimeChange = e => {
     this.setState({
       timeSel: e.detail.value
     })
   }
-
   onDateChange = e => {
     this.setState({
       dateSel: e.detail.value
     })
   }
-
-  handleChange(){
-
-  }
-
   //发布填报
   handleRelease(){
     var info = JSON.parse(JSON.stringify(this.props.info))
     var questionnaire = JSON.parse(JSON.stringify(this.props.questionnaire))
-
     // 如果是首次点击发布的模板问卷
     if(this.$router.params.isTemplate == 1 && this.state.isFirstTemplate) {
       var nInfo = JSON.parse(JSON.stringify(newinfo))
@@ -153,7 +146,6 @@ onTimeChange = e => {
       })
       this.setState({isFirstTemplate: false})
     }
-
     for(let pg of questionnaire.pageList) {
       if(!pg.qtList.length) {
         this.handleTips('error','填报题目不能为空')
@@ -183,7 +175,6 @@ onTimeChange = e => {
       this.handleTips('error','填报主题不能超过30个字符')
       return
     }
-
     if(info.memo.length == 0){
       this.handleTips('error','填报说明不能为空')
       return
@@ -206,17 +197,14 @@ onTimeChange = e => {
       this.handleTips('error','填报人数必须是正整数')
       return
     }
-    
     if(info.useNamelist == 1 && info.namelist.length === 0){
       this.handleTips('error','填报名单不能为空')
       return
     }
-
     if(info.usePeriod == 1 && info.periodType.length === 0){
       this.handleTips('error','填报周期类别不能为空')
       return
     }
-
     if(info.usePeriod == 1 && info.periodSize.length === 0){
       this.handleTips('error','填报周期不能为空')
       return
@@ -229,22 +217,18 @@ onTimeChange = e => {
       this.handleTips('error','填报周期数必须是正整数')
       return
     }
-
     if(info.needPwd == 1 && info.pwd.length === 0){
       this.handleTips('error','开启密码时填报密码不能为空')
       return
     }
-
     if(info.needPwd == 1 && info.pwd.length > 4){
       this.handleTips('error','填报密码最多4位')
       return
     }
-
     if(info.needPwd == 1 &&  isNaN(parseInt(info.pwd))){
       this.handleTips('error','填报密码必须为4位正整数')
       return
     }
-    
     if(info.creatorName === ''){
       info.creatorName = this.props.wxInfo.nickName
     }
@@ -275,27 +259,26 @@ onTimeChange = e => {
           }else{
             this.handleTips('error',message)
           }
-          
         })
+      } else if (response.status == 401) {
+        Taro.hideLoading()
+        this.handleWxLogin('handleRelease')
       } else {
         Taro.hideLoading()
         this.handleTips('error', response.message)
       }
     })  
   }
-
   handleTips (type,message) {
     Taro.atMessage({
       'message': message,
       'type': type,
     })
   }
-
   //保存
   handleSave(){
     var info = JSON.parse(JSON.stringify(this.props.info))
     var questionnaire = JSON.parse(JSON.stringify(this.props.questionnaire))
-
     // 如果是首次点击保存的模板问卷
     if(this.$router.params.isTemplate == 1 && this.state.isFirstTemplate) {
       var nInfo = JSON.parse(JSON.stringify(newinfo))
@@ -317,7 +300,6 @@ onTimeChange = e => {
       })
       this.setState({isFirstTemplate: false})
     }
-
     if(info.title.length === 0){
       this.handleTips('error','填报主题不能为空')
       return
@@ -397,12 +379,67 @@ onTimeChange = e => {
       Taro.hideLoading()
       if(status == 200){
         this.handleTips('success','保存成功')
+      } else if (status == 401) {
+        this.handleWxLogin('handleSave')
       }else{
         this.handleTips('error',message)
       }
     })
   }
-
+  //微信登录
+  handleWxLogin(func) {
+    let encryptedData = ''
+    let iv = ''
+    const _this = this
+    Taro.login()
+      .then(r => {
+        var code = r.code // 登录凭证
+        if (code) {
+          // 调用获取用户信息接口
+          Taro.getUserInfo({
+            success: function (res) {
+              Taro.setStorage({
+                key: "wxInfo",
+                data: res.userInfo
+              })
+              _this.props.dispatch({
+                type: 'common/save',
+                payload: {
+                  wxInfo: res.userInfo
+                }
+              })
+              encryptedData = res.encryptedData
+              iv = res.iv
+            }
+          }).then(() => {
+            let params = { encryptedData: encryptedData, iv: iv, code: code, userId: '0', oid: 'gh_13a2c24667b4' }
+            if (!!encryptedData && !!iv) {
+              this.props.dispatch({
+                type: 'home/wxLogin',
+                payload: params
+              })
+              .then(() => {
+                _this[func]()
+              })
+            } else {
+              this.errorMessage('微信获取用户信息失败,无法保存/发布填报')
+            }
+          }).catch((e) => {
+            this.errorMessage('微信授权登录失败,无法保存/发布填报')
+          })
+        } else {
+          this.errorMessage('微信授权登录失败,无法保存/发布填报')
+        }
+      }).catch((e) => {
+        this.errorMessage('微信授权登录失败,无法保存/发布填报')
+      })
+  }
+  errorMessage = (msg) => {
+    Taro.atMessage({
+      'message': msg,
+      'type': 'error'
+    })
+  }
   handleTitle(value){
     let {info} = this.props
     info.title = value
@@ -413,9 +450,7 @@ onTimeChange = e => {
       }
     })
   }
-
   handleMemo(value){
-    // eslint-disable-next-line no-shadow
     let info = JSON.parse(JSON.stringify(this.props.info))
     info.memo = value.target.value
     this.props.dispatch({
@@ -427,7 +462,6 @@ onTimeChange = e => {
   }
 
   render() {
-    // eslint-disable-next-line no-shadow
     const {questionnaire,info,isModify} = this.props
     return (
       <View className='edit'>
@@ -451,33 +485,33 @@ onTimeChange = e => {
                placeholder='请输入填报说明描述'
              />
           </View>
-       <View>
-           <View className='edit-title'>填报题目</View>
-           <Question questionnaire={questionnaire} />
-       </View>
+        <View>
+          <View className='edit-title'>填报题目</View>
+          <Question questionnaire={questionnaire} />
+        </View>
         <View>
           <View className='edit-title'>填报设置</View>
           <QtSet />
         </View>
         {isModify && (
-           <View className='edit-footer'>
-           <View className='edit-save' onClick={this.handleSave}>
-             保存
-           </View>
-           <View className='edit-send' onClick={this.handleRelease}>
-             发布填报
-           </View>
-         </View>
-    )}
-     {!isModify && (
-      <View className='edit-footer'>
-           <View className='edit-save1' onClick={this.handleSave}>
-             保存
-           </View>
-         </View>
-     )
+          <View className='edit-footer'>
+            <View className='edit-btn'>
+              <AtButton className='edit-save' openType='getUserInfo' onClick={this.handleSave}>保存</AtButton>
+            </View>
+            <View className='edit-btn'>
+              <AtButton className='edit-send' openType='getUserInfo' onClick={this.handleRelease}>发布填报</AtButton>
+            </View>
+          </View>
+        )}
+        {!isModify && (
+          <View className='edit-footer'>
+            <View className='edit-btn'>
+              <AtButton openType='getUserInfo' onClick={this.handleSave} className='edit-save1' >保存</AtButton>
+            </View>
+          </View>
+        )
 
-     }
+        }
       </View>
     )
   }

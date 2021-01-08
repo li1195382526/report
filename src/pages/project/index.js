@@ -23,7 +23,6 @@ class Project extends Component {
       current: 0,
       currentPage: 1,
       isOpened: false,
-      isLogin: false,
       pageSize: 10,
       status: null,
       ispartOpened: false,
@@ -57,12 +56,11 @@ class Project extends Component {
   componentWillMount() {
     const token = Taro.getStorageSync('token');
     if (!token) {
-      this.setState({
-        isLogin: false
-      })
-    } else {
-      this.setState({
-        isLogin: true
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          homeResponse: {status: 401}
+        },
       })
     }
   };
@@ -96,18 +94,22 @@ class Project extends Component {
       current: page,
       pageSize
     }
-    if (!!this.props.token && !!Taro.getStorageSync('token')) {
+    // if (!!this.props.token && !!Taro.getStorageSync('token')) {
       this.props.dispatch({
         type: 'home/getOwnerlist',
         payload: params,
         token: this.props.token,
+      }).then(() => {
+        const {homeResponse} = this.props
+        if(homeResponse.status != 401) {
+          this._Participate.getParticipantlist()
+        }
       })
-    }
+    // }
   }
   // 小程序上拉加载
   onReachBottom() {
-    const { createList, createListTotal } = this.props
-    const { isLogin } = this.state
+    const { createList, createListTotal, homeResponse } = this.props
     if (this.state.current == 0 && createList.length < createListTotal) {
       this.props.dispatch({
         type: 'home/save',
@@ -116,7 +118,7 @@ class Project extends Component {
         },
       });
       this.getOwnerlist()
-    } else if (isLogin) {
+    } else if (homeResponse.status != 401) {
       Taro.showToast({
         title: '暂无更多数据',
         icon: 'none',
@@ -165,20 +167,33 @@ class Project extends Component {
     })
   }
   toEdit(value) {
-    let { isLogin, reportId } = this.state
+    let { reportId } = this.state
+    const { homeResponse } = this.props
     if (value == 0) {
       reportId = ''
     }
-    if (!!isLogin) {
+    if (homeResponse.status != 401) {
       Taro.navigateTo({
         url: `/pages/edit/index?isInit=${value}&reportId=${reportId}`
       })
     } else {
+      this.props.dispatch({
+        type: 'home/save',
+        payload: {
+          isPersonal: 1
+        }
+      })
       this.handleWxLogin()
     }
     this.setState({
       isOpened: false,
       ispartOpened: false
+    })
+  }
+  errorMessage = (msg) => {
+    Taro.atMessage({
+      'message': msg,
+      'type': 'error'
     })
   }
   //微信登录
@@ -212,14 +227,26 @@ class Project extends Component {
               this.props.dispatch({
                 type: 'home/wxLogin',
                 payload: params
+              }).then(() => {
+                _this.props.dispatch({
+                  type: 'home/save',
+                  payload: {
+                    homeResponse: {}
+                  },
+                })
+                _this.getOwnerlist()
               })
             } else {
               this.errorMessage('微信获取用户信息失败')
             }
+          }).catch((e) => {
+            this.errorMessage('微信授权登录失败,无法查看项目列表')
           })
         } else {
           this.errorMessage('微信授权登录失败')
         }
+      }).catch((e) => {
+        this.errorMessage('微信授权登录失败,无法查看项目列表')
       })
   }
   handleClickBar(value) {
@@ -377,24 +404,24 @@ class Project extends Component {
   }
 
   render() {
-    const { createList, Participantlist } = this.props
+    const { createList, Participantlist, homeResponse } = this.props
     const tabList = [{ title: '我的创建' }, { title: '我的参与' }]
-    const { isLogin, status, isDel, current, opened, itemdata } = this.state
+    const { status, isDel, current, opened, itemdata } = this.state
     return (
       <View className='page'>
         <View>
           <AtMessage />
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick} className='home-tabs'>
             <AtTabsPane current={this.state.current} index={0} >
-              {!!isLogin && createList.length ? <List handleOpen={this.handleOpen} createList={createList} /> :
+              {homeResponse.status != 401 && createList.length ? <List handleOpen={this.handleOpen} createList={createList} /> :
                 <View>
                   <Image src={image} className='list-img' />
-                  <View className='no-data'>{!!isLogin ? '暂无数据' : '未登录暂无数据'}</View>
+                  <View className='no-data'>{homeResponse.status != 401 ? '暂无数据' : '未登录暂无数据'}</View>
                 </View>
               }
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
-              {!!isLogin ? <Participate ref={element => (this._Participate = element)} handlePart={this.handlePart} /> :
+              {homeResponse.status != 401 ? <Participate ref={element => (this._Participate = element)} handlePart={this.handlePart} /> :
                 <View>
                   <Image src={image} className='list-img' />
                   <View className='no-data'>未登录暂无数据</View>
@@ -403,7 +430,7 @@ class Project extends Component {
             </AtTabsPane>
           </AtTabs>
           <View className='create-fill' onClick={() => this.toEdit(0)}>
-            <AtButton type='primary' openType='getUserInfo'>{isLogin ? "创建填报" : "立即登录"}</AtButton>
+            <AtButton type='primary' openType='getUserInfo'>{homeResponse.status != 401 ? "创建填报" : "立即登录"}</AtButton>
           </View>
 
           {/* 列表选择项 */}

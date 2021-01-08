@@ -98,10 +98,14 @@ class PersonalCenter extends Component {
             } else {
               this.errorMessage('微信获取用户信息失败')
             }
-          }) 
+          }).catch((e) => {
+            this.errorMessage('微信授权登录失败')
+          })
         } else {
           this.errorMessage('微信授权登录失败')
         }
+      }).catch((e) => {
+        this.errorMessage('微信授权登录失败')
       })
   }
 
@@ -140,16 +144,14 @@ class PersonalCenter extends Component {
           <View className='head-img'>
             <AtAvatar image={!!token ?wxInfo.avatarUrl : image} circle={true} size='300' ></AtAvatar>
           </View>
-        <View className='wechat-name'>
+          <View className='wechat-name'>
             <View>
               {!!token ? wxInfo.nickName :'暂无'}
             </View>
             {!token && (
               <AtButton openType='getUserInfo' onClick={this.login}>立即登录</AtButton>
             )}
-            
-        </View>
-            
+          </View>
         </View>
         <View>
         <AtListItem title='名单库' arrow='right' note='名单库用于发布填报时直接引用名单中人员' onClick={this.handelListDataBase} />

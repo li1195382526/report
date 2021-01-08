@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem, AtMessage, AtCheckbox  } from 'taro-ui'
+import { AtListItem, AtModal, AtModalHeader, AtModalAction, AtModalContent, AtTextarea, AtActionSheet, AtActionSheetItem, AtMessage, AtCheckbox, AtButton  } from 'taro-ui'
 import image from '../../assets/images/u128.png'
 import './index.scss';
 
@@ -40,6 +40,7 @@ class DataList extends Component {
 		this.checkedChange = this.checkedChange.bind(this)
 		this.formatName = this.formatName.bind(this)
 		this.formatList = this.formatList.bind(this)
+		this.login = this.login.bind(this)
 	}
 
 	componentWillMount() {
@@ -216,16 +217,72 @@ class DataList extends Component {
 			Taro.navigateBack({ delta: 1 })
 		}
 	}
+	login() {
+		let encryptedData = ''
+		let iv = ''
+		const _this = this
+		Taro.login().then(r => {
+			var code = r.code // 登录凭证
+			if (code) {
+				// 调用获取用户信息接口
+				Taro.getUserInfo({
+					success: function (res) {
+						Taro.setStorage({
+							key: "wxInfo",
+							data: res.userInfo
+						})
+						_this.props.dispatch({
+							type: 'common/save',
+							payload: {
+								wxInfo: res.userInfo
+							}
+						})
+						encryptedData = res.encryptedData
+						iv = res.iv
+					}
+				}).then(() => {
+					let params = { encryptedData: encryptedData, iv: iv, code: code, oid: 'gh_13a2c24667b4' }
+					if (!!encryptedData && !!iv) {
+						this.props.dispatch({
+							type: 'home/wxLogin',
+							payload: params
+						}).then(() => {
+							_this.getDataList()
+						})
+					} else {
+						this.errorMessage('微信获取用户信息失败')
+					}
+				}).catch((e) => {
+					this.errorMessage('微信授权登录失败,无法查看名单库')
+				})
+			} else {
+				this.errorMessage('微信授权登录失败')
+			}
+		}).catch((e) => {
+			this.errorMessage('微信授权登录失败,无法查看名单库')
+		})
+	}
+	errorMessage = (msg) => {
+		Taro.atMessage({
+			'message': msg,
+			'type': 'error'
+		})
+	}
 
 	render() {
 		const { isOpen, isMenge, nameList, name } = this.state
-		const { dataList } = this.props
+		const { dataList, response } = this.props
 		const from = this.$router.params.from
 		return (
 			<View>
 				<AtMessage />
 				<View className="content">
-					{dataList.length == 0 && (<View style={{textAlign:'center',color:'#999'}}><Image src={image} className='list-img'/><View style={{textAlign:'center'}}>暂无数据</View></View>)}
+					{dataList.length == 0 && (
+						<View style={{ textAlign: 'center', color: '#999' }}>
+							<Image src={image} className='list-img' />
+							<View style={{ textAlign: 'center' }}>{ response.status == 401 ? '暂未登录' : '暂无数据' }</View>
+						</View>
+					)}
 					{dataList.map((item, key) => (
 						<View key={key} className='list-item'>
 							{/* <View className='checkobox-data'><Checkbox value={key} onClick={this.checkedChange} dataItem={item} dataKey={key}></Checkbox></View> */}
@@ -249,10 +306,17 @@ class DataList extends Component {
 					))}
 				</View>
 				<View className='edit-footer'>
-					<View className='edit-save' onClick={this.handleAddNameList}>
-						添加名单组
-					</View>
-					{from == 'nameList' && <View className='edit-send' onClick={this.handleRelease}>引用名单</View>}
+					{response.status != 401 && (
+						<View className='edit-save' onClick={this.handleAddNameList}>
+							添加名单组
+						</View>
+					)}
+					{from == 'nameList' && response.status != 401 && <View className='edit-send' onClick={this.handleRelease}>引用名单</View>}
+					{response.status == 401 && (
+						<View className='edit-login'>
+							<AtButton openType='getUserInfo' onClick={this.login}>立即登录</AtButton>
+						</View>
+					)}
 				</View>
 
 				{isOpen && (

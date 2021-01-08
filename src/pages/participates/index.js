@@ -27,12 +27,6 @@ class Participates extends Component {
 
   };
   componentDidMount() {
-    // const token = this.props.token || Taro.getStorageSync('token');
-    // if (!token) {
-
-    // } else {
-    //   this.getParticipantlist()
-    // }
   }
 
   componentDidShow = () => {

@@ -9,6 +9,7 @@ export default {
     page: 1,
     isPersonal:0,//0首页登录，1，个人中心等，2，获取名单库登录
     Participantlist: [],
+    homeResponse: {},
     createListTotal: 0
   },
 
@@ -64,32 +65,6 @@ export default {
             logintime: now
           }
         });
-        if(isPersonal === 0){
-          setTimeout(() => {
-            Taro.redirectTo({
-              url: '../project/index'
-            })
-          }, 100);
-        }else if(isPersonal === 2){
-          setTimeout(() => {
-            Taro.navigateTo({
-              url: '../dataList/index'
-            })
-          }, 100);
-        }else if(isPersonal === 3){
-          setTimeout(() => {
-            Taro.navigateTo({
-              url: '../edit/index?isInit=0&reportId='
-            })
-          }, 100);
-        }else{
-          setTimeout(() => {
-            Taro.redirectTo({
-              url: '../personalCenter/index'
-            })
-          }, 100);
-        }
-        
       } else if(data.status == HTTP_STATUS.SUCCESS && !data.data.token) {
         Taro.navigateTo({
           url: '/pages/home/wxlogin?userId=' + data.data.userId
@@ -123,13 +98,23 @@ export default {
     * getOwnerlist({ payload: values, token }, { call, put, select }) {
       var { page, createList } = yield select(state => state.home);
       const { data } = yield call(homeApi.getOwnerlist, values, token);
-      yield put({
-        type: 'save',
-        payload: {
-          createList:createList.concat(data.data),
-          createListTotal: data.total
-        }
-      });
+      if(data.status == 401) {
+        yield put({
+          type: 'save',
+          payload: {
+            homeResponse: data
+          }
+        });
+      } else {
+        yield put({
+          type: 'save',
+          payload: {
+            homeResponse: {},
+            createList:createList.concat(data.data),
+            createListTotal: data.total
+          }
+        });
+      }
     },
 
     * bindPhone({ payload: values }, { call, put }) {

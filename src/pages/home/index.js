@@ -110,6 +110,12 @@ class Home extends Component {
         }
       })
   }
+  errorMessage = (msg) => {
+    Taro.atMessage({
+      'message': msg,
+      'type': 'error'
+    })
+  }
   handleClickBar(value) {
     this.setState({
       currentBar: value

@@ -9,6 +9,7 @@ export default {
     title:'',
     current: 1,
     total: 0,
+    response: {},
     releaseData: [] // 引用的名单
   },
 
@@ -16,10 +17,11 @@ export default {
     * getNamelist({ payload: value, token, url }, { call, put, select }) {
       const { data } = yield call(dataListApi.getNamelist,value, token, url);
       let { dataList } = yield select((state) => state.dataList);
-      if(data.total) {
+      if (data.data) {
         yield put({
           type: 'save',
           payload: {
+            response: {},
             dataList: dataList.concat(data.data),
             total: data.total
           }
@@ -27,6 +29,9 @@ export default {
       } else {
         yield put({
           type: 'save',
+          payload: {
+            response: data
+          }
         });
       }
     },

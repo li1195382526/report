@@ -17,26 +17,20 @@
         width:90%;
         left:5%;
         z-index: 2;
+        .edit-btn {
+            flex: 1;
+        }
         .edit-save{
-            width:50%;
             background-color: #fff;
-            line-height: 100px;
-            text-align: center;
             color: #71a0f7;
-            border:1px solid #71a0f7;
         }
         .edit-send{
-            width:50%;
             background-color: #71a0f7;
-            line-height: 100px;
-            text-align: center;
             color: #fff;
         }
         .edit-save1{
             width:100%;
             background-color: #71a0f7;
-            line-height: 100px;
-            text-align: center;
             margin: auto;
             color: #fff;
         }

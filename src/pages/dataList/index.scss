@@ -29,6 +29,9 @@
         line-height: 100px;
         text-align: center;
     }
+    .edit-login {
+        flex: 0.9;
+    }
 }
 
 .daa-data{
@@ -80,4 +83,9 @@
     width: 300px;
     height: 300px;
     margin-top: 30%;
+}
+.at-button {
+    border: 1px solid #71a0f7;
+    color: #71a0f7;
+    background: #fff;
 }

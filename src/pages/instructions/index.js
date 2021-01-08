@@ -24,56 +24,9 @@ class instructions extends Component {
     this.joinCourse = this.joinCourse.bind(this)
   }
   toCreate() {
-    if(this.props.token) {
       Taro.navigateTo({
         url: `/pages/edit/index?isInit=0&reportId=`
       })
-    } else {
-      this.props.dispatch({
-        type: 'home/save',
-        payload: {
-          isPersonal: 3
-        }
-      })
-      let encryptedData = ''
-      let iv = ''
-      const _this = this
-      Taro.login()
-        .then(r => {
-          var code = r.code // 登录凭证
-          if (code) {
-            // 调用获取用户信息接口
-            Taro.getUserInfo({
-              success: function (res) {
-                Taro.setStorage({
-                  key: "wxInfo",
-                  data: res.userInfo
-                })
-                _this.props.dispatch({
-                  type: 'common/save',
-                  payload: {
-                    wxInfo: res.userInfo
-                  }
-                })
-                encryptedData = res.encryptedData
-                iv = res.iv
-              }
-            }).then(() => {
-              let params = { encryptedData: encryptedData, iv: iv, code: code, oid: 'gh_13a2c24667b4' }
-              if (!!encryptedData && !!iv) {
-                this.props.dispatch({
-                  type: 'home/wxLogin',
-                  payload: params
-                })
-              } else {
-                this.errorMessage('微信获取用户信息失败')
-              }
-            })
-          } else {
-            this.errorMessage('微信授权登录失败')
-          }
-        })
-    }
   }
   creatCourse() {
     Taro.navigateTo({
