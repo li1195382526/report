@@ -209,7 +209,6 @@ onTimeChange = e => {
       this.handleTips('error','填报周期不能为空')
       return
     }
-    // console.log(parseInt(info.periodSize))
     if(info.usePeriod == 1 && info.periodSize.length > 0 && parseInt(info.periodSize) < 0){
       this.handleTips('error','填报周期数必须为正整数')
       return
@@ -229,45 +228,46 @@ onTimeChange = e => {
       this.handleTips('error','填报密码必须为4位正整数')
       return
     }
-    if(info.creatorName === ''){
-      info.creatorName = this.props.wxInfo.nickName
-    }
-    Taro.showLoading({title: '正在发布...', mask: true})
-    const params = {
-      info,
-      questionnaire
-    }
-    this.props.dispatch({
-      type: 'edit/saveQtn',
-      token: this.props.token,
-      payload: params,
-    }).then(()=>{
-      var {response} = this.props
-      if(response.status == 200) {
-        this.props.dispatch({
-          type: 'edit/publish',
-          token: this.props.token,
-          payload: {reportId: response.data.id},
-          url:`/v3/report/${response.data.id}/publish`
-        }).then(()=>{
-          const {qtnStatus,message} = this.props
-          Taro.hideLoading()
-          if(qtnStatus === 200){
-            Taro.redirectTo({
-              url: `/pages/release/index?listId=${response.data.id}`
-             })
-          }else{
-            this.handleTips('error',message)
-          }
-        })
-      } else if (response.status == 401) {
-        Taro.hideLoading()
-        this.handleWxLogin('handleRelease')
-      } else {
-        Taro.hideLoading()
-        this.handleTips('error', response.message)
+    Taro.showLoading({title: '正在发布...', mask: true, complete: () => {
+      if (!info.creatorName || info.creatorName.length === 0){
+        info.creatorName = this.props.wxInfo.nickName
       }
-    })  
+      const params = {
+        info,
+        questionnaire
+      }
+      this.props.dispatch({
+        type: 'edit/saveQtn',
+        token: this.props.token,
+        payload: params,
+      }).then(()=>{
+        var {response} = this.props
+        if(response.status == 200) {
+          this.props.dispatch({
+            type: 'edit/publish',
+            token: this.props.token,
+            payload: {reportId: response.data.id},
+            url:`/v3/report/${response.data.id}/publish`
+          }).then(()=>{
+            const {qtnStatus,message} = this.props
+            Taro.hideLoading()
+            if(qtnStatus === 200){
+              Taro.redirectTo({
+                url: `/pages/release/index?listId=${response.data.id}`
+               })
+            }else{
+              this.handleTips('error',message)
+            }
+          })
+        } else if (response.status == 401) {
+          Taro.hideLoading()
+          this.handleWxLogin('handleRelease')
+        } else {
+          Taro.hideLoading()
+          this.handleTips('error', response.message)
+        }
+      })  
+    }})
   }
   handleTips (type,message) {
     Taro.atMessage({
@@ -362,29 +362,30 @@ onTimeChange = e => {
       this.handleTips('error', '填报密码必须为4位正整数')
       return
     }
-    Taro.showLoading({title: '正在保存...', mask: true})
-    if(info.creatorName.length === 0){
-      info.creatorName = this.props.wxInfo.nickName
-    }
-    const params = {
-      info,
-      questionnaire
-    }
-    this.props.dispatch({
-      type: 'edit/saveQtn',
-      token: this.props.token,
-      payload: params,
-    }).then(()=>{
-      const {status,message} = this.props
-      Taro.hideLoading()
-      if(status == 200){
-        this.handleTips('success','保存成功')
-      } else if (status == 401) {
-        this.handleWxLogin('handleSave')
-      }else{
-        this.handleTips('error',message)
+    Taro.showLoading({title: '正在保存...', mask: true, complete: () => {
+      if (!info.creatorName || info.creatorName.length === 0){
+        info.creatorName = this.props.wxInfo.nickName
       }
-    })
+      const params = {
+        info,
+        questionnaire
+      }
+      this.props.dispatch({
+        type: 'edit/saveQtn',
+        token: this.props.token,
+        payload: params,
+      }).then(()=>{
+        const {status,message} = this.props
+        Taro.hideLoading()
+        if(status == 200){
+          this.handleTips('success','保存成功')
+        } else if (status == 401) {
+          this.handleWxLogin('handleSave')
+        }else{
+          this.handleTips('error',message)
+        }
+      })
+    }})
   }
   //微信登录
   handleWxLogin(func) {

@@ -5,9 +5,19 @@
     display: flex;
     justify-content: space-between;
     padding: 0 10px 0 10px;
+    align-items: center;
 }
 .qtset-con {
     .at-modal__content {
         min-height: 80rpx!important;
     }
+}
+.icons {
+    display: flex;
+    align-items: center;
+}
+.diy-icon {
+    width: 52px;
+    height: 52px;
+    margin-left: 30px;
 }

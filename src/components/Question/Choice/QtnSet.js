@@ -5,6 +5,8 @@ import { AtIcon, AtModal, AtModalHeader, AtModalContent, AtModalAction }  from '
 import './style/setting.scss'
 import { connect } from '@tarojs/redux';
 import { fromJS } from 'immutable';
+import del from '../../../assets/images/del.png'
+import copy from '../../../assets/images/copy.png'
 
 @connect(({edit,home, common }) => ({
   ...edit,
@@ -105,10 +107,12 @@ class QtnSet extends Component {
         <View className='qt-set'>
           <View><Checkbox value='选中' checked={opts.required} disabled={!isModify} onClick={() => this.handleRequired(opts.required)}></Checkbox> 必填</View>
           {isModify && (
-            <View>
-              <AtIcon onClick={() => this.setState({qtnset_isopen: true})} value='trash' size='25' color='#ccc'></AtIcon>
-              <AtIcon onClick={this.handeCopy} value='money' size='25' color='#ccc'></AtIcon>
-              </View>
+            <View className='icons'>
+              {/* <AtIcon onClick={() => this.setState({qtnset_isopen: true})} value='trash' size='25' color='#ccc'></AtIcon>
+              <AtIcon onClick={this.handeCopy} value='money' size='25' color='#ccc'></AtIcon> */}
+              <Image src={copy} className='diy-icon' onClick={this.handeCopy}></Image>
+              <Image src={del} className='diy-icon' onClick={() => this.setState({ qtnset_isopen: true })}></Image>
+            </View>
           )}
           {!isModify && (
             <View><AtIcon value='trash' size='25' color='#ccc'></AtIcon></View>

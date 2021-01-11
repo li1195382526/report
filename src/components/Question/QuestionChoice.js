@@ -33,7 +33,9 @@ class QuestionChoice extends Component {
             {opts.selectType === 0 &&  <SingleChoice opts={opts}/>}
             {opts.selectType === 1 &&  <MultipleChoice opts={opts}/>}
             <QuestionBottom opts={opts} />
-            <QtnSet opts={opts} />
+            <View className="qtn-set">
+              <QtnSet opts={opts} />
+            </View>
       </View>
     )
   }
