@@ -22,9 +22,14 @@
             display: flex;
             margin: auto;
             justify-content: space-between;
-            height: 80rpx;
-            line-height: 80rpx;
+            min-height: 80rpx;
+            line-height: 1.8;
+            padding: 14px 0;
+            .require {
+                min-width: 100px;
+                text-align: right;
             }
+        }
     }
     
 }

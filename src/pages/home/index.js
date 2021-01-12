@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text, Swiper, SwiperItem } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { AtMessage, AtTabBar } from 'taro-ui'
+import { AtMessage, AtTabBar, AtIcon } from 'taro-ui'
 import './index.scss';
 
 @connect(({ home, common, templateText }) => ({
