@@ -24,6 +24,7 @@ class QtSet extends Component {
         selector: ['日', '周', '月', '年'],
         selectorChecked: '日',
         hint:'',
+        modelTitle: ''
       }
       this.handleSetName = this.handleSetName.bind(this)
       this.handleNum = this.handleNum.bind(this)
@@ -184,8 +185,11 @@ class QtSet extends Component {
     })
     if(value){
       this.setState({
+        modelTitle: '',
         isLimit: true,
-        hint: val === 1 ? "1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期 \n2、关闭连续填报：不限制填写时间，可随时填写所有周期内的数据。" : "开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报"
+        hint: val === 1 ? `1、开启连续填报：连续周期内，每个周期仅填写一次，不可提前或延后填写其他周期
+
+2、关闭连续填报：不限制填写时间，可随时填写所有周期内的数据。` : "开启填报限制后，仅允许每个名单关联的账号填报，其他微信账号不允许填报"
       })
     }
   }
@@ -211,13 +215,28 @@ class QtSet extends Component {
   }
   handleNotice(val) {
     this.setState({
+      modelTitle: '帮助说明',
       isLimit: true,
-      hint: val === 'Namelist' ? `1、什么类型的项目使用“填报名单”？\n您提前知晓参与项目的人员名单，那么您可直接使用“填报名单”快速导入或引用名单库导入参与人员名单，发布之后针对名单分享填报项目。\n2、如使用“填报名单”？\n · 您可通过三种方式创建添加名单：导入名单、引用名单库、单个添加名单人员。\n · 填报人员限制，该功能可对参与填报的人员进行限制，若添加名单时关联了填报手机号，那么开启“填报人员限制”后，仅允许关联的手机号参与填报。` : `1、什么情况使用“填报周期“？\n若您的项目要求参与者连续多期填写，那么您需要开启“填报周期”，完成设置后，您只需发布一次，即可让参与者连续填写多期。\n2、如何使用“填报周期”？\n · 设置“周期数”，即该项目需要参与者连续填写的期数\n · 设置“周期类型”（日/周/年），即该项目的填写周期是每日为一期，还是每周、每年为一期。`
+      hint: val === 'Namelist' ? `1、什么类型的项目使用“填报名单”？
+      
+您提前知晓参与项目的人员名单，那么您可直接使用“填报名单”快速导入或引用名单库导入参与人员名单，发布之后针对名单分享填报项目。
+      
+2、如使用“填报名单”？
+      
+ · 您可通过三种方式创建添加名单：导入名单、引用名单库、单个添加名单人员。
+ · 填报人员限制，该功能可对参与填报的人员进行限制，若添加名单时关联了填报手机号，那么开启“填报人员限制”后，仅允许关联的手机号参与填报。` : `1、什么情况使用“填报周期“？
+      
+若您的项目要求参与者连续多期填写，那么您需要开启“填报周期”，完成设置后，您只需发布一次，即可让参与者连续填写多期。
+      
+2、如何使用“填报周期”？
+      
+ · 设置“周期数”，即该项目需要参与者连续填写的期数
+ · 设置“周期类型”（日/周/年），即该项目的填写周期是每日为一期，还是每周、每年为一期。`
     })
   }
   
   render() {
-    const {isLimit,hint} = this.state
+    const { isLimit, hint, modelTitle } = this.state
     const {info,isModify} = this.props
     let beginTimeList = !!info.beginTime ? info.beginTime :'未设置'
     let expireTimeList = !!info.endTime ? info.endTime  :'未设置'
@@ -412,7 +431,7 @@ class QtSet extends Component {
             style={{ color: isModify ? '' : '#c2c2c2' }}
           />
         </View>
-        <Model isLimit={isLimit} handleClose={this.handleClose} hint={hint} />
+        <Model isLimit={isLimit} handleClose={this.handleClose} hint={hint} title={modelTitle}/>
       </View>
     )
   }

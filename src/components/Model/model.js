@@ -12,10 +12,11 @@ class Model extends Component {
   }
 
   render() {
-      const {isLimit,handleClose,hint,} = this.props
+      const {isLimit,handleClose,hint,title} = this.props
     return (
         <View>
           <AtModal isOpened={isLimit} closeOnClickOverlay={false}>
+            {title && <AtModalHeader>{title}</AtModalHeader>}
             <AtModalContent>
               <View style={{lineHeight:'20px', whiteSpace:'pre-wrap'}}>{hint}</View>
             </AtModalContent>
