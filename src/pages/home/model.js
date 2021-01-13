@@ -37,7 +37,7 @@ export default {
         })
         Taro.setStorage({
           key: "mobile",
-          data: data.data.mobile
+          data: data.data.mobile.substring(0,11)
         })
         Taro.setStorage({
           key: "logintime",
