@@ -168,7 +168,7 @@ class LoadingStatus extends Component {
   handelRes() {
     const { info, res } = this.props
     const reportId = this.$router.params.listId || info.id
-    const period = res.status == 203 && res.data.rep ? res.data.rep.period : 0
+    const period = typeof res.data == 'number' ? res.data : 0
     const currentPeriod = period == 0 || period > info.periodSize ? info.periodSize : period
     Taro.navigateTo({
       url: `/pages/answerDetail/index?reportId=${reportId}&currentPeriod=${currentPeriod}&isStrict=${info.isStrict}`
@@ -188,7 +188,7 @@ class LoadingStatus extends Component {
   render() {
     const { text, showHandelRes } = this.state
     const { info, res } = this.props
-    const period = res.status == 203 && res.data.rep ? res.data.rep.period : 0
+    const period = typeof res.data == 'number' ? res.data : 0
     const currentPeriod = period == 0 || period > info.periodSize ? info.periodSize : period
     return (
       <View className='content'>
