@@ -321,7 +321,7 @@ class QtSet extends Component {
               />
             </View>
           </View>
-          {info.useNamelist == 1 && (<AtListItem title='名单设置' extraText={nameSet} onClick={this.handleSetName} arrow='right' />)}
+          {info.useNamelist == 1 && (<AtListItem disabled={!isModify} title='名单设置' extraText={nameSet} onClick={this.handleSetName} arrow='right' />)}
           {info.useNamelist == 1 && (
             <View className="diy-list-item">
               <View className='title'>

@@ -121,7 +121,7 @@ class LoadingStatus extends Component {
           mask: true
         })
         this.setState({ text: '不匹配', showHandelRes: false })
-      } else if (res.status == 203 && (res.message == '填报已参与' || res.message == '本次填报已完成')) {
+      } else if (res.status == 203 && (res.message == '填报已参与' || res.message == '本次填报已完成' || res.message == '数据已存在！')) {
         Taro.showToast({
           title: res.message,
           icon: 'none',
@@ -144,7 +144,7 @@ class LoadingStatus extends Component {
           duration: 1000,
           mask: true
         })
-        this.setState({ text: '问卷不存在/被删除', showHandelRes: false })
+        this.setState({ text: '问卷不存在', showHandelRes: false })
       } else if (res.status == 203 && res.message == '填报未发布') {
         Taro.showToast({
           title: res.message,
@@ -166,9 +166,10 @@ class LoadingStatus extends Component {
     })
   }
   handelRes() {
-    const { info } = this.props
+    const { info, res } = this.props
     const reportId = this.$router.params.listId || info.id
-    const currentPeriod = info.periodSize
+    const period = res.status == 203 && res.data.rep ? res.data.rep.period : 0
+    const currentPeriod = period == 0 || period > info.periodSize ? info.periodSize : period
     Taro.navigateTo({
       url: `/pages/answerDetail/index?reportId=${reportId}&currentPeriod=${currentPeriod}&isStrict=${info.isStrict}`
     })
@@ -187,6 +188,8 @@ class LoadingStatus extends Component {
   render() {
     const { text, showHandelRes } = this.state
     const { info, res } = this.props
+    const period = res.status == 203 && res.data.rep ? res.data.rep.period : 0
+    const currentPeriod = period == 0 || period > info.periodSize ? info.periodSize : period
     return (
       <View className='content'>
         <AtMessage />
@@ -198,7 +201,7 @@ class LoadingStatus extends Component {
                 <Text className="status">{text}</Text>
               </View>
               <View className='memo'>{info.memo}</View>
-              <View className="note">{`${info.creatorName} | ${info.updateTime || info.createTime} | 参与${info.finishCount}/${info.totalCount || '不限'}`}</View>
+              <View className="note">{`${info.creatorName} | ${info.updateTime || info.createTime} ${info.usePeriod == 1 ? '| 参与' + currentPeriod + "/" + info.periodSize + '周' : ''}`}</View>
             </View>
             <View className='btn'>
               {showHandelRes && <AtButton type='primary' onClick={this.handelRes}>查看结果</AtButton>}
