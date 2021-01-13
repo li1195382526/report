@@ -314,7 +314,7 @@ class DataList extends Component {
 					{from == 'nameList' && response.status != 401 && <View className='edit-send' onClick={this.handleRelease}>引用名单</View>}
 					{response.status == 401 && (
 						<View className='edit-login'>
-							<AtButton openType='getUserInfo' onClick={this.login}>立即登录</AtButton>
+							<AtButton type='primary' openType='getUserInfo' onClick={this.login}>立即登录</AtButton>
 						</View>
 					)}
 				</View>

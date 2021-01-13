@@ -156,7 +156,7 @@ class answerDetail extends Component {
                     {periods.length > 0 && (
                         <View className="view-plain">
                             <View className='view-text'>当前进行至第 {index + 1} 周期</View>
-                            <View className='view-text'>截止时间 {periods[index + 1].endTime}</View>
+                            <View className='view-text'>截止时间 {periods[index].endTime}</View>
                         </View>
                     )}
                     {periods.length === 0 && (

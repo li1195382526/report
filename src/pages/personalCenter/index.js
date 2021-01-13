@@ -137,7 +137,9 @@ class PersonalCenter extends Component {
   }
 
   render() {
-    const {token,wxInfo} = this.props
+    const wxInfo = Taro.getStorageSync('wxInfo')
+    const token = Taro.getStorageSync('token')
+    console.log('wxInfo', wxInfo)
     return (
       <View className='personal'>
         <View className='personal-login'>
