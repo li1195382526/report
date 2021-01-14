@@ -110,7 +110,7 @@ class QtnSet extends Component {
             <View className='icons'>
               {/* <AtIcon onClick={() => this.setState({qtnset_isopen: true})} value='trash' size='25' color='#ccc'></AtIcon>
               <AtIcon onClick={this.handeCopy} value='money' size='25' color='#ccc'></AtIcon> */}
-              <Image src={copy} className='diy-icon' onClick={this.handeCopy}></Image>
+              <Image src={copy} className='diy-icon diy-icon-small' onClick={this.handeCopy}></Image>
               <Image src={del} className='diy-icon' onClick={() => this.setState({ qtnset_isopen: true })}></Image>
             </View>
           )}
