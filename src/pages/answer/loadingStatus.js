@@ -144,7 +144,7 @@ class LoadingStatus extends Component {
           duration: 1000,
           mask: true
         })
-        this.setState({ text: '问卷不存在', showHandelRes: false })
+        this.setState({ text: '问卷已删除', showHandelRes: false })
       } else if (res.status == 203 && res.message == '填报未发布') {
         Taro.showToast({
           title: res.message,
