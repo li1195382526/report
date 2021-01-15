@@ -36,6 +36,20 @@ class QuestionOpen extends Component {
       }
     })
   }
+
+  handleBlur(val,item){
+    const {opts,anw} = this.props
+    let newAnw = fromJS(anw)
+    const premise = `${opts.mySeq}(${item.mySeq})_${val.target.value}`
+    // eslint-disable-next-line no-undef
+    newAnw = newAnw.set(opts.mySeq, [premise])
+    this.props.dispatch({
+      type: 'answer/save',
+      payload: {
+        anw:newAnw.toJS()
+      }
+    })
+  }
   
   render() {
     const {opts,anw,noModify} = this.props
@@ -52,6 +66,7 @@ class QuestionOpen extends Component {
               value={value}
               className='open-input' 
               onInput={(val)=>this.handleChange(val,item)} 
+              onBlur={(val) =>this.handleBlur(val,item)}
             />
          )
         })}
