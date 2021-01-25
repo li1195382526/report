@@ -350,7 +350,7 @@ class Answer extends Component {
     return (
       <View className='answer'>
         <AtMessage />
-        {info.useNamelist == 1 && (
+        {info.useNamelist == 1 && from != 'viewData' && (
           <View className='change-name'>
             <View>{res.status == 200 ? res.data.rep.name : '未知'}</View>
             {checkNamelist && info.isUserlimit == 0 && (

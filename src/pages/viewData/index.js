@@ -117,7 +117,7 @@ class ViewData extends Component {
         this.getResList()
       })
      }else{
-      if(isCurrent >= current + 1){
+       if (isCurrent >= current + 1 || isCurrent == 0){
         this.setState({ current }, () => {
           this.getResList()
         })
